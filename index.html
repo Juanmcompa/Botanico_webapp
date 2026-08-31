@@ -437,9 +437,11 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 }
 .listitem:hover{background:rgba(255,255,255,.03)}
 .listitem .lthumb{
-  width:56px;height:56px;border-radius:14px;overflow:hidden;flex:none;position:relative;
+  display:block;width:56px;height:56px;border-radius:14px;overflow:hidden;flex:none;position:relative;
   background:var(--moss);
 }
+.listitem .lbody{display:block}
+.nowplaying .np-thumb,.nowplaying .np-body{display:block}
 .listitem .lthumb canvas{position:absolute;inset:0;width:100%;height:100%}
 .listitem .lbody{flex:1;min-width:0}
 .listitem .lbody b{display:block;font-size:14px;font-weight:600;line-height:1.3}
@@ -618,6 +620,86 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .hub b{display:block;font-family:var(--serif);font-weight:400;font-size:17px;letter-spacing:-.01em}
 .hub small{display:block;font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.35}
 
+
+/* ============================================================
+   LA RUEDA DEL AÑO — calendario radial de floración.
+   Recurso de lámina botánica: el año como círculo, no como lista.
+   ============================================================ */
+.anillo{position:relative;padding:0 20px;margin-top:4px}
+.rueda{width:100%;max-width:340px;margin:0 auto;display:block;touch-action:none;cursor:grab}
+.rueda:active{cursor:grabbing}
+.rueda .seg{transition:opacity .3s ease,transform .3s ease;transform-origin:160px 160px}
+.rueda .anillo-g{transition:transform .72s cubic-bezier(.34,1.16,.36,1)}
+.rueda .etiqueta{
+  font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.04em;
+  fill:var(--faint);transition:fill .3s ease;pointer-events:none;
+}
+.rueda .etiqueta.on{fill:var(--text)}
+.rueda .etiqueta.hoy{fill:var(--vidrio)}
+.aguja{fill:var(--text)}
+
+.nucleo{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  text-align:center;pointer-events:none;width:150px;
+}
+.nucleo .mes{
+  font-family:var(--serif);font-optical-sizing:auto;font-weight:300;
+  font-size:30px;line-height:1;letter-spacing:-.03em;text-transform:capitalize;
+  display:block;margin-bottom:6px;
+}
+.nucleo .cuenta{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
+.nucleo .cuenta b{color:var(--rosa);font-weight:700}
+.nucleo .hoy-chip{
+  display:inline-block;margin-top:8px;padding:3px 9px;border-radius:999px;
+  background:rgba(126,216,195,.16);color:var(--vidrio);
+  font-size:9.5px;font-weight:700;letter-spacing:.1em;
+}
+
+.tirames{display:flex;gap:10px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
+.tirames::-webkit-scrollbar{display:none}
+.florcard{
+  flex:none;width:132px;border-radius:var(--r-m);overflow:hidden;
+  background:var(--bark);border:1px solid var(--line);text-align:left;
+  animation:subir .45s cubic-bezier(.22,.9,.24,1) backwards;
+}
+@keyframes subir{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.florcard .th{display:block;height:88px;position:relative}
+.florcard .mt{display:block;padding:10px 11px 12px}
+.florcard .mt b{display:block;font-size:12.5px;font-weight:600;line-height:1.25}
+.florcard .mt i{display:block;font-size:10.5px;color:var(--faint);margin-top:3px;font-family:var(--serif);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.acciones{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 20px}
+.accion{
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  padding:14px 4px;border-radius:var(--r-m);
+  background:var(--bark);border:1px solid var(--line);
+  transition:transform .16s var(--sheet-ease),border-color .16s ease;
+}
+.accion:active{transform:scale(.95)}
+.accion:hover{border-color:var(--line-2)}
+.accion svg{width:21px;height:21px;stroke-width:1.6;color:var(--vidrio)}
+.accion span{font-size:10px;font-weight:600;color:var(--muted);text-align:center;line-height:1.2}
+
+.cabecera{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:56px 20px 10px;gap:12px;
+}
+.cabecera .marca{font-family:var(--serif);font-size:17px;font-weight:400;letter-spacing:-.01em;line-height:1.15}
+.cabecera .marca small{display:block;font-family:var(--sans);font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+
+/* ---------- barra de pestañas: indicador deslizante ---------- */
+.tabbar{position:relative}
+.tabind{
+  position:absolute;top:7px;height:44px;border-radius:14px;
+  background:rgba(126,216,195,.13);border:1px solid rgba(126,216,195,.24);
+  transition:transform .42s cubic-bezier(.34,1.14,.36,1),width .42s cubic-bezier(.34,1.14,.36,1);
+  pointer-events:none;z-index:0;
+}
+.tab{position:relative;z-index:1}
+.tab svg{transition:transform .32s cubic-bezier(.34,1.3,.36,1)}
+.tab.on svg{transform:translateY(-1px) scale(1.08)}
+.tab span{transition:opacity .25s ease}
+
 /* ---------- responsive: en mobile la app ocupa todo ---------- */
 @media (max-width:900px){
   .stage{display:block}
@@ -663,6 +745,12 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   opacity:0;transition:opacity .3s ease,transform .3s ease;pointer-events:none;
 }
 .maphint.on{opacity:1;transform:translateX(-50%)}
+
+@keyframes secIn{from{opacity:0;transform:scale(.84)}to{opacity:1;transform:none}}
+.sector-in{animation:secIn .62s cubic-bezier(.22,.95,.28,1) backwards;transform-box:fill-box;transform-origin:center}
+@keyframes dibujar{to{stroke-dashoffset:0}}
+.path-in{stroke-dasharray:1600;stroke-dashoffset:1600;animation:dibujar 1.25s cubic-bezier(.4,.7,.3,1) forwards}
+@media (prefers-reduced-motion:reduce){.sector-in,.path-in{animation:none;stroke-dashoffset:0}}
 
 /* ---------- pin numerado con auricular ---------- */
 .numpin text{font-family:var(--sans);font-weight:700}
@@ -783,8 +871,9 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   <aside class="stage-note">
     <p class="eyebrow">Prototipo · Diseño Gráfico 3</p>
     <h1>Thays, la app del <em>Jardín Botánico</em> de Buenos Aires</h1>
-    <p>Prototipo navegable de alta fidelidad. Mapa interactivo, 19 fichas técnicas, 5 recorridos guiados, juego de identificación, galería y agenda.</p>
-    <p>Los datos botánicos, horarios, esculturas y programas son reales. Las imágenes son composiciones generadas en el navegador: en producción se reemplazan por fotografía del archivo del Jardín.</p>
+    <p>Prototipo navegable de alta fidelidad. La home es un calendario radial de floración: girá la rueda y el Jardín cambia de color.</p>
+    <p>36 fichas técnicas · 5 recorridos + el propio · audioguía numerada · mapa sobre el plano oficial · accesibilidad.</p>
+    <p>Los datos botánicos, horarios, esculturas y programas son reales. Donde hay fotografía aportada se usa; donde no, una composición generada en el navegador.</p>
     <div class="keyhint">
       <div><kbd>Tab</kbd> recorré la interfaz con teclado</div>
       <div><kbd>Esc</kbd> cerrar panel abierto</div>
@@ -1019,6 +1108,143 @@ const ESPECIES = [
 ];
 const espById = id => ESPECIES.find(e=>e.id===id);
 
+/* ============================================================
+   Colección de Plantas Medicinales y especies sumadas a partir
+   de las fotos aportadas para el prototipo.
+   ============================================================ */
+ESPECIES.push(
+  {id:"ajedrea", nom:"Ajedrea", bin:"Satureja hortensis", fam:"Lamiaceae",
+   origen:"Mediterráneo oriental y suroeste de Asia", alt:"30 a 50 cm", sector:"medicinales", x:316, y:908,
+   flor:[11,0,1], color:"blanca", hoja:"simple", tronco:"multiple", habitat:"pampa",
+   desc:"Mata pequeña de tallos finos y hojas angostas, muy aromática. Florece en verano en espigas de flores diminutas, blancas o apenas rosadas, que atraen abejas.",
+   dato:"Los romanos la usaban como condimento antes de que llegara la pimienta de Oriente: su nombre latino, satureja, la emparentaba con los sátiros.",
+   usos:"Condimento, digestiva, carminativa", conserva:"Preocupación menor"},
+
+  {id:"alcachofera", nom:"Alcachofera", bin:"Cynara cardunculus var. scolymus", fam:"Asteraceae",
+   origen:"Cuenca del Mediterráneo", alt:"1,5 a 2 m", sector:"medicinales", x:366, y:908,
+   flor:[11,0,1], color:"violeta", hoja:"palmeada", tronco:"multiple", habitat:"pampa",
+   desc:"Hojas enormes, dentadas y grisáceas por el envés. Lo que se come es el capítulo floral entero antes de abrirse; si se lo deja, se abre en un penacho violeta espectacular.",
+   dato:"Su amargor viene de la cinarina, el compuesto que la volvió un clásico de la fitoterapia hepática.",
+   usos:"Alimentaria, hepatoprotectora, colerética", conserva:"Especie cultivada"},
+
+  {id:"comino-negro", nom:"Comino negro", bin:"Nigella sativa", fam:"Ranunculaceae",
+   origen:"Suroeste de Asia y Mediterráneo oriental", alt:"30 a 60 cm", sector:"medicinales", x:316, y:934,
+   flor:[9,10,11], color:"blanca", hoja:"acicular", tronco:"multiple", habitat:"pampa",
+   desc:"Hojas finísimas, casi filiformes, y flores blancas con venas azuladas rodeadas de un encaje de brácteas. El fruto es una cápsula que guarda semillas negras y angulosas.",
+   dato:"Se hallaron semillas de comino negro en la tumba de Tutankamón. No tiene parentesco con el comino común: es pariente de las anémonas.",
+   usos:"Condimento, aceite, medicina tradicional", conserva:"Preocupación menor"},
+
+  {id:"hierbaluisa", nom:"Hierbaluisa", bin:"Aloysia citrodora", fam:"Verbenaceae",
+   origen:"Argentina, Chile, Perú y Uruguay", alt:"2 a 3 m", sector:"medicinales", x:366, y:934,
+   flor:[11,0,1], color:"blanca", hoja:"simple", tronco:"multiple", habitat:"pampa",
+   desc:"Arbusto de hojas ásperas y lanceoladas que sueltan un perfume intenso a limón al frotarlas. Florece en panículas laxas de flores blancas y lilas.",
+   dato:"Es sudamericana. Los botánicos españoles que la llevaron a Europa en el siglo XVIII la bautizaron en honor a María Luisa de Parma.",
+   usos:"Infusión digestiva, perfumería, aceite esencial", conserva:"Preocupación menor"},
+
+  {id:"lavanda", nom:"Lavanda", bin:"Lavandula angustifolia", fam:"Lamiaceae",
+   origen:"Mediterráneo occidental", alt:"60 cm a 1 m", sector:"medicinales", x:316, y:960,
+   flor:[10,11,0], color:"violeta", hoja:"acicular", tronco:"multiple", habitat:"pampa",
+   desc:"Mata compacta de hojas angostas y grisáceas, con espigas violetas sobre tallos largos y desnudos. Prefiere suelo pobre y seco: en tierra rica crece frondosa y perfuma menos.",
+   dato:"El aceite esencial se concentra en pelos glandulares microscópicos de la flor; por eso se cosecha justo antes de que abra del todo.",
+   usos:"Aceite esencial, sedante suave, perfumería", conserva:"Preocupación menor"},
+
+  {id:"manzanilla", nom:"Manzanilla", bin:"Matricaria chamomilla", fam:"Asteraceae",
+   origen:"Europa y oeste de Asia", alt:"20 a 50 cm", sector:"medicinales", x:366, y:960,
+   flor:[9,10,11], color:"blanca", hoja:"acicular", tronco:"multiple", habitat:"pampa",
+   desc:"Hierba anual de hojas muy divididas y capítulos de centro amarillo abombado con lígulas blancas que se doblan hacia atrás al madurar.",
+   dato:"Ese centro hueco y cónico es lo que la distingue de sus parecidas: si lo cortás al medio y está vacío, es manzanilla.",
+   usos:"Infusión digestiva, antiinflamatoria, cosmética", conserva:"Preocupación menor"},
+
+  {id:"melisa", nom:"Melisa", bin:"Melissa officinalis", fam:"Lamiaceae",
+   origen:"Sur de Europa y oeste de Asia", alt:"40 a 80 cm", sector:"medicinales", x:316, y:986,
+   flor:[11,0,1], color:"blanca", hoja:"simple", tronco:"multiple", habitat:"pampa",
+   desc:"También llamada toronjil. Hojas ovales, dentadas y rugosas, con olor a limón y menta. Las flores son pequeñas, blancas, escondidas entre las hojas.",
+   dato:"Su nombre viene del griego mélissa, «abeja»: los apicultores frotaban las colmenas nuevas con sus hojas para que el enjambre se quedara.",
+   usos:"Infusión relajante, digestiva, aromática", conserva:"Preocupación menor"},
+
+  {id:"oregano", nom:"Orégano", bin:"Origanum vulgare", fam:"Lamiaceae",
+   origen:"Mediterráneo y Asia central", alt:"30 a 80 cm", sector:"medicinales", x:366, y:986,
+   flor:[11,0,1], color:"rosa", hoja:"simple", tronco:"multiple", habitat:"pampa",
+   desc:"Mata leñosa en la base, de hojitas ovales enfrentadas de a pares y ramilletes de flores rosadas o blancas. El aroma se concentra en verano, con el calor seco.",
+   dato:"Su nombre griego, oros ganos, significa «alegría de la montaña», por las laderas donde crece espontáneamente.",
+   usos:"Condimento, antiséptico, aceite esencial", conserva:"Preocupación menor"},
+
+  {id:"saponaria", nom:"Saponaria", bin:"Saponaria officinalis", fam:"Caryophyllaceae",
+   origen:"Europa y oeste de Asia", alt:"30 a 70 cm", sector:"medicinales", x:316, y:1012,
+   flor:[11,0,1,2], color:"rosa", hoja:"simple", tronco:"multiple", habitat:"pampa",
+   desc:"También llamada jabonera. Tallos erguidos con hojas enfrentadas y flores rosadas de cinco pétalos que se abren al atardecer y perfuman de noche.",
+   dato:"Sus raíces y hojas tienen saponinas: frotadas en agua hacen espuma. Se usó durante siglos para lavar textiles delicados y todavía se emplea para limpiar tapices antiguos.",
+   usos:"Jabón vegetal, restauración textil, medicinal", conserva:"Preocupación menor"},
+
+  {id:"sauco", nom:"Saúco", bin:"Sambucus nigra", fam:"Adoxaceae",
+   origen:"Europa, norte de África y oeste de Asia", alt:"4 a 6 m", sector:"medicinales", x:366, y:1012,
+   flor:[9,10], color:"blanca", hoja:"compuesta", tronco:"multiple", habitat:"pampa",
+   desc:"Arbusto o arbolito de hojas compuestas y corimbos planos de flores blancas muy perfumadas, seguidos por racimos de bayas negras y brillantes.",
+   dato:"Sus ramas jóvenes tienen la médula esponjosa y se vacían con facilidad: durante siglos se hicieron con ellas flautas y cerbatanas de juguete.",
+   usos:"Flores en infusión, frutos en conserva, tintórea", conserva:"Preocupación menor"},
+
+  {id:"paulonia", nom:"Árbol del emperador", bin:"Paulownia tomentosa", fam:"Paulowniaceae",
+   origen:"China central y occidental", alt:"10 a 15 m", sector:"asia", x:972, y:226,
+   flor:[8,9], color:"violeta", hoja:"simple", tronco:"recto", habitat:"asia",
+   desc:"Hojas enormes, aterciopeladas y acorazonadas. A comienzos de la primavera, todavía sin hojas, se cubre de panojas de flores violetas tubulares con olor a vainilla.",
+   dato:"Su madera es una de las más livianas y estables del mundo: en Japón se plantaba un ejemplar al nacer una hija y se talaba para hacerle el arcón de bodas.",
+   usos:"Ornamental, madera liviana, reforestación rápida", conserva:"Preocupación menor"},
+
+  {id:"cacao", nom:"Cacao", bin:"Theobroma cacao", fam:"Malvaceae",
+   origen:"Amazonía occidental y América tropical", alt:"4 a 8 m", sector:"invernaculos", x:0, y:0, interior:[152,60],
+   flor:[0,1,2,3,9,10,11], color:"blanca", hoja:"simple", tronco:"recto", habitat:"selva",
+   desc:"Árbol de sotobosque, de hojas grandes y colgantes. Sus flores diminutas brotan directamente del tronco y de las ramas gruesas —un fenómeno llamado caulifloria— y de ahí cuelgan las mazorcas.",
+   dato:"Las flores solo las poliniza un mosquito minúsculo del género Forcipomyia. Sin ese insecto no hay chocolate: menos del 5 % de las flores llega a fruto.",
+   usos:"Alimentaria, cosmética, ceremonial", conserva:"Vulnerable en poblaciones silvestres"},
+
+  {id:"kauri", nom:"Kauri de Queensland", bin:"Agathis robusta", fam:"Araucariaceae",
+   origen:"Queensland, Australia", alt:"hasta 50 m", sector:"oceania", x:626, y:486,
+   flor:[], color:"sin flor", hoja:"escamosa", tronco:"recto", habitat:"oceania",
+   desc:"Conífera de tronco columnar y corteza que se desprende en escamas redondeadas. Sus hojas son anchas y coriáceas, nada parecidas a las agujas de un pino, aunque es pariente de la araucaria.",
+   dato:"La resina fósil de los kauris neozelandeses se extrajo durante décadas para hacer barnices: se cavaban campos enteros buscando ámbar de árboles muertos hace milenios.",
+   usos:"Madera de calidad, resina, ornamental", conserva:"Preocupación menor"},
+
+  {id:"agarrapalo", nom:"Agarrapalo", bin:"Ficus luschnathiana", fam:"Moraceae",
+   origen:"Nordeste argentino, Uruguay y sur de Brasil", alt:"15 a 20 m", sector:"argentina", x:702, y:762,
+   flor:[], color:"sin flor", hoja:"simple", tronco:"tablar", habitat:"selva",
+   desc:"El higuerón nativo del Litoral. Empieza su vida como epífito sobre otro árbol: sus raíces bajan por el tronco huésped, se sueldan entre sí y terminan asfixiándolo.",
+   dato:"Cuando el árbol huésped se pudre, queda una columna hueca de raíces fusionadas: el agarrapalo se sostiene sobre el fantasma del árbol que mató.",
+   usos:"Sombra, ornamental de parques, madera blanda", conserva:"Preocupación menor"}
+);
+
+/* La colección de medicinales creció: el cantero necesita más lugar en el plano */
+(function(){ const m=SECTORES.find(x=>x.id==="medicinales"); m.shapes=[["r",302,896,78,152]]; m.lx=341; m.ly=884; })();
+
+/* ------------------------------------------------------------
+   Fotos aportadas para el prototipo. La app las prefiere sobre
+   la composición generada; si falta alguna, no queda hueco.
+   ------------------------------------------------------------ */
+const FOTOS = {
+  "palo-borracho":"paloborracho_flor.jpg",
+  "ginkgo":"Gingko_biloba.jpg",
+  "yerba-mate":"Yerba_Mate.jpg",
+  "invernaculo1":"invernario_exterior.jpg",
+  "helecho":"invernario_1.jpg",
+  "edificio-central":"ninio_estatua.jpg",
+  "estanque":"estanque_plantasacuaticas.jpg",
+  "coleccion-medicinales":"plantas_cortadas_mix.jpg",
+  "paulonia":"arbol_delemperador.jpg",
+  "cacao":"Cacahuacuautitl.jpg",
+  "kauri":"agathis_robusta.jpg",
+  "agarrapalo":"Ficus_luschnathiana.jpg",
+  "ajedrea":"Ajedrea_flor.jpg",
+  "alcachofera":"Alcachofera_flor.jpg",
+  "comino-negro":"Comino_negro_flor.jpg",
+  "hierbaluisa":"Hierbaluisa_flor.jpg",
+  "lavanda":"Lavanda_flor.jpg",
+  "manzanilla":"Manzanilla_flor.jpg",
+  "melisa":"Melisa_flor.jpg",
+  "oregano":"Or\u00e9gano_flor.jpg",
+  "saponaria":"Saponaria_flor.jpg",
+  "sauco":"Sambucus_nigra_flor.jpg"
+};
+
+
 ESPECIES.push(
   {id:"monstera", nom:"Costilla de Adán", bin:"Monstera deliciosa", fam:"Araceae",
    origen:"Selvas de México y América Central", alt:"hasta 8 m trepando", sector:"invernaculos", x:0, y:0,
@@ -1039,13 +1265,13 @@ ESPECIES.push(
    dato:"Las semillas de orquídea son polvo: no tienen reservas y solo germinan si encuentran un hongo que las alimente.",
    usos:"Ornamental de colección", conserva:"Varias especies del género están amenazadas"}
 );
-ESPECIES.find(e=>e.id==="helecho").interior = [96,120];
-ESPECIES.find(e=>e.id==="bromelia").interior = [212,72];
+ESPECIES.find(e=>e.id==="helecho").interior = [82,122];
+ESPECIES.find(e=>e.id==="bromelia").interior = [222,74];
 
 /* Planta interior del Invernáculo N.º 1: 35 × 8 m, el único abierto al público */
 const INTERIOR = {
   id:"invernaculo1", nom:"Invernáculo N.º 1", vb:"0 0 440 190",
-  especies:["helecho","monstera","bromelia","papiro","cattleya"]
+  especies:["helecho","monstera","cacao","bromelia","papiro","cattleya"]
 };
 
 
@@ -1131,6 +1357,16 @@ const POIS = [
    dato:"El efecto viene de la sombra, la evapotranspiración de las hojas y la permeabilidad del suelo."}
 ];
 const poiById = id => POIS.find(p=>p.id===id);
+
+POIS.push(
+  {id:"estanque", nom:"Estanque de plantas acuáticas", tipo:"Naturaleza", x:802, y:884, kind:"glass",
+   desc:"Espejo de agua con una fuente en el centro, poblado de nenúfares, juncos y plantas palustres. Es el punto donde el Jardín exhibe la vegetación que vive con las raíces sumergidas.",
+   dato:"Las hojas flotantes de los nenúfares tienen los estomas en la cara de arriba, al revés que casi todas las plantas: es el único lado que toca el aire."},
+  {id:"coleccion-medicinales", nom:"Colección de Plantas Medicinales", tipo:"Sector", x:300, y:890, kind:"bloom",
+   desc:"Canteros ordenados por uso terapéutico con las especies que la farmacopea tradicional europea, mediterránea y sudamericana viene usando desde hace siglos: aromáticas, digestivas, sedantes y tintóreas.",
+   dato:"Casi la mitad de los medicamentos que se recetan hoy derivan, directa o indirectamente, de un compuesto vegetal."}
+);
+
 
 const SERVICIOS = [
   {id:"acceso-santafe", nom:"Acceso Av. Santa Fe", tipo:"Acceso", x:530, y:1070, icono:"acceso"},
@@ -1405,11 +1641,11 @@ function paintAll(root){
    3. ICONOS
    ============================================================ */
 const I = {
-  home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>',
-  map:'<path d="M9 3 3 5.5v16L9 19l6 2.5 6-2.5v-16L15 5.5 9 3z"/><path d="M9 3v16M15 5.5v16"/>',
-  route:'<circle cx="6" cy="6" r="2.6"/><circle cx="18" cy="18" r="2.6"/><path d="M8.6 6H14a3.4 3.4 0 0 1 0 6.8h-4A3.4 3.4 0 0 0 10 18h5.4"/>',
-  leaf:'<path d="M4 20C3 12 8 4 20 4c0 12-7 16-13 15Z"/><path d="M4 20c4-6 8-9 12-11"/>',
-  cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>',
+  home:'<path d="M6.5 21h11"/><path d="M12 21v-8"/><path d="M12 13c0-3.4-2.4-6-6-6.2C5.8 10.2 8.4 13 12 13Z"/><path d="M12 11.4c0-3 2.2-5.4 5.4-5.6.2 3-2.2 5.6-5.4 5.6Z"/>',
+  map:'<path d="M3.5 20.5C2.4 12 8 4.2 20.5 3c1 9.4-5.2 16.4-17 17.5Z"/><path d="M3.8 20.2C7.6 14.4 12.6 9.4 18.6 5.6"/><circle cx="13.4" cy="10.6" r="2.1"/>',
+  route:'<circle cx="5.6" cy="5.6" r="2.3"/><circle cx="18.4" cy="18.4" r="2.3"/><path d="M7.7 6.4c3.6.9 4.6 3 3.4 6.2s-.4 5.1 3.2 5.6"/>',
+  leaf:'<path d="M12.8 3C7.2 4 4.3 8.3 4.9 14.4c5.7-1 8.6-5.3 7.9-11.4Z"/><path d="M5 14.2C7.4 10.9 9.7 8.1 12.1 6.2"/><circle cx="16.4" cy="15.6" r="4.1"/><path d="m19.4 18.6 2.3 2.3"/>',
+  cal:'<rect x="3" y="6" width="18" height="15" rx="3.4"/><path d="M8 3.2v5M16 3.2v5M3 11.2h18"/><path d="M11.6 18.6c0-2.2 1.7-3.7 3.8-3.8-.1 2.2-1.7 3.8-3.8 3.8Z"/>',
   search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   close:'<path d="m6 6 12 12M18 6 6 18"/>',
   back:'<path d="m14 6-6 6 6 6"/>',
@@ -1469,7 +1705,8 @@ const tipoDe = o => ESPECIES.includes(o) ? "esp" : "poi";
    composición generada. Para enchufar fotos reales basta dejar los
    archivos en esa carpeta, sin tocar una línea de código. */
 function imagen(o,kind,hue){
-  return `${art(o.id,kind||"bloom",hue)}<img class="foto" src="fotos/${o.id}.jpg" alt="" aria-hidden="true" onerror="this.remove()" onload="this.classList.add('ok')">`;
+  const archivo = FOTOS[o.id] || (o.id+".jpg");
+  return `${art(o.id,kind||"bloom",hue)}<img class="foto" src="fotos/${encodeURI(archivo)}" alt="" aria-hidden="true" onerror="this.remove()" onload="this.classList.add('ok')">`;
 }
 
 /* ---------- audioguía: voz real del navegador ---------- */
@@ -1554,7 +1791,8 @@ function recuperar(){
    ============================================================ */
 const S = {
   view:"home", stack:[], fav:new Set(), sector:null, focus:null,
-  capas:{especies:true, patrimonio:true, servicios:false, sectores:true, accesible:false},
+  capas:{especies:true, patrimonio:true, servicios:false, sectores:true, accesible:false, enflor:false},
+  mapaEntrada:true,
   ruta:null, paso:0, mes:new Date().getMonth(),
   juego:{hoja:null,flor:null,tronco:null,habitat:null,step:0},
   galFiltro:"todo", espFiltro:"todo", busqueda:"",
@@ -1562,7 +1800,7 @@ const S = {
   planta:"predio",                                 /* predio | invernaculo1 */
   audio:{id:null,tipo:null,sonando:false,vel:1,pct:0},
   a11y:{texto:0, contraste:false, transcripcion:false, soloAccesible:false},
-  miRuta:[], teclado:""
+  miRuta:[], teclado:"", mesRueda:new Date().getMonth()
 };
 
 const TABS = [
@@ -1582,6 +1820,7 @@ const views = document.getElementById("views");
 const RENDER = {};
 
 function go(id, opts={}){
+  const prev=S.view;
   const sh=document.getElementById("sheet"), sc=document.getElementById("scrim"), lbx=document.getElementById("lightbox");
   if(sh) sh.classList.remove("on"); if(sc) sc.classList.remove("on"); if(lbx) lbx.classList.remove("on");
   if(!opts.back && S.view!==id) S.stack.push(S.view);
@@ -1593,7 +1832,9 @@ function go(id, opts={}){
   requestAnimationFrame(()=>{ el.classList.add("on"); el.scrollTop=0; paintAll(el); });
   const root=PARENT[id]||id;
   document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.tab===root));
-  if(id==="mapa") requestAnimationFrame(drawMap);
+  requestAnimationFrame(moverIndicador);
+  if(id==="mapa"){ if(prev!=="mapa") S.mapaEntrada=true; requestAnimationFrame(drawMap); }
+  if(id==="home") requestAnimationFrame(hookRueda);
   pintarGuia(); aplicarA11y();
 }
 function back(){
@@ -1601,9 +1842,22 @@ function back(){
   go(prev,{back:true});
 }
 function tabbar(){
-  document.getElementById("tabbar").innerHTML = TABS.map(t=>
-    `<button class="tab${t.id===S.view?" on":""}" data-tab="${t.id}" onclick="go('${t.id}')" aria-label="${t.nom}">${svg(t.icon)}<span>${t.nom}</span></button>`
-  ).join("");
+  document.getElementById("tabbar").innerHTML =
+    `<span class="tabind" aria-hidden="true"></span>` +
+    TABS.map(t=>`<button class="tab${t.id===S.view?" on":""}" data-tab="${t.id}" onclick="go('${t.id}')" aria-label="${t.nom}">${svg(t.icon)}<span>${t.nom}</span></button>`).join("");
+  requestAnimationFrame(moverIndicador);
+}
+function moverIndicador(){
+  const bar=document.getElementById("tabbar"); if(!bar) return;
+  const ind=bar.querySelector(".tabind"), act=bar.querySelector(".tab.on");
+  if(!ind) return;
+  if(!act){ ind.style.opacity="0"; return; }
+  const r=bar.getBoundingClientRect(), a=act.getBoundingClientRect();
+  ind.style.opacity="1";
+  ind.style.width=a.width+"px";
+  ind.style.height=a.height+"px";
+  ind.style.top=(a.top-r.top)+"px";
+  ind.style.transform=`translateX(${a.left-r.left}px)`;
 }
 
 /* hoja / lightbox / toast */
@@ -1643,42 +1897,136 @@ function horarioHoy(){ return esVerano(S.mes) ? [8,20] : [9,18]; }
 function estaAbierto(){ const h=new Date().getHours(), [a,b]=horarioHoy(); return h>=a && h<b; }
 function enFlor(){ return ESPECIES.filter(e=>e.flor.includes(S.mes)); }
 
+/* ============================================================
+   LA RUEDA DEL AÑO
+   Un jardín botánico se organiza por estaciones, no por menús.
+   El año es un círculo: cada sector del anillo se tiñe con lo que
+   florece ese mes y con qué intensidad. Girás la rueda y ves el
+   Jardín cambiar de color.
+   ============================================================ */
+const FLOR_HEX = {rosa:"#F0709B", amarilla:"#E8B24C", roja:"#E2523F", blanca:"#E4EDE2", violeta:"#9B7BD8", "sin flor":"#5E7A66"};
+const florDelMes = m => ESPECIES.filter(e=>e.flor.includes(m));
+function colorDelMes(m){
+  const l=florDelMes(m); if(!l.length) return "#33463B";
+  const c={}; l.forEach(e=>c[e.color]=(c[e.color]||0)+1);
+  return FLOR_HEX[Object.entries(c).sort((a,b)=>b[1]-a[1])[0][0]] || "#F0709B";
+}
+const MAX_FLOR = Math.max(1, ...Array.from({length:12},(_,m)=>florDelMes(m).length));
+
+function arcoPath(cx,cy,r1,r2,a1,a2){
+  const P=(r,a)=>[cx+r*Math.cos(a*Math.PI/180), cy+r*Math.sin(a*Math.PI/180)];
+  const [x1,y1]=P(r2,a1),[x2,y2]=P(r2,a2),[x3,y3]=P(r1,a2),[x4,y4]=P(r1,a1);
+  const g=(a2-a1)>180?1:0;
+  return `M${x1.toFixed(1)},${y1.toFixed(1)} A${r2},${r2} 0 ${g} 1 ${x2.toFixed(1)},${y2.toFixed(1)} `+
+         `L${x3.toFixed(1)},${y3.toFixed(1)} A${r1},${r1} 0 ${g} 0 ${x4.toFixed(1)},${y4.toFixed(1)} Z`;
+}
+
+function ruedaSVG(){
+  const sel=S.mesRueda, C=170, R1=102, R2=144, RL=161, giro=-sel*30;
+  const segs=Array.from({length:12},(_,i)=>{
+    const a1=-105+i*30, a2=a1+30;
+    const n=florDelMes(i).length, col=colorDelMes(i);
+    const op=(0.16+0.64*(n/MAX_FLOR)).toFixed(2);
+    const act=i===sel;
+    return `<g class="seg" opacity="${act?1:.92}">
+      <path d="${arcoPath(C,C,R1,R2,a1+0.7,a2-0.7)}" fill="${col}" opacity="${act?Math.min(1,+op+0.22):op}"
+            onclick="girarRueda(${i})" style="cursor:pointer"/>
+      ${act?`<path d="${arcoPath(C,C,R1-4,R2+4,a1+0.7,a2-0.7)}" fill="none" stroke="${col}" stroke-width="1.6" opacity=".9"/>`:""}
+      ${i===new Date().getMonth()?`<circle cx="${(C+((R1+R2)/2)*Math.cos((a1+15)*Math.PI/180)).toFixed(1)}" cy="${(C+((R1+R2)/2)*Math.sin((a1+15)*Math.PI/180)).toFixed(1)}" r="2.6" fill="#07100B" opacity=".55"/>`:""}
+    </g>`;
+  }).join("");
+  const etiquetas=Array.from({length:12},(_,i)=>{
+    const a=(-90+i*30)*Math.PI/180;
+    const lx=(C+RL*Math.cos(a)).toFixed(1), ly=(C+RL*Math.sin(a)+4).toFixed(1);
+    const cls = i===sel ? "etiqueta on" : (i===new Date().getMonth() ? "etiqueta hoy" : "etiqueta");
+    return `<g transform="rotate(${sel*30} ${lx} ${ly})"><text class="${cls}" x="${lx}" y="${ly}" text-anchor="middle">${MESES_L[i].slice(0,3).toUpperCase()}</text></g>`;
+  }).join("");
+  return `<svg class="rueda" viewBox="-20 0 380 344" id="rueda" role="group" aria-label="Calendario de floración, mes seleccionado: ${MESES_L[sel]}">
+    <circle cx="${C}" cy="${C}" r="${R2+22}" fill="none" stroke="rgba(236,243,237,.05)" stroke-width="1"/>
+    <g class="anillo-g" transform="rotate(${giro} ${C} ${C})">${segs}${etiquetas}</g>
+    <path class="aguja" d="M170,10 l7,12 h-14 Z"/>
+    <circle cx="${C}" cy="${C}" r="${R1-7}" fill="none" stroke="rgba(236,243,237,.07)" stroke-width="1"/>
+  </svg>`;
+}
+
+function girarRueda(m){
+  S.mesRueda=((m%12)+12)%12;
+  const v=document.getElementById("v-home"); if(!v) return;
+  const g=v.querySelector(".anillo-g");
+  if(g){
+    /* redibujo solo el anillo y el núcleo: la rueda gira, la pantalla no salta */
+    v.querySelector(".anillo").innerHTML = ruedaSVG()+nucleoHTML();
+    v.querySelector("#tirames").innerHTML = tiraMesHTML();
+    paintAll(v);
+    hookRueda();
+  }
+}
+function nucleoHTML(){
+  const m=S.mesRueda, l=florDelMes(m), hoy=m===new Date().getMonth();
+  return `<div class="nucleo">
+    <span class="mes">${MESES_L[m]}</span>
+    <span class="cuenta">${l.length?`<b>${l.length}</b> especie${l.length===1?"":"s"} en flor`:"Sin floraciones fichadas"}</span>
+    ${hoy?`<span class="hoy-chip">AHORA</span>`:""}
+  </div>`;
+}
+function tiraMesHTML(){
+  const l=florDelMes(S.mesRueda);
+  if(!l.length) return `<p class="faint" style="font-size:12.5px;padding:0 20px;margin:0;line-height:1.5">
+    Ningún ejemplar fichado florece en ${MESES_L[S.mesRueda]}. Es el mes del follaje: mirá el ginkgo y el liquidámbar.</p>`;
+  return l.map((e,i)=>`
+    <button class="florcard" style="animation-delay:${i*45}ms" onclick="ficha('${e.id}')">
+      <span class="th">${imagen(e,"bloom",e.color==="amarilla"?46:e.color==="roja"?4:e.color==="violeta"?268:e.color==="blanca"?60:335)}</span>
+      <span class="mt"><b>${e.nom}</b><i>${e.bin}</i></span>
+    </button>`).join("");
+}
+
+/* girar arrastrando: el gesto que hace que la rueda se sienta física */
+function hookRueda(){
+  const svg=document.getElementById("rueda"); if(!svg) return;
+  let arr=null;
+  const ang=e=>{
+    const r=svg.getBoundingClientRect();
+    return Math.atan2(e.clientY-(r.top+r.height/2), e.clientX-(r.left+r.width/2))*180/Math.PI;
+  };
+  svg.onpointerdown=e=>{ arr={a:ang(e), m:S.mesRueda, movido:false}; svg.setPointerCapture(e.pointerId); };
+  svg.onpointermove=e=>{
+    if(!arr) return;
+    let d=ang(e)-arr.a; while(d>180)d-=360; while(d<-180)d+=360;
+    if(Math.abs(d)>7) arr.movido=true;
+    const m=arr.m - Math.round(d/30);
+    if(((m%12)+12)%12 !== S.mesRueda) girarRueda(m);
+  };
+  svg.onpointerup=svg.onpointercancel=()=>{ arr=null; };
+}
+
 RENDER.home = () => {
   const [a,b]=horarioHoy(), abierto=estaAbierto();
-  const flores=enFlor();
-  const hoy=ACTIVIDADES.slice(0,2);
   return `
-  <div class="hero">
-    ${art("hero-botanico-thays","canopy")}
-    <div class="hero-grad"></div>
-    <div class="hero-body">
-      <span class="livepill"><span class="dot" style="background:${abierto?"var(--ok)":"var(--warn)"}"></span>
-        ${abierto?"Abierto ahora":"Cerrado"} · ${String(a).padStart(2,"0")}:00 a ${b}:00</span>
-      <h2>Buenos días.<br>El Jardín está <em>en flor</em>.</h2>
-      <p class="muted" style="font-size:13px;margin:0;max-width:270px;line-height:1.5">
-        Jardín Botánico Carlos Thays · Palermo · 7,7 hectáreas · 5.500 especies</p>
-    </div>
+  <div class="cabecera">
+    <div class="marca">Jardín Botánico<small>Carlos Thays · Palermo</small></div>
+    <span class="livepill"><span class="dot" style="background:${abierto?"var(--ok)":"var(--warn)"}"></span>
+      ${abierto?"Abierto":"Cerrado"} · ${String(a).padStart(2,"0")}–${b}h</span>
   </div>
 
-  <div class="pad">
-    <div class="quickgrid">
-      <button class="quick" onclick="go('mapa')">${svg(I.locate)}<span><b>¿Dónde estoy?</b><small>Ubicate en el mapa del Jardín</small></span></button>
-      <button class="quick" onclick="go('teclado')">${svg(I.keypad)}<span><b>Audio por número</b><small>Tecleá el número del cartel</small></span></button>
-      <button class="quick" onclick="go('juego')">${svg(I.game)}<span><b>Armá tu planta</b><small>¿A qué especie te parecés?</small></span></button>
-      <button class="quick" onclick="abrirRuta('primera-vez')">${svg(I.play)}<span><b>Primera vez acá</b><small>Recorrido de 45 minutos</small></span></button>
-    </div>
+  <div style="padding:0 20px 4px">
+    <span class="kicker">El año del Jardín</span>
+    <p class="muted" style="font-size:13px;line-height:1.5;margin:8px 0 0;max-width:32ch">
+      Girá la rueda o tocá un mes: cada sector se tiñe con lo que florece y con cuánto.</p>
   </div>
 
-  <div class="sec-head pad">
-    <h3 class="sec-title">En flor en ${MESES_L[S.mes]}</h3>
-    <button class="more" onclick="go('especies')">Ver todas</button>
+  <div class="anillo">${ruedaSVG()}${nucleoHTML()}</div>
+
+  <div class="tirames" id="tirames">${tiraMesHTML()}</div>
+
+  <div class="sec-head pad" style="margin-bottom:12px">
+    <h3 class="sec-title">Empezá por acá</h3>
+    <button class="more" onclick="go('especies')">Catálogo</button>
   </div>
-  <div class="bloomscroll">
-    ${(flores.length?flores:ESPECIES.slice(0,5)).map(e=>`
-      <button class="bloomcard" onclick="ficha('${e.id}')">
-        <div class="thumb">${imagen(e,"bloom",e.color==="amarilla"?46:e.color==="roja"?4:e.color==="violeta"?268:e.color==="blanca"?60:335)}</div>
-        <div class="meta"><b>${e.nom}</b><i>${e.bin}</i></div>
-      </button>`).join("")}
+  <div class="acciones">
+    <button class="accion" onclick="go('mapa')">${svg(I.locate)}<span>Dónde<br>estoy</span></button>
+    <button class="accion" onclick="go('teclado')">${svg(I.keypad)}<span>Audio por<br>número</span></button>
+    <button class="accion" onclick="abrirRuta('primera-vez')">${svg(I.play)}<span>Primera<br>vez</span></button>
+    <button class="accion" onclick="go('juego')">${svg(I.game)}<span>Armá tu<br>planta</span></button>
   </div>
 
   <div class="sec-head pad"><h3 class="sec-title">Dato del día</h3></div>
@@ -1692,7 +2040,7 @@ RENDER.home = () => {
     <h3 class="sec-title">Este fin de semana</h3>
     <button class="more" onclick="go('agenda')">Agenda</button>
   </div>
-  ${hoy.map((ev,i)=>`
+  ${ACTIVIDADES.slice(0,2).map((ev,i)=>`
     <button class="listitem" onclick="go('agenda')">
       <div class="lthumb">${art("ev-"+i,"path")}</div>
       <div class="lbody"><b>${ev.nom}</b><i style="font-style:normal;font-family:var(--sans)">${ev.d} · ${ev.hora}</i><div class="l3">${ev.cupo}</div></div>
@@ -1805,6 +2153,7 @@ RENDER.mapa = () => `
         <button class="chip${S.capas.patrimonio?" on":""}" onclick="capa('patrimonio')">Patrimonio</button>
         <button class="chip${S.capas.servicios?" on":""}" onclick="capa('servicios')">Servicios</button>
         <button class="chip${S.capas.sectores?" on":""}" onclick="capa('sectores')">Sectores</button>
+        <button class="chip${S.capas.enflor?" on":""}" onclick="capa('enflor')">${svg(I.leaf,"chipicon")} En flor</button>
         <button class="chip${S.capas.accesible?" on":""}" onclick="capa('accesible')">${svg(I.accesible,"chipicon")} Accesibilidad</button>
         <button class="chip${S.ruta?" on":""}" onclick="${S.ruta?"quitarRuta()":"go('recorridos')"}">${S.ruta?"Recorrido activo":"Recorridos"}</button>
       </div>
@@ -1838,6 +2187,7 @@ function drawMap(){
   if(S.capas.patrimonio) pins=pins.concat(POIS.map(p=>({...p,g:"poi"})));
   if(S.capas.servicios)  pins=pins.concat(SERVICIOS.map(x=>({...x,g:"srv"})));
   const enRuta = ruta ? ruta.paradas.map(x=>x.ref.split(":")[1]) : [];
+  const entrada = S.mapaEntrada;
 
   svgEl.innerHTML=`
   <defs>
@@ -1890,14 +2240,20 @@ function drawMap(){
   <text x="1226" y="848" text-anchor="middle" fill="#5C6B62" font-family="Instrument Sans" font-size="22">Casares</text>
 
   <!-- sectores -->
-  <g>${SECTORES.filter(x=>!x.nogeom).map(sec=>{
+  <g>${SECTORES.filter(x=>!x.nogeom).map((sec,si)=>{
       const sel = S.sector===sec.id;
-      const op  = sec.quiet ? (sel?.30:.13) : (sel?.46:.26);
-      return `<g class="sector" onclick="tapSector('${sec.id}')" style="cursor:pointer">
-        ${sec.shapes.map(sh=>formaSector(sh,`fill="${sec.c}" opacity="${op}"`)).join("")}
-        ${sec.hatch?sec.shapes.map(sh=>formaSector(sh,`fill="url(#hatch)" opacity="${sel?.5:.3}"`)).join(""):""}
-        ${sec.shapes.map(sh=>formaSector(sh,`fill="none" stroke="${sec.c}" stroke-opacity="${sel?.9:.42}" stroke-width="2"`)).join("")}
-      </g>`;
+      const enf = S.capas.enflor ? (ESPECIES.filter(e=>e.sector===sec.id && e.flor.includes(S.mes)).length) : null;
+      const col = S.capas.enflor ? (enf?"#F0709B":"#33463B") : sec.c;
+      const op  = S.capas.enflor ? (enf ? (0.18+0.62*Math.min(1,enf/4)).toFixed(2) : .10)
+                                 : (sec.quiet ? (sel?.30:.13) : (sel?.46:.26));
+      const anim = entrada ? ` class="sector-in" style="animation-delay:${si*42}ms"` : "";
+      return `<g${anim}><g class="sector" onclick="tapSector('${sec.id}')" style="cursor:pointer">
+        <g opacity="${op}">${sec.shapes.map(sh=>formaSector(sh,`fill="${col}"`)).join("")}</g>
+        ${sec.hatch&&!S.capas.enflor?`<g opacity="${sel?.5:.3}">${sec.shapes.map(sh=>formaSector(sh,`fill="url(#hatch)"`)).join("")}</g>`:""}
+        ${sec.shapes.map(sh=>formaSector(sh,`fill="none" stroke="${col}" stroke-opacity="${sel?.9:.42}" stroke-width="2"`)).join("")}
+        ${S.capas.enflor&&enf?`<g transform="translate(${sec.lx} ${sec.ly+26})">
+            <circle r="17" fill="#F0709B"/><text y="7" text-anchor="middle" font-family="Instrument Sans" font-size="19" font-weight="700" fill="#2A0713">${enf}</text></g>`:""}
+      </g></g>`;
     }).join("")}
   </g>
 
@@ -1907,7 +2263,7 @@ function drawMap(){
   <text x="842" y="368" text-anchor="middle" fill="#8FA396" font-family="Instrument Sans" font-size="21">de Jardinería</text>
 
   <!-- senderos -->
-  <g>${SENDEROS.map((d,i)=>`<path class="path-line${i>2?" thin":""}" d="${d}"/>`).join("")}</g>
+  <g>${SENDEROS.map((d,i)=>`<path class="path-line${i>2?" thin":""}${entrada?" path-in":""}" style="${entrada?`animation-delay:${240+i*90}ms`:""}" d="${d}"/>`).join("")}</g>
 
   <!-- espejos de agua -->
   <g fill="#2E6E7A" opacity=".55">
@@ -1949,11 +2305,14 @@ function drawMap(){
       </g>`;
     }
     const col = p.g==="esp" ? "#F0709B" : p.g==="poi" ? "#DED6C6" : "#7ED8C3";
-    const r   = sel?18:12;
-    const op  = ruta?.55:1;
+    const floreciendo = p.g==="esp" && p.flor && p.flor.includes(S.mes);
+    const r   = sel?18:(S.capas.enflor&&floreciendo?16:12);
+    let op    = ruta?.55:1;
+    if(S.capas.enflor) op = floreciendo?1:(p.g==="esp"?.22:.4);
     return `<g class="pin${sel?" sel":""}" opacity="${op}" onclick="pinTap('${p.g}','${p.id}')" tabindex="0" role="button" aria-label="${p.nom}">
       ${sel?`<circle cx="${p.x}" cy="${p.y}" r="34" fill="${col}" opacity=".18"/>`:""}
       <circle class="hit" cx="${p.x}" cy="${p.y}" r="34"/>
+      ${S.capas.enflor&&floreciendo?`<circle cx="${p.x}" cy="${p.y}" r="${r+9}" fill="none" stroke="#F0709B" stroke-width="2" opacity=".55"/>`:""}
       <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${col}" stroke="#070C09" stroke-width="3"/>
       ${p.letra?`<text x="${p.x}" y="${p.y+6}" text-anchor="middle" font-family="Instrument Sans" font-size="15" font-weight="700" fill="#0A140E">${p.letra}</text>`:""}
       ${sel?`<text x="${p.x}" y="${p.y-30}" text-anchor="middle" fill="#ECF3ED" font-size="26" font-weight="600" font-family="Instrument Sans" paint-order="stroke" stroke="#070C09" stroke-width="7">${p.nom}</text>`:""}
@@ -1962,6 +2321,7 @@ function drawMap(){
 
   svgEl.setAttribute("viewBox",`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
   hookPan(svgEl);
+  if(entrada){ S.mapaEntrada=false; }
 }
 
 function hookPan(el){

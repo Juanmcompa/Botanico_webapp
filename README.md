@@ -34,12 +34,13 @@ Entrá al [link de arriba](https://juanmcompa.github.io/Botanico_webapp/), o des
 
 ## Contenido del prototipo
 
-- **Mapa trazado sobre el plano oficial** — perímetro real, los 14 sectores de la leyenda institucional, la Escuela Técnica de Jardinería como predio propio, Plaza Intendente Casares, los cinco invernáculos y los puntos A–J. Capas conmutables, buscador unificado y una segunda planta con el interior del Invernáculo N.º 1.
+- **La rueda del año** — la pantalla de inicio es un calendario radial de floración: doce sectores, cada uno teñido con lo que florece ese mes y con qué intensidad. Se gira arrastrando o tocando un mes, y el Jardín cambia de color delante tuyo.
+- **Mapa trazado sobre el plano oficial** — perímetro real, los 14 sectores de la leyenda institucional, la Escuela Técnica de Jardinería como predio propio, Plaza Intendente Casares, los cinco invernáculos y los puntos A–J. Capas conmutables —incluida «en flor», un mapa de calor botánico que cambia con la estación—, buscador unificado, entrada animada y una segunda planta con el interior del Invernáculo N.º 1.
 - **Audioguía numerada** — cada parada tiene número de audio, reproducción con la voz del navegador, control de velocidad y transcripción completa. Teclado numérico para marcar el número del cartel sin cámara ni señal.
-- **22 fichas técnicas** — familia, origen, porte, calendario de floración mes a mes, estado de conservación, descripción, usos y un dato memorable por especie.
+- **36 fichas técnicas** — familia, origen, porte, calendario de floración mes a mes, estado de conservación, descripción, usos y un dato memorable por especie.
 - **5 recorridos guiados + el tuyo** — barra persistente estilo audioguía de museo (Anterior · Listado · Teclado · Mapa · Siguiente), pines numerados con auricular, navegación paso a paso con distancia y giro calculados sobre el plano, y armado de recorrido propio compartible por link.
 - **Accesibilidad** — tres tamaños de texto, alto contraste, transcripciones permanentes, capa de sanitarios accesibles, rampas y bancos, y ficha de accesibilidad por recorrido (superficie, pendiente, sombra, silla de ruedas, duración a paso lento).
-- **26 puntos de interés** — invernáculo art nouveau, edificio central, columna meteorológica, esculturas, jardín de mariposas, yerbal histórico, refugio climático.
+- **28 puntos de interés** — invernáculo art nouveau, edificio central, columna meteorológica, esculturas, jardín de mariposas, yerbal histórico, refugio climático.
 - **Armá tu planta** — juego de identificación por rasgos (hoja, flor, tronco, hábitat) con porcentaje de coincidencia contra el catálogo.
 - **Galería** — grilla del feed con filtros temáticos y visor.
 - **Agenda y voluntariado** — actividades reales del Jardín y los tres programas del Área Educativa con formulario de postulación.
@@ -68,7 +69,7 @@ Entrá al [link de arriba](https://juanmcompa.github.io/Botanico_webapp/), o des
 
 **Las imágenes no son fotografías.** Son composiciones atmosféricas generadas en `<canvas>` por una función determinista: cada elemento recibe siempre la misma imagen a partir de su identificador. Se resolvió así porque no hay derechos sobre el material fotográfico del archivo del Jardín.
 
-**Para sumar fotos reales** alcanza con dejar los archivos en `fotos/` con el identificador como nombre (`palo-borracho.jpg`, `ginkgo.jpg`). La app las detecta sola y las superpone con un fundido; si falta alguna, usa la composición generada. La lista completa de identificadores está en [`fotos/LEEME.md`](fotos/LEEME.md).
+**Hay 22 fotografías reales integradas**, aportadas para el prototipo y mapeadas por nombre en el objeto `FOTOS` del código. Para sumar más alcanza con dejar los archivos en `fotos/` con el identificador como nombre (`ombu.jpg`, `jacaranda.jpg`): la app las detecta sola y las superpone con un fundido; si falta alguna, usa la composición generada. El estado de cada una está en [`fotos/LEEME.md`](fotos/LEEME.md).
 
 ## Fuentes
 
