@@ -152,6 +152,7 @@ Thays
 
 1. Las cinco secciones raíz son hermanas: siempre accesibles, sin jerarquía entre ellas.
 2. Fichas y puntos de interés se abren como **panel inferior**, no como pantalla nueva: el usuario nunca pierde el contexto del mapa o de la lista.
+2 bis. Ningún modo captura la navegación. La barra de recorrido se superpone a la de secciones y se pliega a una tira mínima, pero las cinco secciones siguen a un toque.
 3. Las pantallas hijas llevan botón de retroceso rotulado con el nombre de su sección padre.
 4. El panel de recorrido activo flota sobre el mapa y sobrevive a la navegación entre secciones.
 
@@ -217,7 +218,7 @@ Mapa vectorial trazado sobre **el plano oficial del Jardín**, no sobre un mapa 
 El **modo seguimiento** adopta el patrón de las audioguías de museo. Con un recorrido activo:
 
 - Las paradas se dibujan sobre el mapa como **círculos grandes numerados con ícono de auricular**; la parada actual se invierte en claro.
-- La barra de secciones se reemplaza por la **barra de recorrido**: Anterior · Listado · Teclado · Mapa · Siguiente. Una sola barra por vez.
+- Aparece la **barra de recorrido** —Anterior · Listado · Teclado · Mapa · Siguiente— flotando *sobre* la de secciones, con su propia cabecera para plegarla o terminar el recorrido. La navegación general nunca se bloquea: se puede volver al inicio sin perder el paso.
 - Sobre ella, la **ficha activa**: miniatura, nombre, número de audio, parada X de N y botón de reproducción con barra de progreso.
 - Encima, la **instrucción de navegación**: «Girá a la derecha · 25 m hasta la parada 3». Distancia y giro se derivan de la geometría del plano, no están escritos a mano.
 - El botón **Simular** mueve el punto «estás acá» por la traza para demostrar el patrón sin salir a caminar.

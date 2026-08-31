@@ -159,7 +159,6 @@ kbd{
 .view.nopad{padding-bottom:0}
 
 /* ---------- barra de pestañas ---------- */
-.tabbar.hide{display:none}
 .tabbar{
   position:absolute;left:0;right:0;bottom:0;z-index:50;
   display:grid;grid-template-columns:repeat(5,1fr);
@@ -189,8 +188,8 @@ kbd{
   letter-spacing:-.015em;margin:0;text-wrap:balance;
 }
 .sec-head{
-  display:flex;align-items:baseline;justify-content:space-between;
-  gap:12px;margin:30px 0 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin:22px 0 12px;
 }
 .sec-head .more{font-size:12px;color:var(--vidrio);font-weight:600}
 .kicker{
@@ -214,7 +213,7 @@ kbd{
   transition:all .16s ease;white-space:nowrap;
 }
 .chip.on{background:var(--text);color:var(--night);border-color:var(--text)}
-.chip .chipicon{width:13px;height:13px;display:inline-block;vertical-align:-2px;margin-right:3px}
+.chipicon{width:13px;height:13px;display:inline-block;vertical-align:-2px;margin-right:3px;flex:none}
 .chip:hover:not(.on){border-color:var(--line-2);color:var(--text)}
 
 .btn{
@@ -320,9 +319,14 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 }
 .map-search input::placeholder{color:var(--faint)}
 .map-search svg{width:17px;height:17px;stroke-width:1.7;color:var(--muted);flex:none}
-.screen[data-guia="1"] .map-tools{bottom:224px}
-.screen[data-guia="1"] .toast{bottom:232px}
-.screen[data-guia="1"] .maphint{bottom:250px}
+.screen[data-guia="1"] .map-tools{bottom:270px}
+.screen[data-guia="1"] .toast{bottom:280px}
+.screen[data-guia="1"] .maphint{bottom:296px}
+.screen[data-guia="1"] .view{padding-bottom:262px}
+.screen[data-guia="mini"] .map-tools{bottom:186px}
+.screen[data-guia="mini"] .toast{bottom:194px}
+.screen[data-guia="mini"] .maphint{bottom:210px}
+.screen[data-guia="mini"] .view{padding-bottom:176px}
 .map-tools{
   position:absolute;right:16px;bottom:112px;z-index:20;
   display:flex;flex-direction:column;gap:8px;
@@ -626,7 +630,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
    Recurso de lámina botánica: el año como círculo, no como lista.
    ============================================================ */
 .anillo{position:relative;padding:0 20px;margin-top:4px}
-.rueda{width:100%;max-width:340px;margin:0 auto;display:block;touch-action:none;cursor:grab}
+.rueda{width:100%;max-width:292px;margin:0 auto;display:block;touch-action:none;cursor:grab}
 .rueda:active{cursor:grabbing}
 .rueda .seg{transition:opacity .3s ease,transform .3s ease;transform-origin:160px 160px}
 .rueda .anillo-g{transition:transform .72s cubic-bezier(.34,1.16,.36,1)}
@@ -640,11 +644,11 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 
 .nucleo{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  text-align:center;pointer-events:none;width:150px;
+  text-align:center;pointer-events:none;width:132px;
 }
 .nucleo .mes{
   font-family:var(--serif);font-optical-sizing:auto;font-weight:300;
-  font-size:30px;line-height:1;letter-spacing:-.03em;text-transform:capitalize;
+  font-size:27px;line-height:1;letter-spacing:-.03em;text-transform:capitalize;
   display:block;margin-bottom:6px;
 }
 .nucleo .cuenta{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
@@ -655,15 +659,20 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   font-size:9.5px;font-weight:700;letter-spacing:.1em;
 }
 
+.pista{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  margin:-4px 0 14px;font-size:11px;color:var(--faint);
+}
+.pista svg{width:14px;height:14px;stroke-width:1.8}
 .tirames{display:flex;gap:10px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
 .tirames::-webkit-scrollbar{display:none}
 .florcard{
-  flex:none;width:132px;border-radius:var(--r-m);overflow:hidden;
+  flex:none;width:124px;border-radius:var(--r-m);overflow:hidden;
   background:var(--bark);border:1px solid var(--line);text-align:left;
   animation:subir .45s cubic-bezier(.22,.9,.24,1) backwards;
 }
 @keyframes subir{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.florcard .th{display:block;height:88px;position:relative}
+.florcard .th{display:block;height:78px;position:relative}
 .florcard .mt{display:block;padding:10px 11px 12px}
 .florcard .mt b{display:block;font-size:12.5px;font-weight:600;line-height:1.25}
 .florcard .mt i{display:block;font-size:10.5px;color:var(--faint);margin-top:3px;font-family:var(--serif);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -682,7 +691,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 
 .cabecera{
   display:flex;align-items:center;justify-content:space-between;
-  padding:56px 20px 10px;gap:12px;
+  padding:44px 20px 6px;gap:12px;
 }
 .cabecera .marca{font-family:var(--serif);font-size:17px;font-weight:400;letter-spacing:-.01em;line-height:1.15}
 .cabecera .marca small{display:block;font-family:var(--sans);font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
@@ -757,11 +766,28 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 
 /* ---------- barra de recorrido (Anterior · Listado · Teclado · Mapa · Siguiente) ---------- */
 .guidebar{
-  position:absolute;left:0;right:0;bottom:0;z-index:52;
-  display:none;background:rgba(7,12,9,.97);
-  backdrop-filter:blur(22px) saturate(1.4);border-top:1px solid var(--line);
+  position:absolute;left:8px;right:8px;bottom:70px;z-index:52;
+  display:none;background:rgba(11,20,15,.97);border-radius:20px;
+  backdrop-filter:blur(22px) saturate(1.4);border:1px solid var(--line-2);
+  box-shadow:0 18px 40px -18px rgba(0,0,0,.9);overflow:hidden;
 }
-.guidebar.on{display:block}
+.guidebar.on{display:block;animation:subirGuia .34s var(--sheet-ease)}
+@keyframes subirGuia{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.guiahead{
+  display:flex;align-items:center;gap:10px;padding:9px 8px 9px 14px;
+  border-bottom:1px solid var(--line);
+}
+.guiahead .gt{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
+.guiahead .gt b{font-size:11.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.guiahead svg{width:16px;height:16px;stroke-width:2}
+.gicon{
+  width:34px;height:34px;border-radius:11px;flex:none;display:grid;place-items:center;
+  color:var(--muted);border:1px solid transparent;
+}
+.gicon:hover{color:var(--text);border-color:var(--line-2)}
+.guidebody{overflow:hidden;transition:max-height .34s var(--sheet-ease)}
+.guidebar.mini .guidebody{max-height:0}
+.guidebar.mini .nowplaying{border-bottom:0}
 .nowplaying{
   display:flex;gap:11px;align-items:center;padding:10px 14px;
   border-bottom:1px solid var(--line);width:100%;text-align:left;
@@ -844,7 +870,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .switch.on{background:var(--vidrio)}
 .switch.on i{transform:translateX(19px)}
 .segrow{display:flex;gap:6px;padding:0 20px 16px}
-.seg{flex:1;padding:11px 0;border-radius:12px;border:1px solid var(--line-2);font-size:12.5px;font-weight:700;color:var(--muted)}
+.seg{flex:1;padding:11px 0;min-height:52px;display:grid;place-items:center;border-radius:12px;border:1px solid var(--line-2);font-size:12.5px;font-weight:700;color:var(--muted)}
 .seg.on{background:var(--text);color:var(--night);border-color:var(--text)}
 
 /* ---------- fotos reales encima de la composición generada ---------- */
@@ -1687,6 +1713,13 @@ Object.assign(I,{
   ojo:'<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
   share:'<circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.8 7.4-4.3M8.3 13.2l7.4 4.3"/>',
   mas:'<path d="M12 5v14M5 12h14"/>',
+  tap:'<path d="M9 11.5V6a2 2 0 0 1 4 0v6.5"/><path d="M13 10.5a2 2 0 1 1 4 0V15a6 6 0 0 1-6 6 6 6 0 0 1-5.2-3l-2-3.5a2 2 0 0 1 3.4-2L9 14"/>',
+  teclas:'<rect x="2.5" y="6" width="19" height="12" rx="3"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h12"/>',
+  movimiento:'<path d="M4 9c2.4-2.6 4.8-2.6 7.2 0s4.8 2.6 7.2 0"/><path d="M4 15c2.4-2.6 4.8-2.6 7.2 0s4.8 2.6 7.2 0"/>',
+  girar:'<path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 4v4.4h-4.4"/>',
+  abajo:'<path d="m6 9 6 6 6-6"/>',
+  arriba:'<path d="m6 15 6-6 6 6"/>',
+  giro:'<path d="M6 21v-7a5 5 0 0 1 5-5h7"/><path d="m14 5 4 4-4 4"/>',
   accesible:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="7.4" r="1.5"/><path d="M9.4 10.2h5.2M12 10.2v3.6h3l1.6 3.4"/><path d="M12 13.8a3.4 3.4 0 1 0 2.4 5.8"/>'
 });
 
@@ -1800,7 +1833,7 @@ const S = {
   planta:"predio",                                 /* predio | invernaculo1 */
   audio:{id:null,tipo:null,sonando:false,vel:1,pct:0},
   a11y:{texto:0, contraste:false, transcripcion:false, soloAccesible:false},
-  miRuta:[], teclado:"", mesRueda:new Date().getMonth()
+  miRuta:[], teclado:"", mesRueda:new Date().getMonth(), guiaAbierta:true
 };
 
 const TABS = [
@@ -2008,19 +2041,14 @@ RENDER.home = () => {
       ${abierto?"Abierto":"Cerrado"} · ${String(a).padStart(2,"0")}–${b}h</span>
   </div>
 
-  <div style="padding:0 20px 4px">
-    <span class="kicker">El año del Jardín</span>
-    <p class="muted" style="font-size:13px;line-height:1.5;margin:8px 0 0;max-width:32ch">
-      Girá la rueda o tocá un mes: cada sector se tiñe con lo que florece y con cuánto.</p>
-  </div>
-
   <div class="anillo">${ruedaSVG()}${nucleoHTML()}</div>
+  <div class="pista">${svg(I.girar)}<span>Arrastrá para girar el año</span></div>
 
   <div class="tirames" id="tirames">${tiraMesHTML()}</div>
 
   <div class="sec-head pad" style="margin-bottom:12px">
     <h3 class="sec-title">Empezá por acá</h3>
-    <button class="more" onclick="go('especies')">Catálogo</button>
+    <button class="more" onclick="go('especies')" aria-label="Ver el catálogo completo de especies">Catálogo ${svg(I.next,"chipicon")}</button>
   </div>
   <div class="acciones">
     <button class="accion" onclick="go('mapa')">${svg(I.locate)}<span>Dónde<br>estoy</span></button>
@@ -2510,9 +2538,11 @@ RENDER.accesibilidad = () => `
   </div>
   <div style="height:20px"></div>
 
-  <div style="padding:0 20px 10px"><span class="kicker">Tamaño de texto</span></div>
+  <div style="padding:0 20px 10px"><span class="kicker">${svg(I.texto,"chipicon")} Tamaño de texto</span></div>
   <div class="segrow">
-    ${["Normal","Grande","Muy grande"].map((t,i)=>`<button class="seg${S.a11y.texto===i?" on":""}" onclick="textoA11y(${i})">${t}</button>`).join("")}
+    ${[["A",14,"Normal"],["A",19,"Grande"],["A",25,"Muy grande"]].map((t,i)=>
+      `<button class="seg${S.a11y.texto===i?" on":""}" onclick="textoA11y(${i})" aria-label="Tamaño de texto ${t[2].toLowerCase()}" aria-pressed="${S.a11y.texto===i}">
+         <span style="font-size:${t[1]}px;font-weight:700;line-height:1">${t[0]}</span></button>`).join("")}
   </div>
 
   <button class="switchrow" onclick="toggleA11y('contraste')" aria-pressed="${S.a11y.contraste}">
@@ -2533,14 +2563,21 @@ RENDER.accesibilidad = () => `
     <span class="switch${S.capas.accesible?" on":""}"><i></i></span>
   </button>
 
-  <div class="sec-head pad"><h3 class="sec-title">Lo que ya viene puesto</h3></div>
-  <div class="prose">
-    <p><strong>Audioguía en todas las paradas.</strong> Usa la voz del sistema en español, con control de velocidad. No requiere descargar audio ni tener señal.</p>
-    <p><strong>Números en vez de códigos QR.</strong> Cada cartel lleva un número que se teclea con botones grandes. Funciona sin cámara, sin GPS y con visión reducida.</p>
-    <p><strong>Áreas táctiles de 44 píxeles como mínimo.</strong> Los pines del mapa tienen un círculo de impacto invisible bastante mayor que el visible.</p>
-    <p><strong>Navegación por teclado.</strong> Toda la interfaz se recorre con la tecla de tabulación, con foco visible, y Esc cierra cualquier panel abierto.</p>
-    <p><strong>Respeto por «reducir movimiento».</strong> Si el sistema lo pide, las animaciones se anulan en lugar de degradarse.</p>
-    <p><strong>Datos de accesibilidad por recorrido.</strong> Cada uno declara superficie, pendiente, bancos, sombra y aptitud para silla de ruedas, más una duración estimada a paso lento.</p>
+  <div class="sec-head pad"><h3 class="sec-title">Ya viene puesto</h3></div>
+  <div class="accgrid" style="grid-template-columns:1fr 1fr">
+    <div class="accitem"><span style="color:var(--vidrio)">${svg(I.headphones)}</span><span><b>Audioguía</b><small>En las ${ESPECIES.length + POIS.length} paradas, con la voz del sistema</small></span></div>
+    <div class="accitem"><span style="color:var(--vidrio)">${svg(I.keypad)}</span><span><b>Números, no solo QR</b><small>Sin cámara, sin GPS, sin señal</small></span></div>
+    <div class="accitem"><span style="color:var(--vidrio)">${svg(I.tap)}</span><span><b>Áreas de 44 px</b><small>Los pines del mapa tocan más grande de lo que se ve</small></span></div>
+    <div class="accitem"><span style="color:var(--vidrio)">${svg(I.teclas)}</span><span><b>Teclado</b><small>Todo con tabulación, foco visible y Esc para cerrar</small></span></div>
+    <div class="accitem"><span style="color:var(--vidrio)">${svg(I.movimiento)}</span><span><b>Menos movimiento</b><small>Si el sistema lo pide, las animaciones se anulan</small></span></div>
+    <div class="accitem"><span style="color:var(--vidrio)">${svg(I.silla)}</span><span><b>Datos por recorrido</b><small>Superficie, pendiente, bancos, sombra y silla</small></span></div>
+  </div>
+
+  <div class="pad" style="margin-top:18px">
+    <div class="notecard" style="margin:0">
+      <span class="kicker">Criterio</span>
+      <p>Todo ícono lleva su etiqueta o su nombre accesible. Una interfaz de puros íconos se ve más limpia, pero deja afuera a quien usa lector de pantalla y a quien no reconoce el símbolo.</p>
+    </div>
   </div>
   <div style="height:24px"></div>`;
 
@@ -2579,9 +2616,8 @@ RENDER["mi-ruta"] = () => {
   return `
   <div class="backbar"><button class="backbtn" onclick="back()">${svg(I.back)} Recorridos</button></div>
   <div class="vhead" style="padding-top:4px">
-    <span class="kicker">Armá el tuyo</span>
     <h2>Mi recorrido</h2>
-    <p>Elegí las paradas en el orden que quieras. Sirve para preparar una visita con un grupo o una consigna de clase.</p>
+    <p>Elegí paradas y compartilo por link.</p>
   </div>
   ${S.miRuta.length?`
   <div class="pad" style="margin:16px 0 4px">
@@ -2734,7 +2770,7 @@ RENDER.especies = () => {
   <div class="backbar"><button class="backbtn" onclick="back()">${svg(I.back)} Descubrí</button></div>
   <div class="vhead" style="padding-top:4px">
     <h2>Fichas técnicas</h2>
-    <p>${ESPECIES.length} especies documentadas de las 5.500 que reúne el Jardín.</p>
+    <p>${ESPECIES.length} de las 5.500 especies del Jardín.</p>
   </div>
   <div style="padding:14px 20px 12px">
     <div class="map-search" style="margin:0">
@@ -2757,9 +2793,8 @@ RENDER.especies = () => {
    ============================================================ */
 RENDER.recorridos = () => `
   <div class="vhead">
-    <span class="kicker">Cinco caminos</span>
-    <h2>Recorridos guiados</h2>
-    <p>Autoguiados, con paradas numeradas sobre el mapa. Podés empezar y frenar cuando quieras.</p>
+    <h2>Recorridos</h2>
+    <p>Autoguiados. Empezás y frenás cuando querés.</p>
   </div>
   <div style="height:16px"></div>
   <button class="routecard" onclick="go('mi-ruta')" style="border-style:dashed;background:transparent">
@@ -2845,7 +2880,7 @@ RENDER.ruta = (o) => {
    número por parada, barra persistente y navegación paso a paso.
    ============================================================ */
 function iniciarRuta(id){
-  S.ruta=id; S.paso=0; S.planta="predio";
+  S.ruta=id; S.paso=0; S.planta="predio"; S.guiaAbierta=true;
   go("mapa"); toast("Recorrido iniciado. Seguí los números.");
   setTimeout(()=>{ drawMap(); centrarEnParada(); pintarGuia(); },260);
 }
@@ -2877,43 +2912,54 @@ function celebrarRuta(){
   </div>`);
 }
 
-/* barra persistente: ficha activa + Anterior · Listado · Teclado · Mapa · Siguiente */
+/* Barra de recorrido. Flota SOBRE la barra de secciones en vez de
+   reemplazarla: entrar a un recorrido nunca te deja sin salida.
+   Se pliega a una tira mínima y se cierra desde su propia cabecera. */
 function pintarGuia(){
-  const el=document.getElementById("guidebar"), tb=document.getElementById("tabbar");
+  const el=document.getElementById("guidebar"), sc=document.querySelector(".screen");
   if(!el) return;
   const r=rutaActiva();
-  const sc=document.querySelector(".screen");
-  if(!r){ el.classList.remove("on"); if(tb) tb.classList.remove("hide"); if(sc) sc.dataset.guia="0"; return; }
-  el.classList.add("on"); if(tb) tb.classList.add("hide"); if(sc) sc.dataset.guia="1";
+  if(!r){ el.classList.remove("on","mini"); if(sc) sc.dataset.guia="0"; return; }
+  el.classList.add("on");
+  el.classList.toggle("mini", !S.guiaAbierta);
+  if(sc) sc.dataset.guia = S.guiaAbierta ? "1" : "mini";
   const o=paradaActual(), t=tipoParada();
   const tr=tramos(r)[S.paso];
   const ultima = S.paso===r.paradas.length-1;
   el.innerHTML=`
-    ${tr?`<div style="display:flex;align-items:center;gap:9px;padding:9px 14px;border-bottom:1px solid var(--line);background:rgba(126,216,195,.07)">
-      <span style="color:var(--vidrio);display:grid;place-items:center">${svg(I.route)}</span>
-      <span style="font-size:12px;color:#CFDDD2;flex:1;line-height:1.35">
-        <b style="font-weight:700">${tr.giro}</b> · ${tr.m} m hasta la parada ${S.paso+2}</span>
-      <button onclick="simularCaminata()" class="tag vidrio" style="border:0">Simular</button>
-    </div>`:""}
+    <div class="guiahead">
+      <span class="gt" style="color:var(--rosa)">${svg(I.route)}<b>${r.nom}</b></span>
+      <button class="gicon" onclick="plegarGuia()" aria-label="${S.guiaAbierta?"Plegar la barra del recorrido":"Desplegar la barra del recorrido"}" aria-expanded="${S.guiaAbierta}">
+        ${svg(S.guiaAbierta?I.abajo:I.arriba)}</button>
+      <button class="gicon" onclick="quitarRuta()" aria-label="Terminar el recorrido y volver">${svg(I.close)}</button>
+    </div>
     <button class="nowplaying" onclick="abrirParadaActual()" aria-label="Abrir ${o.nom}">
       <span class="np-thumb">${imagen(o, t==="esp"?"bloom":o.kind)}</span>
       <span class="np-body">
         <b>${o.nom}</b>
-        <span>Audio ${o.n} · Parada ${S.paso+1} de ${r.paradas.length}${t==="esp"?" · "+secNom(o.sector):""}</span>
+        <span>${svg(I.headphones,"chipicon")}${o.n} · ${S.paso+1}/${r.paradas.length}${tr?` · ${tr.m} m`:""}</span>
       </span>
-      <span class="np-play" data-audiobtn="${o.id}" role="button" aria-label="Reproducir audio"
+      <span class="np-play" data-audiobtn="${o.id}" role="button" aria-label="Reproducir la audioguía de ${o.nom}"
             onclick="event.stopPropagation();audioFicha('${o.id}','${t}')">${svg(S.audio.sonando&&S.audio.id===o.id?I.pause:I.play)}</span>
     </button>
     <div class="np-prog"><i data-audioprog style="width:${S.audio.id===o.id?S.audio.pct:0}%"></i></div>
-    <div class="guidenav">
-      <button class="gnav" onclick="pasoRuta(-1)" ${S.paso===0?"disabled":""} aria-label="Parada anterior">${svg(I.prev)}<span>Anterior</span></button>
-      <button class="gnav${S.view==="listado"?" on":""}" onclick="go('listado')" aria-label="Listado de paradas">${svg(I.list)}<span>Listado</span></button>
-      <button class="gnav${S.view==="teclado"?" on":""}" onclick="go('teclado')" aria-label="Teclado numérico">${svg(I.keypad)}<span>Teclado</span></button>
-      <button class="gnav${S.view==="mapa"?" on":""}" onclick="go('mapa')" aria-label="Mapa">${svg(I.pin)}<span>Mapa</span></button>
-      <button class="gnav" onclick="pasoRuta(1)" aria-label="${ultima?"Finalizar":"Parada siguiente"}">${svg(ultima?I.check:I.fwd)}<span>${ultima?"Finalizar":"Siguiente"}</span></button>
+    <div class="guidebody">
+      ${tr?`<div style="display:flex;align-items:center;gap:9px;padding:10px 14px;border-top:1px solid var(--line);background:rgba(126,216,195,.07)">
+        <span style="color:var(--vidrio);display:grid;place-items:center">${svg(I.giro)}</span>
+        <span style="font-size:12px;color:#CFDDD2;flex:1;line-height:1.35"><b style="font-weight:700">${tr.giro}</b> · ${tr.m} m</span>
+        <button onclick="simularCaminata()" class="tag vidrio" style="border:0" aria-label="Simular la caminata hasta la próxima parada">${svg(I.play,"chipicon")}Simular</button>
+      </div>`:""}
+      <div class="guidenav">
+        <button class="gnav" onclick="pasoRuta(-1)" ${S.paso===0?"disabled":""} aria-label="Parada anterior">${svg(I.prev)}<span>Anterior</span></button>
+        <button class="gnav${S.view==="listado"?" on":""}" onclick="go('listado')" aria-label="Listado de paradas">${svg(I.list)}<span>Listado</span></button>
+        <button class="gnav${S.view==="teclado"?" on":""}" onclick="go('teclado')" aria-label="Teclado numérico">${svg(I.keypad)}<span>Teclado</span></button>
+        <button class="gnav${S.view==="mapa"?" on":""}" onclick="go('mapa')" aria-label="Ver el mapa">${svg(I.pin)}<span>Mapa</span></button>
+        <button class="gnav" onclick="pasoRuta(1)" aria-label="${ultima?"Finalizar el recorrido":"Parada siguiente"}">${svg(ultima?I.check:I.fwd)}<span>${ultima?"Fin":"Siguiente"}</span></button>
+      </div>
     </div>`;
   paintAll(el);
 }
+function plegarGuia(){ S.guiaAbierta=!S.guiaAbierta; pintarGuia(); }
 
 /* Simulación de caminata: mueve el punto «estás acá» por la traza.
    En producción lo mueve el GPS; acá sirve para demostrar el patrón. */
@@ -2972,9 +3018,8 @@ RENDER.teclado = () => {
   const n=parseInt(S.teclado||"0",10), o=S.teclado?porNumero(n):null;
   return `
   <div class="vhead">
-    <span class="kicker">Audioguía</span>
     <h2>Tecleá el número</h2>
-    <p>Cada cartel del Jardín lleva un número. Marcalo acá y se abre su ficha, sin cámara y sin señal.</p>
+    <p>El del cartel. Sin cámara, sin señal.</p>
   </div>
   <div style="height:18px"></div>
   <div class="keydisplay">
@@ -3007,9 +3052,7 @@ function tecla(k){
    ============================================================ */
 RENDER.descubri = () => `
   <div class="vhead">
-    <span class="kicker">Más allá del recorrido</span>
     <h2>Descubrí</h2>
-    <p>Las colecciones, el patrimonio, la comunidad y un juego para reconocer especies.</p>
   </div>
   <div style="height:18px"></div>
   <div class="hubgrid">
@@ -3050,7 +3093,7 @@ RENDER.puntos = () => {
   <div class="backbar"><button class="backbtn" onclick="back()">${svg(I.back)} Descubrí</button></div>
   <div class="vhead" style="padding-top:4px">
     <h2>Puntos de interés</h2>
-    <p>Más de treinta obras de arte conviven con las colecciones. Estos son los hitos imperdibles.</p>
+    <p>Patrimonio, esculturas y naturaleza.</p>
   </div>
   <div class="chiprow" style="padding-top:14px;padding-bottom:14px">
     <button class="chip on">Todos</button>
@@ -3079,7 +3122,7 @@ RENDER.galeria = () => {
   <div class="vhead" style="padding-top:4px">
     <span class="kicker">@jardinbotanicoba</span>
     <h2>Galería</h2>
-    <p>Fotos publicadas por el Jardín y por la comunidad con <strong style="color:var(--vidrio);font-weight:600">#MiJardínBotánico</strong>.</p>
+    <p><strong style="color:var(--vidrio);font-weight:600">#MiJardínBotánico</strong></p>
   </div>
   <div class="chiprow" style="padding-top:14px;padding-bottom:14px">
     ${tags.map(t=>`<button class="chip${S.galFiltro===t?" on":""}" onclick="S.galFiltro='${t}';go('galeria',{back:true})">${ETIQ[t]||t}</button>`).join("")}
@@ -3266,9 +3309,8 @@ RENDER.juego = () => {
   return `
   <div class="backbar"><button class="backbtn" onclick="back()">${svg(I.back)} Descubrí</button></div>
   <div class="vhead" style="padding-top:4px">
-    <span class="kicker">Juego de identificación</span>
     <h2>Armá tu planta</h2>
-    <p>Combiná cuatro rasgos y descubrí a qué especie del Jardín se parece más lo que armaste.</p>
+    <p>Cuatro rasgos. ¿A qué especie te acercás?</p>
   </div>
   <div style="height:18px"></div>
   <div class="gamewrap">
