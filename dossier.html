@@ -7,943 +7,691 @@
 <style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>Dossier de producto Thays</title>
+<title>Investigación UX Thays</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..600&family=Instrument+Sans:ital,wght@0,400..700;1,400..600&display=swap">
 
 <style>
 :root{
-  --paper:#F7F5EF;
-  --paper-2:#EFEDE4;
-  --card:#FFFFFF;
-  --ink:#16211A;
-  --ink-2:#3E4C43;
-  --ink-3:#6B7A70;
-  --rule:rgba(22,33,26,.13);
-  --rule-2:rgba(22,33,26,.26);
-  --verde:#2E6B4A;
-  --rosa:#B93765;
-  --ambar:#9A6A12;
-  --vidrio:#1F7A6B;
-  --chip:rgba(46,107,74,.10);
-  --shadow:0 1px 2px rgba(22,33,26,.05),0 8px 24px -14px rgba(22,33,26,.18);
-  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --night:#08110D; --deep:#0D1913; --card:#132119; --raise:#1B2C22;
+  --line:rgba(232,239,233,.12); --line-2:rgba(232,239,233,.26);
+  --text:#ECF3ED; --muted:#9CB0A3; --faint:#6C7F74;
+  --rosa:#F0709B; --ambar:#E8B24C; --vidrio:#7ED8C3; --marmol:#DED6C6;
+  --sans:"Instrument Sans",system-ui,-apple-system,sans-serif;
+  --serif:"Fraunces",Georgia,serif;
   --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --paper:#0C120E; --paper-2:#131C16; --card:#16211A;
-    --ink:#E8EFE9; --ink-2:#B4C3B8; --ink-3:#7E8F84;
-    --rule:rgba(232,239,233,.13); --rule-2:rgba(232,239,233,.26);
-    --verde:#7BC79B; --rosa:#F0709B; --ambar:#E2B25A; --vidrio:#79D3C0;
-    --chip:rgba(123,199,155,.12);
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -18px rgba(0,0,0,.8);
-  }
-}
-:root[data-theme="dark"]{
-  --paper:#0C120E; --paper-2:#131C16; --card:#16211A;
-  --ink:#E8EFE9; --ink-2:#B4C3B8; --ink-3:#7E8F84;
-  --rule:rgba(232,239,233,.13); --rule-2:rgba(232,239,233,.26);
-  --verde:#7BC79B; --rosa:#F0709B; --ambar:#E2B25A; --vidrio:#79D3C0;
-  --chip:rgba(123,199,155,.12);
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -18px rgba(0,0,0,.8);
-}
-
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--paper);color:var(--ink);
-  font-family:var(--sans);font-size:16px;line-height:1.65;
-  -webkit-font-smoothing:antialiased;
-}
-.wrap{max-width:1080px;margin:0 auto;padding:0 28px 100px}
+body{margin:0;background:var(--night);color:var(--text);font-family:var(--sans);overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:focus-visible{outline:2px solid var(--vidrio);outline-offset:3px;border-radius:5px}
 
-/* ---------- portada ---------- */
-.cover{
-  border-bottom:1px solid var(--rule);
-  padding:76px 0 44px;margin-bottom:52px;
+.deck{position:fixed;inset:0;display:grid;place-items:center;background:
+  radial-gradient(120% 90% at 50% 0%,#12211A 0%,var(--night) 62%)}
+.stage{position:relative;width:1280px;height:720px;transform-origin:center center}
+.slide{
+  position:absolute;inset:0;padding:64px 80px;
+  display:none;flex-direction:column;
+  background:var(--night);
 }
-.eyebrow{
-  font-family:var(--mono);font-size:11px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--ink-3);margin:0 0 20px;
-}
-h1{
-  font-family:var(--serif);font-optical-sizing:auto;
-  font-weight:300;font-size:clamp(38px,6.4vw,68px);line-height:1.02;
-  letter-spacing:-.032em;margin:0 0 22px;max-width:17ch;text-wrap:balance;
-}
-h1 em{font-style:italic;font-weight:400;color:var(--verde)}
-.lede{font-size:clamp(17px,2vw,20px);line-height:1.55;color:var(--ink-2);max-width:62ch;margin:0 0 30px}
-.covermeta{
-  display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--rule);padding-top:22px;
-}
-.covermeta div{padding-right:38px;margin-right:38px;border-right:1px solid var(--rule)}
-.covermeta div:last-child{border-right:0;margin-right:0;padding-right:0}
-.covermeta dt{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 5px}
-.covermeta dd{margin:0;font-size:14px;font-weight:600}
+.slide.on{display:flex;animation:fade .42s cubic-bezier(.22,.9,.24,1)}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-/* ---------- índice ---------- */
-.toc{
-  background:var(--paper-2);border:1px solid var(--rule);
-  border-radius:16px;padding:24px 26px;margin-bottom:60px;
-}
-.toc h2{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin:0 0 16px;font-weight:400}
-.toc ol{margin:0;padding:0;list-style:none;columns:2;column-gap:40px}
-.toc li{break-inside:avoid;margin-bottom:9px;font-size:14px;display:flex;gap:11px}
-.toc li span{font-family:var(--mono);font-size:11px;color:var(--ink-3);padding-top:3px;min-width:18px}
-.toc a{color:var(--ink);text-decoration:none;border-bottom:1px solid transparent}
-.toc a:hover{border-bottom-color:var(--rule-2)}
-@media (max-width:640px){.toc ol{columns:1}}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--vidrio);margin:0 0 22px}
+.eyebrow.rosa{color:var(--rosa)} .eyebrow.ambar{color:var(--ambar)} .eyebrow.marmol{color:var(--marmol)}
+h1{font-family:var(--serif);font-optical-sizing:auto;font-weight:300;font-size:78px;line-height:1;letter-spacing:-.035em;margin:0 0 26px;max-width:20ch;text-wrap:balance}
+h1 em{font-style:italic;font-weight:400;color:var(--vidrio)}
+h2{font-family:var(--serif);font-weight:300;font-size:50px;line-height:1.04;letter-spacing:-.028em;margin:0 0 20px;max-width:22ch;text-wrap:balance}
+h2 em{font-style:italic;font-weight:400;color:var(--rosa)}
+h3{font-family:var(--sans);font-weight:700;font-size:19px;margin:0 0 10px;letter-spacing:-.005em}
+p{margin:0 0 16px;font-size:19px;line-height:1.55;color:var(--muted);max-width:64ch}
+p strong,strong{color:var(--text);font-weight:600}
+.lead{font-size:23px;color:var(--text);max-width:56ch}
+.small{font-size:15px;line-height:1.5}
+.body{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.foot{font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:.08em}
 
-/* ---------- estructura ---------- */
-section{margin-bottom:76px;scroll-margin-top:24px}
-h2{
-  font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,34px);
-  letter-spacing:-.022em;line-height:1.12;margin:0 0 8px;text-wrap:balance;
-}
-.secnum{
-  font-family:var(--mono);font-size:11px;letter-spacing:.16em;
-  color:var(--verde);display:block;margin-bottom:12px;
-}
-.sechead{border-top:2px solid var(--ink);padding-top:18px;margin-bottom:26px}
-.sechead p{margin:10px 0 0;color:var(--ink-2);max-width:62ch;font-size:16px}
-h3{
-  font-family:var(--sans);font-weight:700;font-size:16.5px;
-  letter-spacing:-.005em;margin:34px 0 10px;
-}
-h4{font-family:var(--sans);font-weight:600;font-size:14px;margin:22px 0 8px;color:var(--ink-2)}
-p{margin:0 0 15px;max-width:70ch}
-ul,ol{margin:0 0 16px;padding-left:20px;max-width:70ch}
-li{margin-bottom:7px}
-strong{font-weight:600}
-em.term{font-style:normal;font-family:var(--serif);font-style:italic}
-a{color:var(--verde)}
-code{font-family:var(--mono);font-size:.86em;background:var(--chip);padding:1.5px 5px;border-radius:5px}
-hr{border:0;border-top:1px solid var(--rule);margin:34px 0}
+/* ---------- rejillas ---------- */
+.cols{display:grid;gap:22px}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:repeat(3,1fr)}
+.c4{grid-template-columns:repeat(4,1fr)}
+.split{display:grid;grid-template-columns:1fr 1.15fr;gap:56px;align-items:center;flex:1;min-height:0}
 
-/* ---------- tablas ---------- */
-.tablebox{overflow-x:auto;margin:0 0 20px;border:1px solid var(--rule);border-radius:14px;background:var(--card)}
-table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
-th,td{text-align:left;padding:11px 15px;border-bottom:1px solid var(--rule);vertical-align:top}
-th{
-  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--ink-3);font-weight:400;background:var(--paper-2);white-space:nowrap;
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
+.card.accent{border-color:rgba(240,112,155,.4);background:linear-gradient(155deg,rgba(240,112,155,.10),rgba(19,33,25,.9))}
+.card.vidrio{border-color:rgba(126,216,195,.36);background:linear-gradient(155deg,rgba(126,216,195,.09),rgba(19,33,25,.9))}
+.card h3{margin-bottom:8px}
+.card p{font-size:15.5px;line-height:1.5;margin:0}
+
+.stat{font-family:var(--serif);font-weight:300;font-size:62px;line-height:1;letter-spacing:-.03em;display:block;margin-bottom:8px}
+.stat.rosa{color:var(--rosa)} .stat.vidrio{color:var(--vidrio)} .stat.ambar{color:var(--ambar)}
+.statlabel{font-size:14.5px;line-height:1.45;color:var(--muted)}
+
+/* ---------- persona ---------- */
+.persona{display:grid;grid-template-columns:300px 1fr;gap:48px;align-items:center;flex:1;min-height:0}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:30px;text-align:center}
+.pavatar{width:96px;height:96px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;
+  font-family:var(--serif);font-size:38px;font-weight:300;color:var(--night)}
+.pcard .pname{font-family:var(--serif);font-size:30px;font-weight:400;margin:0 0 4px;letter-spacing:-.02em}
+.pcard .prole{font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:.06em;margin:0}
+.quote{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:34px;line-height:1.22;letter-spacing:-.02em;color:var(--text);
+  margin:0 0 26px;padding-left:22px;border-left:3px solid var(--rosa);max-width:24ch;
 }
+dl.pdl{margin:0;display:grid;gap:14px}
+dl.pdl dt{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--vidrio);margin-bottom:4px}
+dl.pdl dd{margin:0;font-size:17px;line-height:1.45;color:var(--muted)}
+
+/* ---------- cadena hipótesis → decisión ---------- */
+.chain{display:grid;grid-template-columns:repeat(4,1fr);gap:0;flex:1;align-items:stretch;min-height:0;padding-top:34px}
+.link{position:relative;padding:0 30px 26px 0;display:flex;flex-direction:column;justify-content:flex-start}
+.link+.link{padding-left:30px;border-left:1px solid var(--line)}
+.link .lk{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 12px}
+.link:nth-child(1) .lk{color:var(--vidrio)}
+.link:nth-child(2) .lk{color:var(--ambar)}
+.link:nth-child(3) .lk{color:var(--rosa)}
+.link:nth-child(4) .lk{color:var(--marmol)}
+.link p{font-size:16.5px;line-height:1.5;margin:0}
+.link .big{font-family:var(--serif);font-weight:300;font-size:27px;line-height:1.15;letter-spacing:-.02em;color:var(--text);margin:0 0 10px}
+
+/* ---------- listas ---------- */
+ul.clean{list-style:none;margin:0;padding:0;display:grid;gap:13px}
+ul.clean li{display:flex;gap:13px;font-size:18px;line-height:1.45;color:var(--muted)}
+ul.clean li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--vidrio);flex:none;margin-top:9px}
+ul.clean.rosa li::before{background:var(--rosa)}
+ul.no li::before{background:none;border:1.5px solid var(--faint);width:9px;height:9px;margin-top:8px}
+
+.tag{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
+.t-rosa{background:rgba(240,112,155,.16);color:var(--rosa)}
+.t-vidrio{background:rgba(126,216,195,.16);color:var(--vidrio)}
+.t-ambar{background:rgba(232,178,76,.16);color:var(--ambar)}
+.t-plain{background:rgba(255,255,255,.07);color:var(--muted)}
+
+table{border-collapse:collapse;width:100%;font-size:16px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:400}
+td strong{color:var(--text)}
 tr:last-child td{border-bottom:0}
-td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 
-/* ---------- fichas de persona ---------- */
-.personas{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;margin-bottom:8px}
-.persona{
-  background:var(--card);border:1px solid var(--rule);border-radius:16px;
-  padding:20px;box-shadow:var(--shadow);
+/* ---------- barra de control ---------- */
+.hud{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  display:flex;align-items:center;gap:18px;padding:14px 24px;
+  background:linear-gradient(to top,rgba(8,17,13,.96),transparent);
 }
-.persona .who{font-family:var(--serif);font-size:20px;font-weight:400;letter-spacing:-.015em;margin:0 0 3px}
-.persona .role{font-size:12px;color:var(--ink-3);margin:0 0 14px;font-family:var(--mono);letter-spacing:.04em}
-.persona dl{margin:0;font-size:13.5px}
-.persona dt{font-weight:600;margin-top:11px;color:var(--ink-2);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
-.persona dd{margin:3px 0 0;color:var(--ink-2);line-height:1.5}
-.persona .quote{
-  margin:14px 0 0;padding-top:13px;border-top:1px solid var(--rule);
-  font-family:var(--serif);font-style:italic;font-size:14.5px;color:var(--ink);line-height:1.45;
-}
+.hud .dots{display:flex;gap:5px;flex:1;flex-wrap:wrap}
+.dot{width:22px;height:4px;border-radius:2px;background:rgba(236,243,237,.2);transition:background .2s}
+.dot.on{background:var(--rosa)}
+.dot:hover{background:rgba(236,243,237,.5)}
+.hud .num{font-family:var(--mono);font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+.navbtn{width:36px;height:36px;border-radius:10px;border:1px solid var(--line-2);display:grid;place-items:center;color:var(--muted)}
+.navbtn:hover{color:var(--text);border-color:var(--line-2)}
+.navbtn svg{width:17px;height:17px}
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--rosa);z-index:60;transition:width .35s cubic-bezier(.22,.9,.24,1)}
 
-/* ---------- moscow ---------- */
-.moscow{display:grid;gap:14px}
-.mrow{
-  display:grid;grid-template-columns:112px 1fr;gap:20px;
-  padding:18px 20px;border-radius:14px;border:1px solid var(--rule);background:var(--card);
+@media (max-width:820px){
+  .hud{padding:10px 14px;gap:10px}
+  .hud .dots{display:none}
 }
-.mrow .mlabel{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
-.m-must .mlabel{color:var(--rosa)} .m-should .mlabel{color:var(--ambar)}
-.m-could .mlabel{color:var(--vidrio)} .m-wont .mlabel{color:var(--ink-3)}
-.mrow ul{margin:0;padding-left:18px;font-size:14px;max-width:none}
-.mrow li{margin-bottom:5px}
-@media (max-width:640px){.mrow{grid-template-columns:1fr;gap:8px}}
-
-/* ---------- arquitectura de información ---------- */
-.ia{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:8px}
-.iacol{background:var(--card);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
-.iacol .iah{
-  padding:11px 14px;background:var(--chip);
-  font-size:13px;font-weight:700;border-bottom:1px solid var(--rule);
-}
-.iacol ul{list-style:none;margin:0;padding:8px 0;font-size:13px}
-.iacol li{padding:5px 14px;color:var(--ink-2);display:flex;gap:8px;margin:0}
-.iacol li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--verde);flex:none;margin-top:8px}
-.iacol li.sub{padding-left:30px;font-size:12.5px;color:var(--ink-3)}
-.iacol li.sub::before{background:var(--rule-2);width:4px;height:4px;margin-top:8px}
-
-/* ---------- flujos ---------- */
-.flow{
-  display:flex;gap:0;overflow-x:auto;padding:4px 2px 14px;margin-bottom:12px;
-}
-.step{
-  flex:none;width:186px;background:var(--card);border:1px solid var(--rule);
-  border-radius:14px;padding:14px 15px;position:relative;margin-right:26px;
-}
-.step:last-child{margin-right:0}
-.step::after{
-  content:"";position:absolute;right:-20px;top:50%;width:14px;height:1.5px;
-  background:var(--rule-2);
-}
-.step:last-child::after{display:none}
-.step .sn{font-family:var(--mono);font-size:10px;color:var(--verde);letter-spacing:.1em;display:block;margin-bottom:6px}
-.step b{display:block;font-size:13.5px;margin-bottom:4px}
-.step small{display:block;font-size:12px;color:var(--ink-3);line-height:1.45}
-.step.alt{border-style:dashed;background:transparent}
-
-/* ---------- design system ---------- */
-.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:12px;margin-bottom:22px}
-.sw{border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:var(--card)}
-.sw .chipc{height:64px}
-.sw .swmeta{padding:10px 12px}
-.sw b{display:block;font-size:12.5px}
-.sw code{background:none;padding:0;font-size:11px;color:var(--ink-3)}
-
-.typespec{border:1px solid var(--rule);border-radius:14px;background:var(--card);overflow:hidden;margin-bottom:22px}
-.typerow{padding:16px 18px;border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:16px;align-items:baseline}
-.typerow:last-child{border-bottom:0}
-.typerow .sample{flex:1;min-width:200px}
-.typerow .spec{font-family:var(--mono);font-size:11px;color:var(--ink-3);white-space:nowrap}
-
-/* ---------- callouts ---------- */
-.note{
-  border-left:3px solid var(--verde);background:var(--chip);
-  padding:16px 18px;border-radius:0 12px 12px 0;margin:0 0 20px;
-}
-.note p:last-child{margin-bottom:0}
-.note .nl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--verde);display:block;margin-bottom:7px}
-.note.warn{border-left-color:var(--ambar);background:rgba(154,106,18,.09)}
-.note.warn .nl{color:var(--ambar)}
-
-/* ---------- guion de demo ---------- */
-.demo{border:1px solid var(--rule);border-radius:16px;overflow:hidden;background:var(--card)}
-.demorow{display:grid;grid-template-columns:70px 1fr;gap:0;border-bottom:1px solid var(--rule)}
-.demorow:last-child{border-bottom:0}
-.demorow .t{
-  padding:16px 14px;font-family:var(--mono);font-size:12px;color:var(--verde);
-  background:var(--paper-2);border-right:1px solid var(--rule);font-variant-numeric:tabular-nums;
-}
-.demorow .c{padding:16px 18px}
-.demorow .c b{display:block;font-size:14.5px;margin-bottom:5px}
-.demorow .c p{margin:0;font-size:13.5px;color:var(--ink-2);max-width:64ch}
-.demorow .c .say{
-  margin-top:9px;font-family:var(--serif);font-style:italic;font-size:14px;
-  color:var(--ink);padding-left:13px;border-left:2px solid var(--rule-2);
-}
-
-footer{border-top:1px solid var(--rule);padding-top:26px;font-size:13px;color:var(--ink-3)}
-footer a{color:var(--ink-2)}
-@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 
-<div class="wrap">
+<div class="progress" id="prog"></div>
+<div class="deck">
+  <div class="stage" id="stage">
 
-<header class="cover">
-  <p class="eyebrow">Documentación de producto · Caso de cátedra · Diseño Gráfico 3</p>
-  <h1>Thays, la app del <em>Jardín Botánico</em> de Buenos Aires</h1>
-  <p class="lede">Documentación completa de un producto digital para el Jardín Botánico Carlos Thays: desde el problema y los usuarios hasta el alcance, los flujos, el sistema de diseño y el guion de la demo. El prototipo navegable acompaña este documento.</p>
-  <dl class="covermeta">
-    <div><dt>Versión</dt><dd>1.0 — prototipo validado</dd></div>
-    <div><dt>Estado</dt><dd>Listo para demo</dd></div>
-    <div><dt>Alcance</dt><dd>App web, mobile first</dd></div>
-    <div><dt>Fecha</dt><dd>Agosto 2026</dd></div>
-  </dl>
-</header>
-
-<nav class="toc" aria-label="Índice">
-  <h2>Contenido</h2>
-  <ol>
-    <li><span>01</span><a href="#contexto">Contexto y problema</a></li>
-    <li><span>02</span><a href="#objetivos">Objetivos y métricas</a></li>
-    <li><span>03</span><a href="#personas">Usuarios y personas</a></li>
-    <li><span>04</span><a href="#alcance">Alcance y priorización</a></li>
-    <li><span>05</span><a href="#ia">Arquitectura de información</a></li>
-    <li><span>06</span><a href="#flujos">Flujos principales</a></li>
-    <li><span>07</span><a href="#funcional">Especificación funcional</a></li>
-    <li><span>08</span><a href="#datos">Modelo de datos</a></li>
-    <li><span>09</span><a href="#sistema">Sistema de diseño</a></li>
-    <li><span>10</span><a href="#tecnica">Notas técnicas</a></li>
-    <li><span>11</span><a href="#riesgos">Riesgos y supuestos</a></li>
-    <li><span>12</span><a href="#roadmap">Roadmap</a></li>
-    <li><span>13</span><a href="#demo">Guion de demo</a></li>
-    <li><span>14</span><a href="#catedra">Uso en clase</a></li>
-    <li><span>15</span><a href="#fuentes">Fuentes</a></li>
-  </ol>
-</nav>
-
-<!-- 01 -->
-<section id="contexto">
-  <div class="sechead">
-    <span class="secnum">01</span>
-    <h2>Contexto y problema</h2>
-    <p>Qué es el Jardín, qué le pasa hoy al visitante y por qué una app resuelve algo real y no inventado.</p>
-  </div>
-
-  <h3>El sitio</h3>
-  <p>El Jardín Botánico Carlos Thays abrió el 7 de septiembre de 1898 sobre un proyecto que Carlos Thays presentó en 1892. Ocupa cerca de <strong>7,7 hectáreas</strong> en Palermo, entre la avenida Santa Fe, la avenida Las Heras y la calle República Árabe de Siria, con Plaza Italia como acceso principal. Fue declarado Monumento Histórico Nacional en 1996 y, en marzo de 2023, primer refugio climático de la Ciudad: bajo su dosel se registran temperaturas hasta 4,8 °C menores que en las calles que lo rodean.</p>
-  <p>Reúne unas <strong>5.500 especies</strong> arbustivas, arbóreas y herbáceas organizadas por origen geográfico, familia y utilización, más de treinta obras de arte, cinco invernáculos —uno de ellos art nouveau, premiado en la Exposición Universal de París de 1889—, la casona de 1881 donde vivió Thays, un jardín de mariposas a cielo abierto, una biblioteca infantil y la Escuela Técnica de Jardinería «Cristóbal María Hicken».</p>
-
-  <h3>El problema del visitante</h3>
-  <p>La riqueza del Jardín es enorme y su comunicación en el lugar es mínima. Un visitante típico entra por Plaza Italia, camina veinte minutos, ve carteles con nombres científicos que no le dicen nada y se va sin haber entendido qué estaba mirando. Cuatro fricciones concretas:</p>
-  <div class="tablebox">
-    <table>
-      <thead><tr><th>Fricción</th><th>Qué pasa hoy</th><th>Consecuencia</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Orientación</strong></td><td>La cartelería de sectores es escasa y el trazado no es una grilla. Es fácil recorrer siempre el mismo tercio del predio.</td><td>Sectores enteros —Oceanía, África, el yerbal histórico— quedan sin visitar.</td></tr>
-        <tr><td><strong>Interpretación</strong></td><td>Los carteles dan nombre científico, familia y origen. Nada explica por qué esa planta importa.</td><td>La visita es paisajística, no educativa. No hay aprendizaje ni recuerdo.</td></tr>
-        <tr><td><strong>Narrativa</strong></td><td>No hay un recorrido sugerido para quien viene por primera vez ni para quien viene con chicos.</td><td>La visita se agota en veinte minutos y no se repite.</td></tr>
-        <tr><td><strong>Estacionalidad</strong></td><td>Lo mejor del Jardín cambia mes a mes, pero el visitante no tiene cómo saber qué está en flor hoy.</td><td>Se pierde el principal motivo para volver.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="note">
-    <span class="nl">Hipótesis de producto</span>
-    <p>Si el visitante puede ubicarse, entender lo que ve y seguir un relato, la visita pasa de veinte minutos de paseo a una hora de experiencia — y genera una segunda visita. El Jardín ya tiene el contenido; lo que falta es el canal.</p>
-  </div>
-</section>
-
-<!-- 02 -->
-<section id="objetivos">
-  <div class="sechead">
-    <span class="secnum">02</span>
-    <h2>Objetivos y métricas</h2>
-    <p>Tres objetivos, cada uno con la métrica que lo verifica. Sin métrica, un objetivo es un deseo.</p>
-  </div>
-  <div class="tablebox">
-    <table>
-      <thead><tr><th>Objetivo</th><th>Métrica principal</th><th>Meta a 6 meses</th></tr></thead>
-      <tbody>
-        <tr><td><strong>O1. Que el visitante se oriente</strong><br><span style="color:var(--ink-3);font-size:13px">Nadie debería perderse un sector entero por no saber que existe.</span></td><td>Sectores visitados por sesión (posición GPS registrada)</td><td class="num">De 4 a 8 de 14</td></tr>
-        <tr><td><strong>O2. Que entienda lo que ve</strong><br><span style="color:var(--ink-3);font-size:13px">Convertir la cartelería muda en contenido.</span></td><td>Fichas abiertas por sesión</td><td class="num">≥ 5</td></tr>
-        <tr><td><strong>O3. Que vuelva</strong><br><span style="color:var(--ink-3);font-size:13px">La estacionalidad es el activo del Jardín.</span></td><td>Usuarios con dos o más visitas en 6 meses</td><td class="num">25 %</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h3>Métricas secundarias</h3>
-  <ul>
-    <li><strong>Duración media de la visita</strong> — de 22 a 45 minutos.</li>
-    <li><strong>Tasa de finalización de recorridos</strong> — 40 % de los recorridos iniciados llegan a la última parada.</li>
-    <li><strong>Escaneos de QR por cartel</strong> — identifica qué especies generan curiosidad y dónde conviene invertir en cartelería física.</li>
-    <li><strong>Postulaciones a voluntariado</strong> — el Jardín convoca entre febrero y marzo; la app debe medir cuántas llegan por este canal.</li>
-  </ul>
-
-  <div class="note warn">
-    <span class="nl">Métrica que no usamos</span>
-    <p>Descargas. Una app de sitio se mide por lo que pasa adentro del predio, no por instalaciones. Por eso el producto es una app web: no hay fricción de descarga y la métrica de entrada es la visita, no la instalación.</p>
-  </div>
-</section>
-
-<!-- 03 -->
-<section id="personas">
-  <div class="sechead">
-    <span class="secnum">03</span>
-    <h2>Usuarios y personas</h2>
-    <p>Cuatro perfiles que cubren los usos reales del Jardín. Cada decisión de alcance se justifica contra al menos uno de ellos.</p>
-  </div>
-
-  <div class="personas">
-    <article class="persona">
-      <p class="who">Sofía</p>
-      <p class="role">28 · Primera visita · Palermo</p>
-      <dl>
-        <dt>Contexto</dt><dd>Pasa por Plaza Italia, tiene una hora libre y entra sin plan.</dd>
-        <dt>Necesita</dt><dd>Que alguien le diga por dónde empezar y qué vale la pena mirar.</dd>
-        <dt>Fricción</dt><dd>No va a leer un mapa impreso ni a bajar una app de 80 MB en la puerta.</dd>
-      </dl>
-      <p class="quote">«Entré, caminé, era lindo, pero no entendí nada de lo que vi.»</p>
-    </article>
-
-    <article class="persona">
-      <p class="who">Marcelo</p>
-      <p class="role">61 · Visitante frecuente · Jubilado</p>
-      <dl>
-        <dt>Contexto</dt><dd>Viene dos veces por mes. Conoce el predio mejor que la cartelería.</dd>
-        <dt>Necesita</dt><dd>Saber qué está en flor esta semana y datos que todavía no sepa.</dd>
-        <dt>Fricción</dt><dd>El contenido genérico lo aburre: quiere profundidad, no bienvenidas.</dd>
-      </dl>
-      <p class="quote">«Yo ya sé dónde está todo. Lo que quiero es que me cuenten algo nuevo.»</p>
-    </article>
-
-    <article class="persona">
-      <p class="who">Carla y Tomi</p>
-      <p class="role">37 y 7 · Familia · Fin de semana</p>
-      <dl>
-        <dt>Contexto</dt><dd>Sábado a la tarde, con un chico de siete años y dos horas por delante.</dd>
-        <dt>Necesita</dt><dd>Una excusa para que el chico camine y mire, no una enciclopedia.</dd>
-        <dt>Fricción</dt><dd>Si la app es texto, el chico se aburre en tres minutos.</dd>
-      </dl>
-      <p class="quote">«Necesito que se entretenga y de paso aprenda algo.»</p>
-    </article>
-
-    <article class="persona">
-      <p class="who">Lucía</p>
-      <p class="role">24 · Estudiante de Agronomía</p>
-      <dl>
-        <dt>Contexto</dt><dd>Viene a estudiar especies concretas para un trabajo práctico.</dd>
-        <dt>Necesita</dt><dd>Nombre científico, familia, origen, estado de conservación y ubicación exacta.</dd>
-        <dt>Fricción</dt><dd>Buscar una especie caminando el predio entero le lleva media hora.</dd>
-      </dl>
-      <p class="quote">«Necesito llegar a un ejemplar puntual sin dar dos vueltas al Jardín.»</p>
-    </article>
-  </div>
-
-  <h3>Cómo se reparten las funciones</h3>
-  <div class="tablebox">
-    <table>
-      <thead><tr><th>Función</th><th>Sofía</th><th>Marcelo</th><th>Carla y Tomi</th><th>Lucía</th></tr></thead>
-      <tbody>
-        <tr><td>Mapa interactivo</td><td>Crítica</td><td>Baja</td><td>Media</td><td>Crítica</td></tr>
-        <tr><td>Fichas técnicas</td><td>Media</td><td>Alta</td><td>Baja</td><td>Crítica</td></tr>
-        <tr><td>Recorridos guiados</td><td>Crítica</td><td>Media</td><td>Alta</td><td>Baja</td></tr>
-        <tr><td>Qué está en flor</td><td>Media</td><td>Crítica</td><td>Media</td><td>Media</td></tr>
-        <tr><td>Armá tu planta</td><td>Baja</td><td>Baja</td><td>Crítica</td><td>Baja</td></tr>
-        <tr><td>Actividades y voluntariado</td><td>Baja</td><td>Alta</td><td>Media</td><td>Media</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- 04 -->
-<section id="alcance">
-  <div class="sechead">
-    <span class="secnum">04</span>
-    <h2>Alcance y priorización</h2>
-    <p>Método MoSCoW. Lo que entra en la versión 1, lo que espera y —sobre todo— lo que decidimos no hacer.</p>
-  </div>
-
-  <div class="moscow">
-    <div class="mrow m-must">
-      <span class="mlabel">Must have</span>
-      <ul>
-        <li><strong>Mapa interactivo de navegación</strong> — 14 sectores, senderos, accesos, capas conmutables, búsqueda, zoom y desplazamiento, punto «estás acá».</li>
-        <li><strong>Fichas técnicas de plantas</strong> — nombre común y científico, familia, origen, porte, calendario de floración, estado de conservación, descripción, dato de interés, usos y enlace al mapa.</li>
-        <li><strong>Recorridos prearmados</strong> — cinco itinerarios con duración, distancia, paradas numeradas, traza sobre el mapa y modo de seguimiento paso a paso.</li>
-      </ul>
+  <!-- 01 portada -->
+  <section class="slide on">
+    <div class="body">
+      <p class="eyebrow">Investigación de UX · Diseño Gráfico 3 · FADU</p>
+      <h1>Nadie entiende lo que está <em>mirando</em></h1>
+      <p class="lead">Cómo pasamos de una observación en el Jardín Botánico Carlos Thays a un producto digital con alcance definido, y qué evidencia sostiene cada decisión.</p>
     </div>
-    <div class="mrow m-should">
-      <span class="mlabel">Should have</span>
-      <ul>
-        <li><strong>Puntos de interés turístico</strong> — esculturas, invernáculos, casona, columna meteorológica, jardín de mariposas, refugio climático.</li>
-        <li><strong>Actividades y voluntariado</strong> — agenda de visitas guiadas y talleres, más los tres programas de voluntariado con formulario de postulación.</li>
-        <li><strong>Qué está en flor</strong> — filtro por mes en curso, alimentado por el calendario de floración de cada ficha.</li>
-        <li><strong>Escaneo de QR</strong> — cada cartel del Jardín abre su ficha directamente.</li>
-      </ul>
+    <div class="foot">Thays · Prototipo navegable · Agosto 2026 &nbsp;&nbsp;·&nbsp;&nbsp; ← → para avanzar</div>
+  </section>
+
+  <!-- 02 el sitio -->
+  <section class="slide">
+    <p class="eyebrow">01 · El sitio</p>
+    <h2>Un patrimonio enorme con una comunicación mínima</h2>
+    <div class="cols c4" style="margin-top:18px">
+      <div><span class="stat vidrio">1898</span><span class="statlabel">Abre el Jardín, sobre el proyecto que Thays presentó en 1892</span></div>
+      <div><span class="stat rosa">5.500</span><span class="statlabel">Especies arbóreas, arbustivas y herbáceas</span></div>
+      <div><span class="stat ambar">7,7 ha</span><span class="statlabel">En pleno Palermo, entre Santa Fe, Las Heras y Plaza Italia</span></div>
+      <div><span class="stat" style="color:var(--marmol)">30+</span><span class="statlabel">Obras de arte entre los canteros, con autor y procedencia</span></div>
     </div>
-    <div class="mrow m-could">
-      <span class="mlabel">Could have</span>
-      <ul>
-        <li><strong>Armá tu planta</strong> — juego de identificación por rasgos con porcentaje de coincidencia contra el catálogo.</li>
-        <li><strong>Galería del feed</strong> — fotos de la cuenta oficial y de la comunidad, con moderación previa.</li>
-        <li><strong>Colección personal</strong> — herbario de especies guardadas e insignias por recorrido completado.</li>
-        <li><strong>Audioguía</strong> — narración por parada para accesibilidad y para quien prefiere caminar sin mirar la pantalla.</li>
-      </ul>
+    <p style="margin-top:34px;max-width:78ch">Cinco invernáculos —uno art nouveau premiado en la Exposición Universal de París de 1889—, la casona de 1881 donde vivió Thays, un jardín de mariposas a cielo abierto, una escuela de jardinería centenaria y, desde 2023, el <strong>primer refugio climático de la Ciudad</strong>: bajo su dosel se registran hasta 4,8 °C menos que en la vereda.</p>
+    <div class="foot">Fuente: GCBA · Área Educativa del Jardín Botánico Carlos Thays</div>
+  </section>
+
+  <!-- 03 el problema -->
+  <section class="slide">
+    <p class="eyebrow rosa">02 · Lo que observamos</p>
+    <h2>La visita dura veinte minutos y no deja nada</h2>
+    <div class="cols c4" style="margin-top:26px">
+      <div class="card"><h3>Orientación</h3><p>La cartelería de sectores es escasa y el trazado no es una grilla. Es fácil recorrer siempre el mismo tercio del predio.</p></div>
+      <div class="card"><h3>Interpretación</h3><p>Los carteles dan nombre científico, familia y origen. Nada explica por qué esa planta importa.</p></div>
+      <div class="card"><h3>Narrativa</h3><p>No hay recorrido sugerido para quien viene por primera vez ni para quien viene con chicos.</p></div>
+      <div class="card"><h3>Estacionalidad</h3><p>Lo mejor cambia mes a mes, pero el visitante no tiene cómo saber qué está en flor hoy.</p></div>
     </div>
-    <div class="mrow m-wont">
-      <span class="mlabel">Won't have</span>
-      <ul>
-        <li><strong>Venta de entradas</strong> — el ingreso al Jardín es gratuito.</li>
-        <li><strong>App nativa en tiendas</strong> — duplica el costo de mantenimiento y agrega fricción de descarga en la puerta.</li>
-        <li><strong>Red social propia</strong> — comentarios, perfiles y seguidores. La comunidad ya está en Instagram; integrarse cuesta menos que competir.</li>
-        <li><strong>Realidad aumentada</strong> — alto costo, batería y compatibilidad irregular. Se evalúa recién en fase 3.</li>
-        <li><strong>Identificación de plantas por foto</strong> — requiere un modelo entrenado y falla mucho; iNaturalist ya lo resuelve y el Jardín ya lo usa.</li>
-      </ul>
+    <div class="card accent" style="margin-top:28px">
+      <p style="font-size:18px"><strong>El contenido existe.</strong> El herbario, el archivo de Thays, los planos históricos, la programación educativa: todo está. Lo que falta no es información sino <strong>un canal que la entregue en el momento y el lugar donde sirve</strong>.</p>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- 05 -->
-<section id="ia">
-  <div class="sechead">
-    <span class="secnum">05</span>
-    <h2>Arquitectura de información</h2>
-    <p>Cinco secciones en la barra inferior. Ninguna pantalla queda a más de tres toques del inicio.</p>
-  </div>
-
-  <div class="ia">
-    <div class="iacol"><div class="iah">Inicio</div><ul>
-      <li>Estado: abierto / cerrado y horario</li>
-      <li>Accesos rápidos (4)</li>
-      <li class="sub">¿Dónde estoy?</li>
-      <li class="sub">Escanear cartel</li>
-      <li class="sub">Armá tu planta</li>
-      <li class="sub">Primera vez acá</li>
-      <li>Qué está en flor este mes</li>
-      <li>Dato del día</li>
-      <li>Este fin de semana</li>
-    </ul></div>
-
-    <div class="iacol"><div class="iah">Mapa</div><ul>
-      <li>Buscador</li>
-      <li>Capas conmutables</li>
-      <li class="sub">Especies</li>
-      <li class="sub">Patrimonio</li>
-      <li class="sub">Servicios</li>
-      <li class="sub">Recorrido activo</li>
-      <li>Ficha rápida al tocar un pin</li>
-      <li>Zoom, desplazamiento, centrar</li>
-    </ul></div>
-
-    <div class="iacol"><div class="iah">Recorridos</div><ul>
-      <li>Listado de 5 recorridos</li>
-      <li>Detalle del recorrido</li>
-      <li class="sub">Duración, distancia, dificultad</li>
-      <li class="sub">Paradas numeradas</li>
-      <li>Modo seguimiento</li>
-      <li class="sub">Barra de progreso</li>
-      <li class="sub">Parada actual y siguiente</li>
-    </ul></div>
-
-    <div class="iacol"><div class="iah">Descubrí</div><ul>
-      <li>Fichas técnicas</li>
-      <li class="sub">Buscador y filtros</li>
-      <li class="sub">Ficha completa</li>
-      <li>Puntos de interés</li>
-      <li>Armá tu planta</li>
-      <li>Galería</li>
-      <li>Tu colección</li>
-    </ul></div>
-
-    <div class="iacol"><div class="iah">Agenda</div><ul>
-      <li>Actividades por fecha</li>
-      <li>Visitas guiadas</li>
-      <li>Talleres</li>
-      <li>Voluntariado</li>
-      <li class="sub">Los tres programas</li>
-      <li class="sub">Formulario de postulación</li>
-    </ul></div>
-  </div>
-
-  <h3>Reglas de navegación</h3>
-  <ul>
-    <li>Las cinco secciones raíz son <strong>hermanas</strong>: siempre accesibles desde la barra inferior, sin jerarquía entre ellas.</li>
-    <li>Las <strong>fichas y los puntos de interés se abren como panel inferior</strong>, no como pantalla nueva. El usuario nunca pierde el contexto del mapa o de la lista que venía mirando.</li>
-    <li>Las <strong>pantallas hijas</strong> (catálogo, galería, juego, detalle de recorrido, voluntariado) llevan botón de retroceso rotulado con el nombre de su sección padre.</li>
-    <li>El <strong>panel de recorrido activo</strong> flota sobre el mapa y sobrevive a la navegación entre secciones: el usuario puede consultar una ficha y volver sin perder el paso.</li>
-  </ul>
-</section>
-
-<!-- 06 -->
-<section id="flujos">
-  <div class="sechead">
-    <span class="secnum">06</span>
-    <h2>Flujos principales</h2>
-    <p>Los cuatro caminos que justifican el producto. Cada uno se puede recorrer en el prototipo.</p>
-  </div>
-
-  <h3>F1 · Primera visita, sin plan <span style="font-weight:400;color:var(--ink-3);font-size:14px">— Sofía</span></h3>
-  <div class="flow">
-    <div class="step"><span class="sn">01</span><b>Entra por Plaza Italia</b><small>Abre la app desde el QR del acceso.</small></div>
-    <div class="step"><span class="sn">02</span><b>Ve el estado</b><small>Abierto, horario y qué está en flor hoy.</small></div>
-    <div class="step"><span class="sn">03</span><b>Toca «Primera vez acá»</b><small>Recorrido de 45 minutos, 9 paradas.</small></div>
-    <div class="step"><span class="sn">04</span><b>Inicia el recorrido</b><small>La traza aparece sobre el mapa.</small></div>
-    <div class="step"><span class="sn">05</span><b>Avanza parada por parada</b><small>El panel muestra qué mirar en cada una.</small></div>
-    <div class="step"><span class="sn">06</span><b>Termina</b><small>Insignia y sugerencia del próximo recorrido.</small></div>
-  </div>
-
-  <h3>F2 · Buscar una especie concreta <span style="font-weight:400;color:var(--ink-3);font-size:14px">— Lucía</span></h3>
-  <div class="flow">
-    <div class="step"><span class="sn">01</span><b>Abre el mapa</b><small>O el catálogo, según prefiera.</small></div>
-    <div class="step"><span class="sn">02</span><b>Escribe el nombre</b><small>Común, científico o familia.</small></div>
-    <div class="step"><span class="sn">03</span><b>Elige el resultado</b><small>El mapa se centra sobre el pin.</small></div>
-    <div class="step"><span class="sn">04</span><b>Lee la ficha rápida</b><small>Sector, nombre científico, resumen.</small></div>
-    <div class="step"><span class="sn">05</span><b>Abre la ficha completa</b><small>Familia, origen, floración, conservación.</small></div>
-    <div class="step alt"><span class="sn">05b</span><b>Alternativa</b><small>Escanea el QR del cartel y llega directo a la ficha.</small></div>
-  </div>
-
-  <h3>F3 · Visita con chicos <span style="font-weight:400;color:var(--ink-3);font-size:14px">— Carla y Tomi</span></h3>
-  <div class="flow">
-    <div class="step"><span class="sn">01</span><b>Abre Recorridos</b><small>Filtra por «Con chicos».</small></div>
-    <div class="step"><span class="sn">02</span><b>Expedición en familia</b><small>30 minutos, 6 misiones.</small></div>
-    <div class="step"><span class="sn">03</span><b>Cumple las misiones</b><small>Buscar, contar, oler, observar.</small></div>
-    <div class="step"><span class="sn">04</span><b>Juega «Armá tu planta»</b><small>Cuatro rasgos, un resultado.</small></div>
-    <div class="step"><span class="sn">05</span><b>Compara con el catálogo</b><small>Abre la ficha de la especie más parecida.</small></div>
-  </div>
-
-  <h3>F4 · Volver <span style="font-weight:400;color:var(--ink-3);font-size:14px">— Marcelo</span></h3>
-  <div class="flow">
-    <div class="step"><span class="sn">01</span><b>Abre la app en casa</b><small>Ve qué está en flor este mes.</small></div>
-    <div class="step"><span class="sn">02</span><b>Consulta la agenda</b><small>Visitas guiadas del fin de semana.</small></div>
-    <div class="step"><span class="sn">03</span><b>Va al Jardín</b><small>Con un objetivo concreto en la cabeza.</small></div>
-    <div class="step"><span class="sn">04</span><b>Guarda especies</b><small>Arma su herbario personal.</small></div>
-    <div class="step"><span class="sn">05</span><b>Se postula</b><small>Divulgador botánico, convocatoria de febrero.</small></div>
-  </div>
-</section>
-
-<!-- 07 -->
-<section id="funcional">
-  <div class="sechead">
-    <span class="secnum">07</span>
-    <h2>Especificación funcional</h2>
-    <p>Módulo por módulo: qué hace, qué muestra y cuándo se considera terminado.</p>
-  </div>
-
-  <h3>M1 · Mapa interactivo</h3>
-  <p>Mapa vectorial propio del predio —no un mapa de calles— con el contorno real del Jardín, los catorce sectores, los senderos principales y secundarios, los tres accesos y las calles perimetrales rotuladas.</p>
-  <ul>
-    <li><strong>Capas conmutables:</strong> especies (19 pines), patrimonio (15 pines), servicios (6 pines) y recorrido activo.</li>
-    <li><strong>Interacción:</strong> desplazamiento con el dedo, acercar y alejar con dos dedos o con los controles, botón de centrado que restituye la vista completa.</li>
-    <li><strong>Pin seleccionado:</strong> crece, se rotula y abre un panel inferior con la ficha rápida.</li>
-    <li><strong>Buscador:</strong> filtra especies, patrimonio y sectores en el mismo campo; al elegir un resultado el mapa se centra y abre la ficha.</li>
-    <li><strong>Ubicación:</strong> punto pulsante «estás acá». En producción se resuelve por GPS con una corrección de encuadre, ya que el predio entero cabe en un radio de 300 metros.</li>
-  </ul>
-  <p><strong>Criterio de aceptación:</strong> desde cualquier punto del mapa, llegar a la ficha de una especie concreta en menos de tres toques.</p>
-
-  <h3>M2 · Fichas técnicas</h3>
-  <p>La unidad de contenido del producto. Cada ficha tiene una estructura fija para que sea comparable entre especies:</p>
-  <div class="tablebox">
-    <table>
-      <thead><tr><th>Bloque</th><th>Contenido</th><th>Fuente</th></tr></thead>
-      <tbody>
-        <tr><td>Encabezado</td><td>Imagen, sector, nombre común, nombre científico en cursiva</td><td>Archivo del Jardín</td></tr>
-        <tr><td>Datos duros</td><td>Familia, altura, origen, tipo de hoja, estado de conservación</td><td>Herbario y bibliografía</td></tr>
-        <tr><td>Calendario</td><td>Doce meses, resaltados los de floración y marcado el mes en curso</td><td>Registro fenológico</td></tr>
-        <tr><td>Descripción</td><td>Dos o tres frases sobre qué mirar y por qué esa planta es como es</td><td>Redacción propia</td></tr>
-        <tr><td>Sabías que</td><td>Un dato memorable por especie. Es lo que el visitante repite después.</td><td>Redacción propia</td></tr>
-        <tr><td>Usos</td><td>Ornamental, medicinal, maderable, alimentario, urbano</td><td>Bibliografía</td></tr>
-        <tr><td>Acciones</td><td>Ver en el mapa · Escuchar · Guardar</td><td>—</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="note">
-    <span class="nl">Decisión editorial</span>
-    <p>El bloque «Sabías que» no es decorativo: es el que convierte una placa de museo en una historia. Que el ombú no sea un árbol sino una hierba gigante, o que seis ginkgos hayan sobrevivido a Hiroshima, es lo que el visitante le cuenta a otro. Cada ficha necesita exactamente uno.</p>
-  </div>
-
-  <h3>M3 · Recorridos guiados</h3>
-  <p>Cinco itinerarios autoguiados, cada uno con su traza sobre el mapa y sus paradas ordenadas:</p>
-  <div class="tablebox">
-    <table>
-      <thead><tr><th>Recorrido</th><th class="num">Duración</th><th class="num">Distancia</th><th class="num">Paradas</th><th>Para quién</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Primera vez en el Jardín</strong></td><td class="num">45 min</td><td class="num">1,2 km</td><td class="num">9</td><td>Visitante nuevo</td></tr>
-        <tr><td><strong>Árboles de mi Ciudad</strong></td><td class="num">40 min</td><td class="num">1,0 km</td><td class="num">10</td><td>Interés urbano</td></tr>
-        <tr><td><strong>Thays y el jardín que soñó</strong></td><td class="num">50 min</td><td class="num">1,1 km</td><td class="num">7</td><td>Interés histórico</td></tr>
-        <tr><td><strong>Mármoles bajo los árboles</strong></td><td class="num">35 min</td><td class="num">0,8 km</td><td class="num">6</td><td>Interés artístico</td></tr>
-        <tr><td><strong>Expedición botánica en familia</strong></td><td class="num">30 min</td><td class="num">0,7 km</td><td class="num">6</td><td>Chicos desde 5 años</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>El <strong>modo seguimiento</strong> es un panel flotante sobre el mapa con la barra de progreso, la parada actual, su indicación y dos acciones: ver el detalle o avanzar. Al avanzar, el mapa se centra en la parada siguiente. El recorrido sobrevive a la navegación: se puede consultar una ficha, ir a la agenda y volver sin perder el paso.</p>
-
-  <h3>M4 · Puntos de interés</h3>
-  <p>Quince hitos clasificados en cuatro tipos —patrimonio, escultura, naturaleza y servicio— con la misma estructura de ficha: descripción, dato y ubicación. Es la capa que explica por qué hay una loba romana en bronce en medio de un jardín botánico.</p>
-
-  <h3>M5 · Armá tu planta</h3>
-  <p>Juego de identificación en cuatro pasos: hoja, flor, tronco y hábitat. Cada elección redibuja una planta imaginaria en pantalla. Al terminar, el sistema compara los cuatro rasgos contra el catálogo y devuelve las tres especies más parecidas con su porcentaje.</p>
-  <p><strong>Ponderación:</strong> hoja 30, flor 26, tronco 24, hábitat 20. Los pesos son distintos a propósito: evitan empates triples y reflejan que el follaje es el rasgo más discriminante en la identificación botánica de campo.</p>
-  <p><strong>Por qué existe:</strong> no es un adorno. Es el único módulo que enseña <em>a mirar</em> —a fijarse en el tipo de hoja, en la corteza, en la forma de la copa— en lugar de enseñar nombres. Y es la respuesta directa a Carla y Tomi.</p>
-
-  <h3>M6 · Galería</h3>
-  <p>Grilla del feed oficial más las fotos de la comunidad publicadas con el hashtag. Sincronización cada seis horas por la API de Instagram, con moderación previa de lo que llega por hashtag. Cada foto se abre en visor con autor, epígrafe y etiqueta temática.</p>
-
-  <h3>M7 · Agenda y voluntariado</h3>
-  <p>Listado de actividades por fecha, con horario, tipo y condiciones de cupo. Debajo, los tres programas de voluntariado del Área Educativa —Divulgadores Botánicos, Coordinación de Expediciones Botánicas y Lazos Huerteros— con sus requisitos y un formulario de postulación de seis campos y consentimiento explícito de datos.</p>
-</section>
-
-<!-- 08 -->
-<section id="datos">
-  <div class="sechead">
-    <span class="secnum">08</span>
-    <h2>Modelo de datos</h2>
-    <p>Seis entidades. La forma del contenido determina lo que la interfaz puede hacer.</p>
-  </div>
-  <div class="tablebox">
-    <table>
-      <thead><tr><th>Entidad</th><th>Campos</th><th>Relaciones</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Especie</strong></td><td><code>id</code>, nombre común, nombre científico, familia, origen, altura, floración [meses], color de flor, tipo de hoja, tipo de tronco, hábitat, descripción, dato, usos, conservación, coordenadas</td><td>pertenece a un Sector; aparece en N Paradas</td></tr>
-        <tr><td><strong>Sector</strong></td><td><code>id</code>, nombre, geometría, color</td><td>contiene N Especies y N Puntos</td></tr>
-        <tr><td><strong>Punto de interés</strong></td><td><code>id</code>, nombre, tipo, descripción, dato, coordenadas</td><td>pertenece a un Sector; aparece en N Paradas</td></tr>
-        <tr><td><strong>Recorrido</strong></td><td><code>id</code>, nombre, resumen, duración, distancia, dificultad, traza</td><td>tiene N Paradas ordenadas</td></tr>
-        <tr><td><strong>Parada</strong></td><td>orden, referencia polimórfica (Especie o Punto), indicación</td><td>pertenece a un Recorrido</td></tr>
-        <tr><td><strong>Actividad</strong></td><td><code>id</code>, nombre, fecha, horario, tipo, cupo, descripción</td><td>—</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="note">
-    <span class="nl">La decisión que sostiene todo</span>
-    <p>Los rasgos morfológicos de cada especie —hoja, flor, tronco, hábitat— son campos estructurados, no texto libre. Esa sola decisión permite que funcionen el juego, el filtro «en flor ahora» y los recorridos temáticos sin duplicar contenido. Si esos datos fueran prosa, cada función necesitaría su propia base.</p>
-  </div>
-</section>
-
-<!-- 09 -->
-<section id="sistema">
-  <div class="sechead">
-    <span class="secnum">09</span>
-    <h2>Sistema de diseño</h2>
-    <p>Dirección: naturaleza inmersiva. Tema oscuro único y deliberado, fotografía a sangre, interfaz flotante y translúcida.</p>
-  </div>
-
-  <h3>Por qué oscuro</h3>
-  <p>Tres razones, ninguna estética. La app se usa a la intemperie bajo un dosel arbóreo, donde el contraste alto cansa menos que un fondo blanco reflejando el cielo. La fotografía botánica —verdes profundos, luz filtrada— se lee mejor sobre negro que sobre blanco. Y el consumo de batería importa en una visita de una hora sin enchufes.</p>
-
-  <h3>Color</h3>
-  <p>Los fondos son negros con sesgo verde, no grises neutros. Los tres acentos vienen del Jardín, no de una paleta genérica: el rosa del palo borracho en flor, el ámbar de la tipa y el ibirá pitá, el verde vidrio del Invernáculo N.º 1. El mármol de las esculturas es el cuarto, reservado al patrimonio.</p>
-  <div class="swatches">
-    <div class="sw"><div class="chipc" style="background:#070C09"></div><div class="swmeta"><b>Noche</b><code>#070C09</code></div></div>
-    <div class="sw"><div class="chipc" style="background:#0F1913"></div><div class="swmeta"><b>Corteza</b><code>#0F1913</code></div></div>
-    <div class="sw"><div class="chipc" style="background:#F0709B"></div><div class="swmeta"><b>Palo borracho</b><code>#F0709B</code></div></div>
-    <div class="sw"><div class="chipc" style="background:#E8B24C"></div><div class="swmeta"><b>Tipa</b><code>#E8B24C</code></div></div>
-    <div class="sw"><div class="chipc" style="background:#7ED8C3"></div><div class="swmeta"><b>Invernáculo</b><code>#7ED8C3</code></div></div>
-    <div class="sw"><div class="chipc" style="background:#DED6C6"></div><div class="swmeta"><b>Mármol</b><code>#DED6C6</code></div></div>
-  </div>
-  <p><strong>Reglas de uso.</strong> El rosa marca especies vivas y la traza del recorrido activo. El mármol marca patrimonio y esculturas. El vidrio marca interacción y el estado del sistema. El ámbar marca datos de interés y contexto histórico. Un elemento nunca toma dos acentos a la vez.</p>
-
-  <h3>Tipografía</h3>
-  <div class="typespec">
-    <div class="typerow">
-      <div class="sample" style="font-family:var(--serif);font-weight:300;font-size:30px;letter-spacing:-.03em;line-height:1.05">El Jardín está <em style="font-style:italic">en flor</em></div>
-      <div class="spec">Fraunces · Light 300 · −3 % · 30–38 px<br>Títulos de pantalla</div>
+  <!-- 04 método -->
+  <section class="slide">
+    <p class="eyebrow">03 · Cómo lo investigamos</p>
+    <h2>Qué es evidencia y qué es supuesto</h2>
+    <p style="max-width:88ch;margin-bottom:26px">La honestidad metodológica es parte del entregable. Todo lo que sigue se apoya en fuentes públicas verificables; ninguna persona fue entrevistada, así que las personas son <strong>arquetipos de trabajo</strong>, no hallazgos de campo.</p>
+    <div class="cols c2" style="gap:20px">
+      <div class="card vidrio">
+        <span class="tag t-vidrio">Evidencia verificable</span>
+        <ul class="clean small" style="margin-top:16px">
+          <li>Plano oficial del predio, con sus 14 sectores y su leyenda</li>
+          <li>Programación, horarios y visitas guiadas publicadas por el GCBA</li>
+          <li>Los tres programas de voluntariado del Área Educativa</li>
+          <li>Fichas botánicas del sendero «Árboles de mi Ciudad»</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag t-ambar">Supuesto a validar</span>
+        <ul class="clean no small" style="margin-top:16px">
+          <li>Las cuatro personas y sus motivaciones</li>
+          <li>Los veinte minutos de visita promedio</li>
+          <li>La disposición a usar el teléfono dentro del Jardín</li>
+          <li>Las metas numéricas de cada objetivo</li>
+        </ul>
+      </div>
     </div>
-    <div class="typerow">
-      <div class="sample" style="font-family:var(--serif);font-style:italic;font-size:19px;color:var(--verde)">Ceiba speciosa</div>
-      <div class="spec">Fraunces Italic · Regular 400 · 15–19 px<br>Nombres científicos, sin excepción</div>
+  </section>
+
+  <!-- 05 usuarios -->
+  <section class="slide">
+    <p class="eyebrow">04 · A quién le hablamos</p>
+    <h2>Cuatro personas, cuatro visitas distintas</h2>
+    <div class="cols c4" style="margin-top:24px">
+      <div class="card"><div class="pavatar" style="background:var(--rosa);width:60px;height:60px;font-size:24px;margin:0 0 16px">S</div><h3>Sofía · 28</h3><p>Primera visita, sin plan. Una hora libre entre dos cosas.</p></div>
+      <div class="card"><div class="pavatar" style="background:var(--vidrio);width:60px;height:60px;font-size:24px;margin:0 0 16px">M</div><h3>Marcelo · 61</h3><p>Viene dos veces por mes. Conoce el predio mejor que la cartelería.</p></div>
+      <div class="card"><div class="pavatar" style="background:var(--ambar);width:60px;height:60px;font-size:24px;margin:0 0 16px">C</div><h3>Carla y Tomi · 37 y 7</h3><p>Sábado a la tarde. Necesita que el chico camine y mire.</p></div>
+      <div class="card"><div class="pavatar" style="background:var(--marmol);width:60px;height:60px;font-size:24px;margin:0 0 16px">L</div><h3>Lucía · 24</h3><p>Estudiante de Agronomía. Busca especies concretas para un TP.</p></div>
     </div>
-    <div class="typerow">
-      <div class="sample" style="font-size:16px">Tronco abultado con aguijones cónicos que lo defienden de los herbívoros.</div>
-      <div class="spec">Instrument Sans · Regular 400 · 14 px / 1,6<br>Texto corrido de interfaz</div>
+    <p style="margin-top:30px;max-width:80ch">Los cuatro perfiles no son decorativos: cada función del producto se justifica contra al menos uno de ellos, y las que no se justifican contra ninguno quedaron afuera del alcance.</p>
+  </section>
+
+  <!-- 06 Sofía -->
+  <section class="slide">
+    <p class="eyebrow rosa">04.1 · Persona</p>
+    <div class="persona">
+      <div class="pcard">
+        <div class="pavatar" style="background:var(--rosa)">S</div>
+        <p class="pname">Sofía</p>
+        <p class="prole">28 · PRIMERA VISITA</p>
+      </div>
+      <div>
+        <p class="quote">«Entré, caminé, era lindo, pero no entendí nada de lo que vi.»</p>
+        <dl class="pdl">
+          <div><dt>Necesita</dt><dd>Que alguien le diga por dónde empezar y qué vale la pena mirar.</dd></div>
+          <div><dt>Fricción</dt><dd>No va a leer un mapa impreso ni a bajar una app de 80 MB parada en la puerta.</dd></div>
+          <div><dt>Qué le construimos</dt><dd>Un recorrido de 45 minutos disponible en la pantalla de inicio, sin instalar nada.</dd></div>
+        </dl>
+      </div>
     </div>
-    <div class="typerow">
-      <div class="sample" style="font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)">Calendario de floración</div>
-      <div class="spec">Monoespaciada de sistema · 10–11 px · +15 %<br>Rótulos, categorías y datos</div>
+  </section>
+
+  <!-- 07 Marcelo -->
+  <section class="slide">
+    <p class="eyebrow rosa">04.2 · Persona</p>
+    <div class="persona">
+      <div class="pcard">
+        <div class="pavatar" style="background:var(--vidrio)">M</div>
+        <p class="pname">Marcelo</p>
+        <p class="prole">61 · VISITANTE FRECUENTE</p>
+      </div>
+      <div>
+        <p class="quote">«Yo ya sé dónde está todo. Lo que quiero es que me cuenten algo nuevo.»</p>
+        <dl class="pdl">
+          <div><dt>Necesita</dt><dd>Saber qué está en flor esta semana y datos que todavía no sepa.</dd></div>
+          <div><dt>Fricción</dt><dd>El contenido genérico lo aburre. La bienvenida le sobra.</dd></div>
+          <div><dt>Qué le construimos</dt><dd>«Qué está en flor» calculado sobre el calendario de floración, y un dato memorable por ficha.</dd></div>
+        </dl>
+      </div>
     </div>
+  </section>
+
+  <!-- 08 Carla y Tomi -->
+  <section class="slide">
+    <p class="eyebrow rosa">04.3 · Persona</p>
+    <div class="persona">
+      <div class="pcard">
+        <div class="pavatar" style="background:var(--ambar)">C</div>
+        <p class="pname">Carla y Tomi</p>
+        <p class="prole">37 Y 7 · FAMILIA</p>
+      </div>
+      <div>
+        <p class="quote">«Necesito que se entretenga y de paso aprenda algo.»</p>
+        <dl class="pdl">
+          <div><dt>Necesita</dt><dd>Una excusa para que el chico camine y mire, no una enciclopedia.</dd></div>
+          <div><dt>Fricción</dt><dd>Si la app es texto, el chico se aburre en tres minutos.</dd></div>
+          <div><dt>Qué le construimos</dt><dd>Seis misiones en el recorrido familiar y el juego «Armá tu planta», que enseña a mirar en vez de enseñar nombres.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 Lucía -->
+  <section class="slide">
+    <p class="eyebrow rosa">04.4 · Persona</p>
+    <div class="persona">
+      <div class="pcard">
+        <div class="pavatar" style="background:var(--marmol)">L</div>
+        <p class="pname">Lucía</p>
+        <p class="prole">24 · ESTUDIANTE DE AGRONOMÍA</p>
+      </div>
+      <div>
+        <p class="quote">«Necesito llegar a un ejemplar puntual sin dar dos vueltas al Jardín.»</p>
+        <dl class="pdl">
+          <div><dt>Necesita</dt><dd>Nombre científico, familia, origen, conservación y ubicación exacta.</dd></div>
+          <div><dt>Fricción</dt><dd>Buscar una especie caminando el predio entero le lleva media hora.</dd></div>
+          <div><dt>Qué le construimos</dt><dd>Buscador unificado sobre el mapa y fichas con la misma estructura de siete bloques, comparables entre sí.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 insights -->
+  <section class="slide">
+    <p class="eyebrow ambar">05 · Síntesis</p>
+    <h2>Tres cosas que cruzan a los cuatro</h2>
+    <div class="cols c3" style="margin-top:28px">
+      <div class="card vidrio">
+        <span class="tag t-vidrio">Insight 1</span>
+        <h3 style="margin-top:16px;font-size:22px;font-family:var(--serif);font-weight:400">La orientación es la puerta de todo</h3>
+        <p style="margin-top:10px">Ninguno de los cuatro puede hacer lo suyo si no sabe dónde está parado. Ubicarse no es una función más: es la condición de las otras.</p>
+      </div>
+      <div class="card vidrio">
+        <span class="tag t-vidrio">Insight 2</span>
+        <h3 style="margin-top:16px;font-size:22px;font-family:var(--serif);font-weight:400">El dato memorable vale más que la ficha completa</h3>
+        <p style="margin-top:10px">Que el ombú no sea un árbol sino una hierba gigante es lo que el visitante repite. La taxonomía completa no se la lleva nadie.</p>
+      </div>
+      <div class="card vidrio">
+        <span class="tag t-vidrio">Insight 3</span>
+        <h3 style="margin-top:16px;font-size:22px;font-family:var(--serif);font-weight:400">La estacionalidad es el motor de la segunda visita</h3>
+        <p style="margin-top:10px">Un jardín cambia solo. Es el único activo que da una razón nueva para volver sin producir nada nuevo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 H1 -->
+  <section class="slide">
+    <p class="eyebrow">06.1 · De la hipótesis a la pantalla</p>
+    <div class="chain">
+      <div class="link">
+        <p class="lk">Porque</p>
+        <p class="big">Sofía y Lucía no se ubican</p>
+        <p>Una recorre siempre el mismo tercio del predio; la otra pierde media hora buscando un ejemplar.</p>
+      </div>
+      <div class="link">
+        <p class="lk">Suponemos que</p>
+        <p class="big">Un mapa propio del predio, no de calles, resuelve las dos</p>
+        <p>Con sectores, senderos y buscador unificado sobre el mismo campo.</p>
+      </div>
+      <div class="link">
+        <p class="lk">Entonces la app</p>
+        <p class="big">Abre en el mapa a tres toques de cualquier ficha</p>
+        <p>Capas conmutables de especies, patrimonio, servicios y accesibilidad. Traza del recorrido activo generada desde sus paradas.</p>
+      </div>
+      <div class="link">
+        <p class="lk">Y lo mediríamos</p>
+        <p class="big">Sectores visitados por sesión</p>
+        <p>De 4 a 8 de los 14 sectores. Se registra por posición, no por declaración del usuario.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 H2 -->
+  <section class="slide">
+    <p class="eyebrow">06.2 · De la hipótesis a la pantalla</p>
+    <div class="chain">
+      <div class="link">
+        <p class="lk">Porque</p>
+        <p class="big">La cartelería nombra pero no explica</p>
+        <p>Marcelo ya sabe los nombres y Sofía no los necesita: los dos quieren saber por qué esa planta es como es.</p>
+      </div>
+      <div class="link">
+        <p class="lk">Suponemos que</p>
+        <p class="big">Un dato memorable por especie cambia la visita</p>
+        <p>No la ficha completa: un solo hecho que el visitante se lleve puesto y le cuente a otro.</p>
+      </div>
+      <div class="link">
+        <p class="lk">Entonces la app</p>
+        <p class="big">Fija «Sabías que» como bloque obligatorio de toda ficha</p>
+        <p>Estructura de siete bloques idéntica en las 19 fichas, más audioguía con la voz del sistema y transcripción completa.</p>
+      </div>
+      <div class="link">
+        <p class="lk">Y lo mediríamos</p>
+        <p class="big">Fichas abiertas por sesión y audios completados</p>
+        <p>Meta: cinco fichas por visita y 60 % de los audios escuchados hasta el final.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 H3 -->
+  <section class="slide">
+    <p class="eyebrow">06.3 · De la hipótesis a la pantalla</p>
+    <div class="chain">
+      <div class="link">
+        <p class="lk">Porque</p>
+        <p class="big">Sin relato, la visita se agota en veinte minutos</p>
+        <p>Nadie propone por dónde empezar, ni qué hacer con un chico de siete años.</p>
+      </div>
+      <div class="link">
+        <p class="lk">Suponemos que</p>
+        <p class="big">Un itinerario con paradas numeradas sostiene la caminata</p>
+        <p>El patrón ya está probado en museos: número, audio, siguiente.</p>
+      </div>
+      <div class="link">
+        <p class="lk">Entonces la app</p>
+        <p class="big">Adopta el patrón de audioguía completo</p>
+        <p>Barra persistente con Anterior · Listado · Teclado · Mapa · Siguiente, pines numerados con auricular, navegación paso a paso con distancia y giro, y recorridos propios compartibles por link.</p>
+      </div>
+      <div class="link">
+        <p class="lk">Y lo mediríamos</p>
+        <p class="big">Recorridos terminados y duración de visita</p>
+        <p>40 % de los recorridos iniciados llegan a la última parada; la visita media pasa de 22 a 45 minutos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 accesibilidad -->
+  <section class="slide">
+    <p class="eyebrow vidrio" style="color:var(--vidrio)">07 · Accesibilidad</p>
+    <h2>Un requisito de partida, no un parche del final</h2>
+    <div class="split" style="gap:44px">
+      <div>
+        <p>La accesibilidad entró en la definición del producto, no en la revisión previa a la entrega. Eso cambia decisiones estructurales, no colores.</p>
+        <div class="card accent" style="margin-top:22px">
+          <h3>La decisión que más se nota</h3>
+          <p style="margin-top:8px">Cada cartel lleva un <strong>número</strong>, no solo un código QR. Tecleando ese número se abre la ficha: funciona sin cámara, sin GPS, sin señal, con visión reducida y con un teléfono viejo. El QR queda como atajo, no como única puerta.</p>
+        </div>
+      </div>
+      <div class="cols c2" style="gap:14px;align-content:start">
+        <div class="card"><h3>Contenido</h3><p>Transcripción completa de cada audioguía, activable como permanente.</p></div>
+        <div class="card"><h3>Recorridos</h3><p>Superficie, pendiente, bancos, sombra, aptitud para silla de ruedas y duración a paso lento.</p></div>
+        <div class="card"><h3>Mapa</h3><p>Capa con sanitarios accesibles, rampas, bebederos a altura y bancos a la sombra.</p></div>
+        <div class="card"><h3>Interfaz</h3><p>Tres tamaños de texto, alto contraste, foco visible, áreas táctiles de 44 px y respeto por «reducir movimiento».</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 won't have -->
+  <section class="slide">
+    <p class="eyebrow ambar">08 · Alcance</p>
+    <h2>Priorizar es, sobre todo, <em>decir que no</em></h2>
+    <div class="split" style="gap:44px">
+      <div>
+        <p>La lista de lo que queda afuera dice más sobre un producto que la lista de lo que entra. Cada exclusión tiene un motivo, no una excusa.</p>
+        <p class="small" style="margin-top:22px;color:var(--faint)">Método MoSCoW. El alcance completo, con <em>must</em>, <em>should</em> y <em>could</em>, está en el prototipo y en el repositorio.</p>
+      </div>
+      <div>
+        <table>
+          <thead><tr><th>No hacemos</th><th>Por qué</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Venta de entradas</strong></td><td>El ingreso al Jardín es gratuito.</td></tr>
+            <tr><td><strong>App nativa en tiendas</strong></td><td>Duplica el mantenimiento y agrega fricción de descarga justo en la puerta.</td></tr>
+            <tr><td><strong>Red social propia</strong></td><td>La comunidad ya está en Instagram. Integrarse cuesta menos que competir.</td></tr>
+            <tr><td><strong>Realidad aumentada</strong></td><td>Alto costo, consumo de batería y compatibilidad irregular.</td></tr>
+            <tr><td><strong>Identificación por foto</strong></td><td>Requiere un modelo entrenado y falla mucho. iNaturalist ya lo resuelve y el Jardín ya lo usa.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 arquitectura -->
+  <section class="slide">
+    <p class="eyebrow">09 · Arquitectura</p>
+    <h2>Cinco secciones, nada a más de tres toques</h2>
+    <div class="cols c" style="grid-template-columns:repeat(5,1fr);margin-top:26px">
+      <div class="card"><h3>Inicio</h3><p>Estado del Jardín, qué está en flor, accesos rápidos, dato del día y agenda del fin de semana.</p></div>
+      <div class="card"><h3>Mapa</h3><p>Buscador, capas, selector de planta, pines numerados y ficha rápida al tocar.</p></div>
+      <div class="card"><h3>Recorridos</h3><p>Cinco itinerarios, armado propio, y modo guiado con navegación paso a paso.</p></div>
+      <div class="card"><h3>Descubrí</h3><p>Fichas, puntos de interés, juego, galería, audioguía por número y accesibilidad.</p></div>
+      <div class="card"><h3>Agenda</h3><p>Actividades reales del Jardín y los tres programas de voluntariado con postulación.</p></div>
+    </div>
+    <div class="cols c3" style="margin-top:24px;gap:18px">
+      <div class="card vidrio"><h3>Regla 1</h3><p>El detalle se abre como panel inferior, nunca como pantalla nueva: no se pierde el contexto del mapa.</p></div>
+      <div class="card vidrio"><h3>Regla 2</h3><p>Con un recorrido activo, la barra de recorrido reemplaza a la de secciones. Una sola barra por vez.</p></div>
+      <div class="card vidrio"><h3>Regla 3</h3><p>El recorrido sobrevive a la navegación: se puede consultar una ficha y volver sin perder el paso.</p></div>
+    </div>
+  </section>
+
+  <!-- 17 mapa -->
+  <section class="slide">
+    <p class="eyebrow">10 · Decisión de diseño</p>
+    <h2>Por qué un mapa propio y no uno de calles</h2>
+    <div class="split">
+      <div>
+        <p>Un mapa comercial muestra el Jardín como un polígono verde vacío. Todo lo que importa —los catorce sectores fitogeográficos, los senderos, los invernáculos, el yerbal histórico— es invisible en él.</p>
+        <p>El mapa de la app está trazado sobre <strong>el plano oficial del Jardín</strong>: perímetro real entre Las Heras, Santa Fe, Rep. Árabe Siria y Plaza Casares, el predio propio de la Escuela Técnica de Jardinería y los colores de la leyenda institucional, ajustados en luminosidad para leerse sobre fondo oscuro.</p>
+      </div>
+      <div class="cols c2" style="gap:14px;align-content:start">
+        <div class="card"><h3>14 sectores</h3><p>Con la geometría y el color del plano oficial.</p></div>
+        <div class="card"><h3>Dos plantas</h3><p>El predio y el interior del Invernáculo N.º 1, como los pisos de un museo.</p></div>
+        <div class="card"><h3>Trazas calculadas</h3><p>El recorrido se dibuja desde sus paradas: nunca puede desincronizarse.</p></div>
+        <div class="card"><h3>Distancias reales</h3><p>Metros y giros derivados de la geometría, no escritos a mano.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 dirección visual -->
+  <section class="slide">
+    <p class="eyebrow marmol">11 · Dirección visual</p>
+    <h2>El tema oscuro se argumenta, no se elige por gusto</h2>
+    <div class="cols c3" style="margin-top:26px">
+      <div class="card"><h3>Se usa a la intemperie</h3><p>Bajo el dosel, con luz filtrada, el contraste alto cansa menos que un fondo blanco reflejando el cielo.</p></div>
+      <div class="card"><h3>La fotografía manda</h3><p>El verde profundo y la luz filtrada de la fotografía botánica se leen mejor sobre negro que sobre blanco.</p></div>
+      <div class="card"><h3>La batería importa</h3><p>Una visita dura una hora y en el Jardín no hay enchufes.</p></div>
+    </div>
+    <div style="display:flex;gap:14px;margin-top:30px;align-items:stretch">
+      <div class="card" style="flex:1"><h3>Los acentos salen del Jardín</h3>
+        <p style="margin-top:10px">Rosa del palo borracho en flor, ámbar de la tipa y el ibirá pitá, verde vidrio del Invernáculo N.º 1, mármol de las esculturas. Ninguno viene de una paleta genérica, y un elemento nunca toma dos acentos a la vez.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;justify-content:center">
+        <div style="display:flex;gap:8px">
+          <div style="width:74px;height:52px;border-radius:12px;background:#F0709B"></div>
+          <div style="width:74px;height:52px;border-radius:12px;background:#E8B24C"></div>
+          <div style="width:74px;height:52px;border-radius:12px;background:#7ED8C3"></div>
+          <div style="width:74px;height:52px;border-radius:12px;background:#DED6C6"></div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div style="width:74px;height:52px;border-radius:12px;background:#070C09;border:1px solid var(--line-2)"></div>
+          <div style="width:74px;height:52px;border-radius:12px;background:#0F1913;border:1px solid var(--line-2)"></div>
+          <div style="width:74px;height:52px;border-radius:12px;background:#17251C;border:1px solid var(--line-2)"></div>
+          <div style="width:74px;height:52px;border-radius:12px;background:#ECF3ED"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19 imágenes -->
+  <section class="slide">
+    <p class="eyebrow ambar">12 · Una restricción convertida en método</p>
+    <h2>Las imágenes están generadas por código</h2>
+    <div class="split">
+      <div>
+        <p>No tenemos derechos sobre el archivo fotográfico del Jardín. En vez de dejar rectángulos grises, cada elemento recibe una composición atmosférica dibujada en <code style="font-family:var(--mono);font-size:16px;color:var(--vidrio)">&lt;canvas&gt;</code>: capas de follaje con desenfoque, claros de luz, pétalos y grano, generadas por una función determinista a partir de su identificador.</p>
+        <p><strong>El mismo elemento recibe siempre la misma imagen.</strong> El prototipo se ve terminado sin apropiarse de material ajeno.</p>
+        <div class="card vidrio" style="margin-top:12px">
+          <h3>Listo para enchufar fotos reales</h3>
+          <p style="margin-top:8px">El sistema busca <code style="font-family:var(--mono);font-size:14px">fotos/&lt;id&gt;.jpg</code> y, si existe, la superpone con un fundido. Sumar fotografía propia no requiere tocar una línea de código: alcanza con dejar los archivos en la carpeta.</p>
+        </div>
+      </div>
+      <div class="cols c2" style="gap:14px">
+        <div class="card" style="padding:0;overflow:hidden;height:146px"><canvas class="demo" data-seed="palo-borracho" data-kind="bloom" style="width:100%;height:100%;display:block"></canvas></div>
+        <div class="card" style="padding:0;overflow:hidden;height:146px"><canvas class="demo" data-seed="invernaculo1" data-kind="glass" style="width:100%;height:100%;display:block"></canvas></div>
+        <div class="card" style="padding:0;overflow:hidden;height:146px"><canvas class="demo" data-seed="ondina" data-kind="marble" style="width:100%;height:100%;display:block"></canvas></div>
+        <div class="card" style="padding:0;overflow:hidden;height:146px"><canvas class="demo" data-seed="sendero" data-kind="canopy" style="width:100%;height:100%;display:block"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20 qué falta validar -->
+  <section class="slide">
+    <p class="eyebrow rosa">13 · Honestidad</p>
+    <h2>Lo que este trabajo todavía no probó</h2>
+    <div class="cols c2" style="margin-top:24px;gap:20px">
+      <div class="card">
+        <h3>Sin test con usuarios</h3>
+        <p>El prototipo se probó automatizado en Chrome, en escritorio y en móvil, pero nadie lo usó adentro del Jardín. El primer test debería ser presencial, con cinco personas y una tarea concreta: «encontrá el ombú».</p>
+      </div>
+      <div class="card">
+        <h3>La precisión del GPS es un riesgo abierto</h3>
+        <p>En 7,7 hectáreas, el margen de error urbano puede superar la distancia entre dos sectores. Por eso el número del cartel es el recalibrado real y el punto de ubicación se declara aproximado.</p>
+      </div>
+      <div class="card">
+        <h3>La carga editorial no está resuelta</h3>
+        <p>Diecinueve fichas las escribe cualquiera. Doscientas, actualizadas y con foto, necesitan un responsable editorial designado dentro del Jardín.</p>
+      </div>
+      <div class="card">
+        <h3>Los QR dependen de obra física</h3>
+        <p>La app no puede compensar un cartel mal ubicado o ilegible. Sin intervención en la cartelería, media hipótesis se cae.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 21 roadmap -->
+  <section class="slide">
+    <p class="eyebrow">14 · Roadmap</p>
+    <h2>Tres fases, cada una usable por sí sola</h2>
+    <div style="margin-top:26px">
+      <table>
+        <thead><tr><th>Fase</th><th>Plazo</th><th>Entrega</th><th>Condición de salida</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1 · Fundación</strong></td><td>0–3 meses</td><td>Mapa, 50 fichas, 5 recorridos, audioguía por número, aplicación web progresiva y QR en los carteles del sendero «Árboles de mi Ciudad».</td><td>Un visitante nuevo completa un recorrido sin ayuda.</td></tr>
+          <tr><td><strong>2 · Profundidad</strong></td><td>3–6 meses</td><td>Puntos de interés, agenda y voluntariado en vivo, «qué está en flor», capa de accesibilidad verificada en campo y gestor de contenidos.</td><td>El Jardín publica contenido sin intervención de desarrollo.</td></tr>
+          <tr><td><strong>3 · Comunidad</strong></td><td>6–12 meses</td><td>Juego, galería, colección personal, recorridos compartidos, integración con iNaturalist y catálogo ampliado a 200 especies.</td><td>25 % de usuarios recurrentes a seis meses.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 22 cierre -->
+  <section class="slide">
+    <div class="body">
+      <p class="eyebrow">15 · Cierre</p>
+      <h1>El contenido ya estaba. Faltaba <em>el canal</em>.</h1>
+      <div class="cols c3" style="margin-top:14px;max-width:1000px">
+        <div><span class="stat rosa">19</span><span class="statlabel">fichas técnicas con datos verificados y audioguía</span></div>
+        <div><span class="stat vidrio">5+1</span><span class="statlabel">recorridos guiados, más el que arma el visitante</span></div>
+        <div><span class="stat ambar">14</span><span class="statlabel">sectores del plano oficial, con su leyenda real</span></div>
+      </div>
+      <p style="margin-top:34px;max-width:70ch">Lo que se ve en la demo es la fase 1. El juego, la galería y los recorridos compartidos están en el prototipo para mostrar hacia dónde puede crecer, no para pedirlos ahora.</p>
+    </div>
+    <div class="foot">Trabajo académico sin fines comerciales · No representa al GCBA ni al Jardín Botánico Carlos Thays</div>
+  </section>
+
   </div>
-  <p>La serif <em class="term">Fraunces</em> aporta la referencia a la lámina botánica antigua sin caer en la nostalgia; su eje óptico variable permite usarla fina en tamaños grandes. La sans <em class="term">Instrument Sans</em> sostiene la interfaz sin competir. La monoespaciada solo aparece en rótulos y datos: nunca en texto corrido.</p>
-
-  <h3>Componentes</h3>
-  <div class="tablebox">
-    <table>
-      <thead><tr><th>Componente</th><th>Uso</th><th>Especificación</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Panel inferior</strong></td><td>Todo detalle que no cambia de sección</td><td>Radio 32 px superior, máximo 88 % de alto, cortina de fondo con desenfoque, cierre por toque fuera, tecla Esc o navegación</td></tr>
-        <tr><td><strong>Píldora / chip</strong></td><td>Filtros y capas</td><td>Radio total, 12 px, activo en inverso (tinta sobre claro)</td></tr>
-        <tr><td><strong>Ítem de lista</strong></td><td>Catálogos</td><td>Miniatura 56 px, tres líneas de texto, cheurón a la derecha</td></tr>
-        <tr><td><strong>Etiqueta</strong></td><td>Sector, tipo, estado</td><td>Fondo del acento al 15 % con texto del acento pleno</td></tr>
-        <tr><td><strong>Panel flotante</strong></td><td>Recorrido en curso</td><td>Sobre el mapa, por encima de la barra de pestañas, con desenfoque de fondo</td></tr>
-        <tr><td><strong>Aviso</strong></td><td>Confirmaciones</td><td>Vidrio sobre tinta oscura, 2,6 segundos, no bloqueante</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h3>Accesibilidad</h3>
-  <ul>
-    <li><strong>Contraste:</strong> texto principal <code>#ECF3ED</code> sobre <code>#070C09</code> supera 15:1. El texto atenuado se reserva a información secundaria y nunca baja de 4,5:1.</li>
-    <li><strong>Áreas táctiles:</strong> mínimo 44 × 44 px. Los pines del mapa tienen un círculo de impacto invisible mayor que el visible.</li>
-    <li><strong>Teclado:</strong> toda la interfaz es recorrible con tabulación, con foco visible en verde vidrio. Esc cierra el panel abierto.</li>
-    <li><strong>Movimiento:</strong> se respeta <code>prefers-reduced-motion</code>; las animaciones se anulan, no se degradan.</li>
-    <li><strong>Semántica:</strong> los pines del mapa son botones con rótulo accesible; los paneles declaran <code>role="dialog"</code>.</li>
-    <li><strong>Pendiente de la fase 2:</strong> audioguía por parada, que resuelve además el caso de quien camina sin mirar la pantalla.</li>
-  </ul>
-</section>
-
-<!-- 10 -->
-<section id="tecnica">
-  <div class="sechead">
-    <span class="secnum">10</span>
-    <h2>Notas técnicas</h2>
-    <p>Qué se construyó en el prototipo, con qué criterio y qué cambia en producción.</p>
-  </div>
-  <div class="tablebox">
-    <table>
-      <thead><tr><th>Aspecto</th><th>En el prototipo</th><th>En producción</th></tr></thead>
-      <tbody>
-        <tr><td>Plataforma</td><td>Un archivo HTML autónomo, sin dependencias externas</td><td>Aplicación web progresiva instalable, con caché sin conexión</td></tr>
-        <tr><td>Presentación</td><td>Marco de teléfono en escritorio; a pantalla completa por debajo de 900 px</td><td>Igual: mobile first, el escritorio es vista de consulta</td></tr>
-        <tr><td>Mapa</td><td>SVG propio con desplazamiento y zoom sobre el <code>viewBox</code></td><td>Igual, más una capa de georreferenciación para el punto de ubicación</td></tr>
-        <tr><td>Ubicación</td><td>Punto fijo simulado en el acceso de Plaza Italia</td><td>API de geolocalización con corrección de encuadre y respaldo por escaneo de QR</td></tr>
-        <tr><td>Imágenes</td><td>Composiciones generadas en canvas, deterministas por semilla</td><td>Fotografía del archivo del Jardín, en formato AVIF con variantes por densidad</td></tr>
-        <tr><td>Contenido</td><td>Estructuras de datos en el propio archivo</td><td>Gestor de contenidos sin cabeza, para que el equipo del Jardín edite sin desarrollo</td></tr>
-        <tr><td>Galería</td><td>Feed simulado con moderación descripta</td><td>API de Instagram, sincronización cada seis horas, moderación previa del hashtag</td></tr>
-        <tr><td>Formularios</td><td>Validación en el navegador, sin envío</td><td>Integración con el sistema del Área Educativa y consentimiento de datos registrado</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="note">
-    <span class="nl">Por qué las imágenes se generan</span>
-    <p>El prototipo no usa fotos de archivo porque no tenemos derechos sobre ellas. En vez de dejar rectángulos grises, se dibujan composiciones atmosféricas en canvas: una función determinista por semilla que apila capas de follaje con desenfoque, claros de luz, pétalos y grano. Cada elemento recibe siempre la misma imagen, y el prototipo se ve terminado sin apropiarse de material ajeno. Es una decisión de producción, no un efecto.</p>
-  </div>
-</section>
-
-<!-- 11 -->
-<section id="riesgos">
-  <div class="sechead">
-    <span class="secnum">11</span>
-    <h2>Riesgos y supuestos</h2>
-    <p>Lo que puede salir mal y qué haríamos al respecto.</p>
-  </div>
-  <div class="tablebox">
-    <table>
-      <thead><tr><th>Riesgo</th><th>Impacto</th><th>Mitigación</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Señal irregular bajo el dosel</strong></td><td>Alto</td><td>Aplicación web progresiva con caché: mapa, fichas y recorridos disponibles sin conexión tras la primera carga.</td></tr>
-        <tr><td><strong>Precisión del GPS en 7,7 ha</strong></td><td>Alto</td><td>El margen de error urbano puede superar la distancia entre dos sectores. El QR de cada cartel es el recalibrado real; el punto de ubicación se declara aproximado.</td></tr>
-        <tr><td><strong>El contenido envejece</strong></td><td>Medio</td><td>Gestor de contenidos y responsable editorial designado. Sin dueño del contenido, el producto se degrada en un año.</td></tr>
-        <tr><td><strong>Nadie escanea los QR</strong></td><td>Medio</td><td>Requiere intervención física: cartelería nueva, legible y bien ubicada. La app no puede compensar un cartel malo.</td></tr>
-        <tr><td><strong>Moderación de la galería</strong></td><td>Medio</td><td>Toda foto de comunidad pasa por revisión antes de publicarse. Sin moderación, la galería es un pasivo.</td></tr>
-        <tr><td><strong>Obra en curso en el predio</strong></td><td>Bajo</td><td>El Jardín atraviesa una intervención mayor. Sectores y recorridos deben poder marcarse como cerrados desde el gestor de contenidos.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <h3>Supuestos que habría que validar</h3>
-  <ul>
-    <li>Que el visitante está dispuesto a usar el teléfono durante la visita, y no viene justamente a despegarse de él.</li>
-    <li>Que el Jardín puede sostener la carga editorial de mantener las fichas actualizadas.</li>
-    <li>Que la cartelería física puede modificarse para incorporar los códigos QR.</li>
-    <li>Que 19 fichas alcanzan para la versión 1 y el catálogo puede crecer por etapas hasta las 200 especies señalizadas.</li>
-  </ul>
-</section>
-
-<!-- 12 -->
-<section id="roadmap">
-  <div class="sechead">
-    <span class="secnum">12</span>
-    <h2>Roadmap</h2>
-    <p>Tres fases. Cada una entrega algo usable por sí solo.</p>
-  </div>
-  <div class="tablebox">
-    <table>
-      <thead><tr><th>Fase</th><th>Plazo</th><th>Entrega</th><th>Condición de salida</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>Fase 1<br>Fundación</strong></td><td class="num">0–3 meses</td>
-          <td>Mapa, 50 fichas, 5 recorridos, aplicación web progresiva, QR en los carteles de las especies del sendero «Árboles de mi Ciudad»</td>
-          <td>Un visitante nuevo completa un recorrido sin ayuda.</td>
-        </tr>
-        <tr>
-          <td><strong>Fase 2<br>Profundidad</strong></td><td class="num">3–6 meses</td>
-          <td>Puntos de interés, agenda y voluntariado en vivo, «qué está en flor», audioguía, gestor de contenidos para el equipo del Jardín</td>
-          <td>El Jardín publica contenido sin intervención del equipo de desarrollo.</td>
-        </tr>
-        <tr>
-          <td><strong>Fase 3<br>Comunidad</strong></td><td class="num">6–12 meses</td>
-          <td>Juego, galería, colección personal e insignias, integración con iNaturalist, catálogo ampliado a 200 especies</td>
-          <td>25 % de usuarios recurrentes a seis meses.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- 13 -->
-<section id="demo">
-  <div class="sechead">
-    <span class="secnum">13</span>
-    <h2>Guion de demo</h2>
-    <p>Ocho minutos. Abrí el prototipo en Chrome antes de empezar y dejalo en Inicio.</p>
-  </div>
-  <div class="demo">
-    <div class="demorow"><div class="t">0:00</div><div class="c">
-      <b>Abrir con el problema, no con la app</b>
-      <p>Mostrá la pantalla de inicio en silencio dos segundos antes de hablar.</p>
-      <p class="say">«El Jardín Botánico tiene 5.500 especies y más de treinta esculturas. El visitante promedio se queda veinte minutos y se va sin entender nada de lo que vio. No es un problema de contenido: el contenido está. Es un problema de canal.»</p>
-    </div></div>
-
-    <div class="demorow"><div class="t">1:00</div><div class="c">
-      <b>Inicio: el estado del Jardín</b>
-      <p>Señalá la píldora de horario y la fila «en flor». Explicá que el contenido cambia con el mes en curso.</p>
-      <p class="say">«Lo primero que ve no es un menú: es si el Jardín está abierto y qué está floreciendo hoy. Es el motivo por el que vuelve.»</p>
-    </div></div>
-
-    <div class="demorow"><div class="t">2:00</div><div class="c">
-      <b>Mapa: mostrar la orientación</b>
-      <p>Entrá al Mapa. Apagá y encendé la capa de Patrimonio. Acercá con la rueda. Buscá «ombú» en el campo superior y tocá el resultado.</p>
-      <p class="say">«El mapa no es de calles: es el predio real, con sus catorce sectores. Las capas dejan al visitante elegir qué le interesa. Y el buscador lo lleva a un ejemplar puntual sin dar dos vueltas.»</p>
-    </div></div>
-
-    <div class="demorow"><div class="t">3:15</div><div class="c">
-      <b>Ficha: el corazón del producto</b>
-      <p>Abrí la ficha completa del ombú. Bajá hasta el calendario de floración y hasta «Sabías que».</p>
-      <p class="say">«Todas las fichas tienen la misma estructura, así son comparables. Y todas tienen un dato que el visitante se lleva puesto: el ombú no es un árbol, es una hierba gigante. Eso es lo que después le cuenta a alguien.»</p>
-    </div></div>
-
-    <div class="demorow"><div class="t">4:30</div><div class="c">
-      <b>Recorridos: el relato</b>
-      <p>Entrá a Recorridos, abrí «Primera vez en el Jardín» y tocá Iniciar. Avanzá dos paradas con el panel flotante.</p>
-      <p class="say">«Acá el producto deja de ser una base de datos y se vuelve una experiencia. La traza aparece sobre el mapa, el panel dice qué mirar en cada parada, y el recorrido sobrevive si el visitante se distrae con otra cosa.»</p>
-    </div></div>
-
-    <div class="demorow"><div class="t">6:00</div><div class="c">
-      <b>Armá tu planta: el módulo para chicos</b>
-      <p>Salí del recorrido, andá a Descubrí y jugá los cuatro pasos. Mostrá el resultado y abrí una de las coincidencias.</p>
-      <p class="say">«Este es el único módulo que enseña a mirar en vez de enseñar nombres. Elegís hoja, flor, tronco y hábitat, y el sistema te dice a qué especie del Jardín te acercaste. Termina siempre en una ficha real.»</p>
-    </div></div>
-
-    <div class="demorow"><div class="t">7:00</div><div class="c">
-      <b>Agenda y voluntariado: el cierre institucional</b>
-      <p>Mostrá la agenda y bajá hasta los tres programas de voluntariado.</p>
-      <p class="say">«El Jardín ya tiene tres programas de voluntariado y convoca entre febrero y marzo. Hoy esa información vive en un blog. Acá está donde está el visitante que ya se enamoró del lugar.»</p>
-    </div></div>
-
-    <div class="demorow"><div class="t">7:40</div><div class="c">
-      <b>Cerrar con el alcance</b>
-      <p>Volvé a Inicio. No prometas la fase 3.</p>
-      <p class="say">«Lo que vieron es la fase 1: mapa, fichas y recorridos. El juego y la galería son fase 3 y están acá para mostrar hacia dónde puede crecer, no para pedirlos ahora.»</p>
-    </div></div>
-  </div>
-
-  <div class="note warn" style="margin-top:24px">
-    <span class="nl">Dos cosas que conviene decir vos antes de que las pregunten</span>
-    <p>Que las imágenes están generadas por código porque no tenemos derechos sobre las fotos del archivo. Y que el punto de ubicación es simulado, porque el GPS urbano tiene un margen de error mayor que la distancia entre dos sectores del Jardín: en producción se recalibra con los QR de los carteles.</p>
-  </div>
-</section>
-
-<!-- 14 -->
-<section id="catedra">
-  <div class="sechead">
-    <span class="secnum">14</span>
-    <h2>Uso en clase</h2>
-    <p>Cómo aprovechar este caso en Diseño Gráfico 3.</p>
-  </div>
-
-  <h3>Qué muestra el caso</h3>
-  <ul>
-    <li><strong>Que la documentación viene antes que la pantalla.</strong> El orden de este dossier es el orden real del trabajo: problema, usuarios, alcance, arquitectura, flujos y recién después interfaz.</li>
-    <li><strong>Que priorizar es decir que no.</strong> La lista de <em>won't have</em> es tan importante como la de <em>must have</em>, y es la parte que los estudiantes suelen saltear.</li>
-    <li><strong>Que el contenido estructurado habilita funciones.</strong> Los rasgos morfológicos como campos —y no como prosa— son lo que hace posible el juego y el filtro de floración con una sola base.</li>
-    <li><strong>Que la dirección visual se argumenta.</strong> El tema oscuro no se eligió porque «queda bien»: se justifica por el uso a la intemperie, por la fotografía y por la batería.</li>
-  </ul>
-
-  <h3>Cuatro ejercicios sobre este mismo caso</h3>
-  <ol>
-    <li><strong>Redacción de fichas.</strong> Cada estudiante toma tres especies del Jardín y escribe su ficha completa respetando la estructura de siete bloques. La consigna difícil es el «Sabías que»: exige investigación real.</li>
-    <li><strong>Rediseño de dirección visual.</strong> Mismo alcance, misma arquitectura, otra dirección de las tres descartadas: botánico contemporáneo, ilustrado editorial o minimal moderno. Obliga a separar estructura de estilo.</li>
-    <li><strong>Sexto recorrido.</strong> Diseñar un itinerario nuevo con su público, sus paradas y su justificación. Se evalúa la coherencia entre público, duración y selección de paradas.</li>
-    <li><strong>Auditoría crítica.</strong> Encontrar tres decisiones discutibles en este prototipo y argumentar la alternativa. Siempre hay más de tres.</li>
-  </ol>
-
-  <div class="note">
-    <span class="nl">Nota sobre el uso de IA</span>
-    <p>Este caso se produjo con asistencia de IA en todas sus etapas: investigación de fuentes, redacción de contenido, escritura del código y prueba automatizada del prototipo en el navegador. Lo que no delegó la IA fue el criterio: qué problema resolver, a quién, con qué alcance y por qué esa dirección visual y no otra. Esa distinción —ejecución delegable, criterio no delegable— es discutible en clase y probablemente sea la conversación más útil que ofrece el caso.</p>
-  </div>
-</section>
-
-<!-- 15 -->
-<section id="fuentes">
-  <div class="sechead">
-    <span class="secnum">15</span>
-    <h2>Fuentes</h2>
-    <p>Los datos botánicos, históricos, de horarios y de programación provienen de fuentes públicas.</p>
-  </div>
-  <ul>
-    <li><a href="https://buenosaires.gob.ar/vicejefatura/ambiente/jardin-botanico/agenda-del-jardin-botanico">Agenda del Jardín Botánico</a> — Gobierno de la Ciudad de Buenos Aires. Visitas guiadas, expediciones en familia, biblioteca infantil, centro de interpretación.</li>
-    <li><a href="https://www.buenosaires.gob.ar/jardinbotanico/recorre-el-jardin/sendero-arboles-de-mi-ciudad">Sendero «Árboles de mi Ciudad»</a> — GCBA. Fichas de especies del arbolado porteño.</li>
-    <li><a href="https://buenosaires.gob.ar/areas/med_ambiente/espacios_verdes/botanico.php?menu_id=6449">Jardín Botánico Carlos Thays</a> — GCBA. Horarios, superficie, colecciones, invernáculo.</li>
-    <li><a href="https://educacionjbct.wordpress.com/voluntariado/">Voluntariados en Educación</a> — Área Educativa del Jardín Botánico Carlos Thays.</li>
-    <li><a href="https://es.wikipedia.org/wiki/Jard%C3%ADn_bot%C3%A1nico_de_Buenos_Aires">Jardín botánico de Buenos Aires</a> — Wikipedia. Historia, sectores fitogeográficos, esculturas, invernáculos, refugio climático.</li>
-    <li><a href="https://palermonline.com.ar/wordpress/el-jardin-botanico-de-buenos-aires-una-sinfonia-viva-de-arte-ciencia-y-memoria/">El Jardín Botánico de Buenos Aires: una sinfonía viva de arte, ciencia y memoria</a> — Palermonline. Especies destacadas y patrimonio escultórico.</li>
-  </ul>
-</section>
-
-<footer>
-  <p>Documento de producto del prototipo <strong>Thays</strong>. Trabajo académico sin fines comerciales, realizado como material de cátedra para Diseño Gráfico 3. No representa al Gobierno de la Ciudad de Buenos Aires ni al Jardín Botánico Carlos Thays.</p>
-</footer>
-
 </div>
+
+<div class="hud">
+  <button class="navbtn" onclick="ir(-1)" aria-label="Diapositiva anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"/></svg></button>
+  <button class="navbtn" onclick="ir(1)" aria-label="Diapositiva siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"/></svg></button>
+  <div class="dots" id="dots"></div>
+  <span class="num" id="num">01 / 22</span>
+  <button class="navbtn" onclick="pantallaCompleta()" aria-label="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+</div>
+
+<script>
+const slides=[...document.querySelectorAll(".slide")];
+let i=0;
+const dots=document.getElementById("dots");
+dots.innerHTML=slides.map((_,k)=>`<button class="dot${k===0?" on":""}" onclick="saltar(${k})" aria-label="Diapositiva ${k+1}"></button>`).join("");
+function pintar(){
+  slides.forEach((s,k)=>s.classList.toggle("on",k===i));
+  [...dots.children].forEach((d,k)=>d.classList.toggle("on",k===i));
+  document.getElementById("num").textContent=String(i+1).padStart(2,"0")+" / "+String(slides.length).padStart(2,"0");
+  document.getElementById("prog").style.width=((i+1)/slides.length*100)+"%";
+  pintarDemos();
+}
+function ir(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); pintar(); }
+function saltar(k){ i=k; pintar(); }
+addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();ir(1)}
+  if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();ir(-1)}
+  if(e.key==="Home"){saltar(0)} if(e.key==="End"){saltar(slides.length-1)}
+});
+function pantallaCompleta(){
+  document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.();
+}
+
+/* escala la diapositiva de 1280×720 al viewport */
+function encajar(){
+  const st=document.getElementById("stage");
+  const k=Math.min((innerWidth-40)/1280,(innerHeight-90)/720);
+  st.style.transform="scale("+k+")";
+}
+addEventListener("resize",encajar); encajar();
+
+/* mismas composiciones generadas que usa el prototipo */
+function hashStr(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function rng(seed){let a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const MOODS={
+  canopy:{sky:["#12251A","#050C08"],leaf:[["#1E4030",.9],["#2C5A3E",.75],["#3E7A52",.55]],glow:"#8FD6A8",petals:0},
+  bloom:{sky:["#22131C","#080C0A"],leaf:[["#1C3527",.85],["#2A4D36",.7],["#39674A",.5]],glow:"#F0709B",petals:34},
+  glass:{sky:["#0F2B28","#050F0E"],leaf:[["#17453E",.8],["#1F6155",.6],["#2E8577",.4]],glow:"#7ED8C3",petals:0,panes:true},
+  marble:{sky:["#1E2320","#07100B"],leaf:[["#242C26",.85],["#33403A",.6],["#4C5A50",.4]],glow:"#DED6C6",petals:0,stone:true}
+};
+function hoja(ctx,x,y,len,wid,rot){ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(wid,-len*.45,0,-len);ctx.quadraticCurveTo(-wid,-len*.45,0,0);ctx.fill();ctx.restore();}
+function pintarArte(cv){
+  const w=cv.clientWidth,h=cv.clientHeight; if(!w||!h) return;
+  const dpr=Math.min(devicePixelRatio||1,2); cv.width=w*dpr; cv.height=h*dpr;
+  const ctx=cv.getContext("2d"); ctx.scale(dpr,dpr);
+  const m=MOODS[cv.dataset.kind]||MOODS.canopy, r=rng(hashStr(cv.dataset.seed));
+  const g=ctx.createLinearGradient(0,0,w*.3,h); g.addColorStop(0,m.sky[0]); g.addColorStop(1,m.sky[1]);
+  ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+  ctx.globalCompositeOperation="lighter";
+  for(let k=0;k<7;k++){const cx=r()*w,cy=r()*h*.75,rad=(28+r()*90)*(w/300);
+    const rg=ctx.createRadialGradient(cx,cy,0,cx,cy,rad); rg.addColorStop(0,m.glow+"3A"); rg.addColorStop(1,m.glow+"00");
+    ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(cx,cy,rad,0,7); ctx.fill();}
+  ctx.globalCompositeOperation="source-over";
+  if(m.panes){ctx.strokeStyle="rgba(126,216,195,.16)";ctx.lineWidth=1;const st=w/7;
+    for(let k=0;k<=7;k++){ctx.beginPath();ctx.moveTo(k*st,0);ctx.lineTo(k*st-w*.12,h);ctx.stroke();}
+    for(let j=0;j<6;j++){const y=h*(j/5);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y*.94+h*.03);ctx.stroke();}}
+  if(m.stone){const sx=w*(.28+r()*.35),sy=h*(.55+r()*.2),sr=Math.min(w,h)*(.30+r()*.14);
+    const sg=ctx.createRadialGradient(sx-sr*.35,sy-sr*.6,sr*.05,sx,sy,sr*1.5);
+    sg.addColorStop(0,"rgba(226,218,202,.55)");sg.addColorStop(.55,"rgba(150,146,134,.28)");sg.addColorStop(1,"rgba(150,146,134,0)");
+    ctx.fillStyle=sg;ctx.beginPath();ctx.ellipse(sx,sy,sr*.62,sr,0,0,7);ctx.fill();}
+  m.leaf.forEach((layer,li)=>{
+    const [col,alpha]=layer, blur=(m.leaf.length-1-li)*3.2;
+    ctx.filter=blur>0?`blur(${blur}px)`:"none"; ctx.fillStyle=col; ctx.globalAlpha=alpha;
+    const n=Math.round((10+li*7)*(w*h)/48000)+8;
+    for(let k=0;k<n;k++){const x=r()*w*1.15-w*.08,y=(li===0?r()*h*.6:r()*h*1.1-h*.08),len=(16+r()*40)*(1+li*.35)*(w/300+.5);
+      hoja(ctx,x,y,len,len*(.20+r()*.16),(r()-.5)*3.4);}
+  });
+  ctx.filter="none"; ctx.globalAlpha=1;
+  if(m.petals){for(let k=0;k<m.petals;k++){const x=r()*w,y=r()*h,rad=(1.5+r()*4.5)*(w/300+.6);
+    ctx.globalAlpha=.28+r()*.5; ctx.filter=r()>.62?"blur(2.5px)":"none";
+    ctx.fillStyle=`hsl(${335+(r()-.5)*26} ${58+r()*26}% ${62+r()*18}%)`;
+    ctx.beginPath();ctx.ellipse(x,y,rad,rad*.72,r()*3,0,7);ctx.fill();}
+    ctx.filter="none";ctx.globalAlpha=1;}
+  const v=ctx.createRadialGradient(w/2,h*.42,Math.min(w,h)*.15,w/2,h*.5,Math.max(w,h)*.82);
+  v.addColorStop(0,"rgba(0,0,0,0)"); v.addColorStop(1,"rgba(4,8,6,.72)");
+  ctx.fillStyle=v; ctx.fillRect(0,0,w,h);
+  ctx.globalAlpha=.05;
+  for(let k=0;k<w*h/26;k++){ctx.fillStyle=r()>.5?"#fff":"#000";ctx.fillRect(r()*w,r()*h,1,1);}
+  ctx.globalAlpha=1;
+}
+function pintarDemos(){
+  requestAnimationFrame(()=>{
+    document.querySelectorAll(".slide.on canvas.demo").forEach(cv=>{ if(!cv.dataset.hecho){cv.dataset.hecho="1"; pintarArte(cv);} });
+  });
+}
+pintar();
+</script>
 
 </body>
 </html>

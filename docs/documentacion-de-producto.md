@@ -1,8 +1,10 @@
 # Thays — App del Jardín Botánico de Buenos Aires
 ## Documentación de producto
 
-**Versión** 1.0 — prototipo validado · **Estado** listo para demo · **Alcance** app web, mobile first · **Fecha** agosto 2026
-**Contexto** Caso de cátedra, Diseño Gráfico 3
+**Versión** 2.0 · **Estado** prototipo probado en Chrome, escritorio y móvil · **Alcance** app web, mobile first · **Fecha** agosto 2026
+**Contexto** Caso de cátedra, Diseño Gráfico 3, FADU
+
+> Este documento es la referencia larga. La versión de presentación —22 slides con la investigación de UX: usuarios → insights → hipótesis → decisiones— está en `dossier.html`.
 
 ---
 
@@ -93,6 +95,9 @@ Reúne unas **5.500 especies** arbustivas, arbóreas y herbáceas organizadas po
 - **Recorridos prearmados** — cinco itinerarios con duración, distancia, paradas numeradas, traza sobre el mapa y modo de seguimiento paso a paso.
 
 ### Should have
+- **Audioguía por número** — cada parada tiene un número de audio que se teclea con botones grandes, se reproduce con la voz del sistema y trae transcripción completa.
+- **Navegación paso a paso** — distancia en metros y giro hacia la parada siguiente, calculados sobre la geometría del plano.
+- **Accesibilidad** — tres tamaños de texto, alto contraste, transcripciones permanentes, capa de servicios accesibles en el mapa y ficha de accesibilidad por recorrido.
 - **Puntos de interés turístico** — esculturas, invernáculos, casona, columna meteorológica, jardín de mariposas, refugio climático.
 - **Actividades y voluntariado** — agenda de visitas guiadas y talleres, más los tres programas de voluntariado con formulario de postulación.
 - **Qué está en flor** — filtro por mes en curso, alimentado por el calendario de floración de cada ficha.
@@ -102,7 +107,7 @@ Reúne unas **5.500 especies** arbustivas, arbóreas y herbáceas organizadas po
 - **Armá tu planta** — juego de identificación por rasgos con porcentaje de coincidencia.
 - **Galería del feed** — fotos de la cuenta oficial y de la comunidad, con moderación previa.
 - **Colección personal** — herbario de especies guardadas e insignias por recorrido completado.
-- **Audioguía** — narración por parada, para accesibilidad y para quien camina sin mirar la pantalla.
+- **Recorrido propio compartible** — el visitante elige sus paradas, las ordena y comparte el itinerario por link.
 
 ### Won't have
 - **Venta de entradas** — el ingreso es gratuito.
@@ -172,15 +177,18 @@ Abre la app en casa → ve qué está en flor este mes → consulta la agenda �
 ## 07 · Especificación funcional
 
 ### M1 · Mapa interactivo
-Mapa vectorial propio del predio —no un mapa de calles— con el contorno real, los catorce sectores, senderos principales y secundarios, tres accesos y calles perimetrales rotuladas.
+Mapa vectorial trazado sobre **el plano oficial del Jardín**, no sobre un mapa de calles. Un mapa comercial muestra el predio como un polígono verde vacío: los catorce sectores fitogeográficos, los senderos, los invernáculos y el yerbal histórico son invisibles en él.
 
-- **Capas conmutables:** especies (19 pines), patrimonio (15), servicios (6), recorrido activo.
-- **Interacción:** desplazamiento con el dedo, acercar/alejar con dos dedos o controles, botón de centrado.
-- **Pin seleccionado:** crece, se rotula y abre panel inferior con ficha rápida.
-- **Buscador:** especies, patrimonio y sectores en el mismo campo.
-- **Ubicación:** punto pulsante «estás acá». En producción, GPS con corrección de encuadre.
+- **Perímetro real:** Av. Las Heras, Rep. de la India, Rep. Árabe Siria con sus cruces (Juncal, Beruti, Arenales), Av. Santa Fe, y la Plaza Intendente Casares recortada al este. La Escuela Técnica de Jardinería «Cristóbal M. Hicken» aparece como predio propio dentro del Jardín.
+- **Catorce sectores de la leyenda oficial:** Colección Sistemática, Plantas Medicinales, Jardín Romano, Jardín Francés, Argentina, Oceanía, América, Asia, África, Europa, Palmeral, Cicadal, Yerba Mate y Jardín de Mariposas. Se conserva el matiz de cada color institucional y se ajusta la luminosidad para leerse sobre fondo oscuro.
+- **Capas conmutables:** especies, patrimonio (invernáculos A–J, esculturas, edificio central), servicios, sectores, accesibilidad y recorrido activo.
+- **Dos plantas:** el predio y el interior del Invernáculo N.º 1, como los pisos de un museo.
+- **Buscador unificado:** especies, patrimonio, servicios y sectores en el mismo campo.
+- **Ubicación:** punto pulsante «estás acá», simulado en el prototipo. En producción, GPS con corrección de encuadre y recalibrado por número de cartel.
 
 **Criterio de aceptación:** desde cualquier punto del mapa, llegar a la ficha de una especie en menos de tres toques.
+
+**Nota de precisión:** el plano oficial no señala la posición de las esculturas. Esas fichas declaran su ubicación como indicativa dentro de la propia app.
 
 ### M2 · Fichas técnicas
 
@@ -206,7 +214,20 @@ Mapa vectorial propio del predio —no un mapa de calles— con el contorno real
 | Mármoles bajo los árboles | 35 min | 0,8 km | 6 | Interés artístico |
 | Expedición botánica en familia | 30 min | 0,7 km | 6 | Chicos desde 5 años |
 
-El **modo seguimiento** es un panel flotante sobre el mapa con barra de progreso, parada actual, su indicación y dos acciones: ver detalle o avanzar. El recorrido sobrevive a la navegación entre secciones.
+El **modo seguimiento** adopta el patrón de las audioguías de museo. Con un recorrido activo:
+
+- Las paradas se dibujan sobre el mapa como **círculos grandes numerados con ícono de auricular**; la parada actual se invierte en claro.
+- La barra de secciones se reemplaza por la **barra de recorrido**: Anterior · Listado · Teclado · Mapa · Siguiente. Una sola barra por vez.
+- Sobre ella, la **ficha activa**: miniatura, nombre, número de audio, parada X de N y botón de reproducción con barra de progreso.
+- Encima, la **instrucción de navegación**: «Girá a la derecha · 25 m hasta la parada 3». Distancia y giro se derivan de la geometría del plano, no están escritos a mano.
+- El botón **Simular** mueve el punto «estás acá» por la traza para demostrar el patrón sin salir a caminar.
+
+La traza del recorrido se genera desde sus paradas con interpolación suave: no puede desincronizarse del contenido.
+
+El recorrido sobrevive a la navegación: se puede abrir una ficha, ir a la agenda y volver sin perder el paso.
+
+### M3 bis · Recorrido propio
+El visitante elige paradas del catálogo completo, las ordena y las guarda. El itinerario se comparte por link (`#r=id,id,id`): quien lo abre ve las paradas y puede empezarlo. Está pensado para que un docente arme una consigna de visita.
 
 ### M4 · Puntos de interés
 Quince hitos en cuatro tipos —patrimonio, escultura, naturaleza y servicio— con la misma estructura de ficha. Es la capa que explica por qué hay una loba romana en bronce en medio de un jardín botánico.
@@ -217,6 +238,28 @@ Juego en cuatro pasos: hoja, flor, tronco y hábitat. Cada elección redibuja un
 **Ponderación:** hoja 30, flor 26, tronco 24, hábitat 20. Los pesos son distintos a propósito: evitan empates triples y reflejan que el follaje es el rasgo más discriminante en identificación botánica de campo.
 
 **Por qué existe:** es el único módulo que enseña *a mirar* —el tipo de hoja, la corteza, la forma de la copa— en lugar de enseñar nombres.
+
+### M5 bis · Audioguía
+Cada especie y cada punto de interés tiene un **número de audio**: 1 a 22 las especies, 101 en adelante los puntos de interés.
+
+- **Reproducción:** síntesis de voz del navegador en español rioplatense, con selección automática de la mejor voz disponible. No requiere descargar archivos ni tener señal.
+- **Controles:** reproducir, pausar y cuatro velocidades (0,75× a 1,5×).
+- **Transcripción:** el texto completo acompaña siempre al audio y puede fijarse como permanente desde los ajustes de accesibilidad.
+- **Teclado numérico:** pantalla de marcado con botones grandes para escribir el número del cartel. Es la puerta de entrada principal, no un accesorio.
+
+### M5 ter · Accesibilidad
+La accesibilidad entró en la definición del producto, no en la revisión final.
+
+| Ajuste | Qué hace |
+|---|---|
+| Tamaño de texto | Tres escalas: normal, grande y muy grande |
+| Alto contraste | Negro y blanco puros con bordes marcados |
+| Transcripción permanente | Muestra el texto completo de cada audio sin recortar |
+| Capa de accesibilidad | Sanitarios accesibles, rampas, bebederos a altura y bancos a la sombra sobre el mapa |
+
+Cada recorrido declara además: aptitud para silla de ruedas, superficie, pendiente, dónde sentarse, sombra, duración a paso lento y una advertencia concreta (por ejemplo, que el acceso al Invernáculo N.º 1 tiene un escalón de 12 cm sin rampa).
+
+**La decisión estructural:** el número del cartel, y no el código QR, es la puerta principal a la audioguía. Funciona sin cámara, sin GPS, sin señal, con visión reducida y con un teléfono viejo. El QR queda como atajo.
 
 ### M6 · Galería
 Grilla del feed oficial más fotos de la comunidad con hashtag. Sincronización cada seis horas por la API de Instagram, con moderación previa. Visor con autor, epígrafe y etiqueta temática.
@@ -304,12 +347,15 @@ La serif *Fraunces* aporta la referencia a la lámina botánica antigua sin caer
 | Presentación | Marco de teléfono en escritorio; pantalla completa bajo 900 px | Igual: mobile first, escritorio como vista de consulta |
 | Mapa | SVG propio con desplazamiento y zoom sobre el `viewBox` | Igual, más capa de georreferenciación |
 | Ubicación | Punto fijo simulado en Plaza Italia | API de geolocalización con corrección y respaldo por QR |
-| Imágenes | Composiciones generadas en canvas, deterministas por semilla | Fotografía del archivo del Jardín, AVIF con variantes por densidad |
+| Imágenes | Composiciones generadas en canvas, deterministas por semilla, con sistema de reemplazo por foto real ya montado | Fotografía del archivo del Jardín, AVIF con variantes por densidad |
+| Audioguía | Síntesis de voz del navegador | Locución grabada, con la síntesis como respaldo |
 | Contenido | Estructuras de datos en el propio archivo | Gestor de contenidos sin cabeza |
 | Galería | Feed simulado con moderación descripta | API de Instagram, sincronización cada 6 h, moderación previa |
 | Formularios | Validación en el navegador, sin envío | Integración con el Área Educativa y consentimiento registrado |
 
 > **Por qué las imágenes se generan.** El prototipo no usa fotos de archivo porque no tenemos derechos sobre ellas. En vez de dejar rectángulos grises, se dibujan composiciones atmosféricas en canvas: una función determinista por semilla que apila capas de follaje con desenfoque, claros de luz, pétalos y grano. Cada elemento recibe siempre la misma imagen. Es una decisión de producción, no un efecto.
+
+> **Cómo enchufar fotos reales.** La app busca `fotos/<id>.jpg` para cada especie y punto de interés y, si el archivo existe, lo superpone a la composición generada con un fundido. Sumar fotografía propia no requiere tocar una línea de código: alcanza con dejar los archivos en esa carpeta con el identificador como nombre (`palo-borracho.jpg`, `invernaculo1.jpg`, `ginkgo.jpg`). Los identificadores están listados en `fotos/LEEME.md`.
 
 ---
 
