@@ -132,6 +132,53 @@ tr:last-child td{border-bottom:0}
 .navbtn svg{width:17px;height:17px}
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--rosa);z-index:60;transition:width .35s cubic-bezier(.22,.9,.24,1)}
 
+/* ============================================================
+   PANEL DE DEMO
+   Un teléfono navegable que vive por encima del deck: se abre,
+   se arrastra y queda fijo mientras pasás diapositivas.
+   ============================================================ */
+.demo{
+  position:fixed;right:26px;bottom:74px;z-index:80;width:326px;
+  background:linear-gradient(160deg,#2b3830,#0b120e 42%,#232f27);
+  border-radius:34px;padding:11px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 44px 80px -28px rgba(0,0,0,.92),0 0 90px -30px rgba(126,216,195,.28);
+  opacity:0;visibility:hidden;transform:translateY(18px) scale(.97);
+  transition:opacity .32s ease,transform .36s cubic-bezier(.22,.9,.24,1),visibility .32s;
+}
+.demo.on{opacity:1;visibility:visible;transform:none}
+.demo .barra{
+  display:flex;align-items:center;gap:8px;padding:0 6px 9px;cursor:grab;user-select:none;
+}
+.demo .barra:active{cursor:grabbing}
+.demo .barra b{
+  flex:1;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);
+}
+.demo .barra button{
+  width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:var(--muted);
+}
+.demo .barra button:hover{color:var(--text);background:rgba(255,255,255,.07)}
+.demo .barra svg{width:14px;height:14px;stroke-width:2}
+.demo .visor{
+  position:relative;width:100%;height:620px;border-radius:26px;overflow:hidden;background:#070C09;
+}
+.demo iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.demo .respaldo{
+  position:absolute;inset:0;padding:26px 22px;display:flex;flex-direction:column;justify-content:center;
+  background:#070C09;text-align:left;
+}
+.demo .respaldo p{font-size:13px;line-height:1.5;margin:0 0 12px;color:var(--muted);max-width:none}
+.demo .respaldo b{color:var(--text)}
+.demo .respaldo input{
+  width:100%;padding:10px 12px;border-radius:10px;margin-bottom:9px;
+  background:var(--card);border:1px solid var(--line-2);color:var(--text);font:inherit;font-size:12px;
+}
+.demo .respaldo .cargar{
+  width:100%;padding:10px;border-radius:10px;background:var(--rosa);color:#2A0713;
+  font-weight:700;font-size:13px;
+}
+@media (max-width:900px){ .demo{right:12px;left:12px;width:auto;bottom:64px} .demo .visor{height:56vh} }
+
 @media (max-width:820px){
   .hud{padding:10px 14px;gap:10px}
   .hud .dots{display:none}
@@ -150,7 +197,7 @@ tr:last-child td{border-bottom:0}
       <h1>Nadie entiende lo que está <em>mirando</em></h1>
       <p class="lead">Cómo pasamos de una observación en el Jardín Botánico Carlos Thays a un producto digital con alcance definido, y qué evidencia sostiene cada decisión.</p>
     </div>
-    <div class="foot">Thays · Prototipo navegable · Agosto 2026 &nbsp;&nbsp;·&nbsp;&nbsp; ← → para avanzar</div>
+    <div class="foot">Thays · Agosto 2026 &nbsp;&nbsp;·&nbsp;&nbsp; ← → para avanzar &nbsp;&nbsp;·&nbsp;&nbsp; D para abrir el prototipo navegable</div>
   </section>
 
   <!-- 02 el sitio -->
@@ -462,6 +509,10 @@ tr:last-child td{border-bottom:0}
       <div class="card"><h3>Descubrí</h3><p>Fichas, puntos de interés, juego, galería, audioguía por número y accesibilidad.</p></div>
       <div class="card"><h3>Agenda</h3><p>Actividades reales del Jardín y los tres programas de voluntariado con postulación.</p></div>
     </div>
+    <div class="card destacado" style="margin-top:20px;background:linear-gradient(155deg,rgba(126,216,195,.10),rgba(19,33,25,.9));border:1px solid rgba(126,216,195,.34);border-radius:20px;padding:20px 24px">
+      <h3>Antes de todo eso: el arranque</h3>
+      <p style="margin-top:6px">La primera vez, tres pantallas: idioma (español, inglés, portugués), cómo funciona la app en tres ítems, y el ajuste de tamaño de texto y contraste. Ofrecer la accesibilidad <em>en la puerta</em> y no escondida en ajustes es una decisión de producto, no un detalle.</p>
+    </div>
     <div class="cols c3" style="margin-top:24px;gap:18px">
       <div class="card vidrio"><h3>Regla 1</h3><p>El detalle se abre como panel inferior, nunca como pantalla nueva: no se pierde el contexto del mapa.</p></div>
       <div class="card vidrio"><h3>Regla 2</h3><p>La barra de recorrido flota sobre la de secciones y se pliega: entrar a un recorrido nunca deja al visitante sin salida.</p></div>
@@ -597,11 +648,29 @@ tr:last-child td{border-bottom:0}
   </div>
 </div>
 
+<div class="demo" id="demo" role="dialog" aria-label="Prototipo navegable">
+  <div class="barra" id="demo-barra">
+    <b>Prototipo</b>
+    <button onclick="recargarDemo()" aria-label="Reiniciar el prototipo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 4v4.4h-4.4"/></svg></button>
+    <button onclick="alternarDemo()" aria-label="Cerrar el prototipo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="visor">
+    <div class="respaldo" id="demo-respaldo">
+      <p><b>El prototipo se carga desde el repositorio.</b> Abierto desde <code style="font-family:var(--mono);font-size:12px">index.html</code> o desde GitHub Pages aparece acá mismo y lo navegás sin salir de la presentación.</p>
+      <p>Si estás viendo el deck fuera del repositorio, pegá la dirección del prototipo:</p>
+      <input id="demo-url" type="url" placeholder="https://usuario.github.io/repo/" aria-label="Dirección del prototipo">
+      <button class="cargar" onclick="cargarDemo()">Cargar</button>
+    </div>
+    <iframe id="demo-frame" title="Prototipo Thays" src="index.html" loading="lazy"></iframe>
+  </div>
+</div>
+
 <div class="hud">
   <button class="navbtn" onclick="ir(-1)" aria-label="Diapositiva anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"/></svg></button>
   <button class="navbtn" onclick="ir(1)" aria-label="Diapositiva siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"/></svg></button>
   <div class="dots" id="dots"></div>
   <span class="num" id="num">01 / 22</span>
+  <button class="navbtn" id="btn-demo" onclick="alternarDemo()" aria-label="Abrir el prototipo navegable" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 5.5h3"/></svg></button>
   <button class="navbtn" onclick="pantallaCompleta()" aria-label="Pantalla completa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
 </div>
 
@@ -690,6 +759,63 @@ function pintarDemos(){
     document.querySelectorAll(".slide.on canvas.demo").forEach(cv=>{ if(!cv.dataset.hecho){cv.dataset.hecho="1"; pintarArte(cv);} });
   });
 }
+/* ---------- panel de demo ---------- */
+const panelDemo=document.getElementById("demo");
+function alternarDemo(){
+  const on=panelDemo.classList.toggle("on");
+  document.getElementById("btn-demo").setAttribute("aria-pressed",on);
+  if(on) setTimeout(chequearDemo,700);
+}
+function recargarDemo(){
+  const f=document.getElementById("demo-frame");
+  f.src=f.src; setTimeout(chequearDemo,900);
+}
+function cargarDemo(){
+  const v=document.getElementById("demo-url").value.trim();
+  if(!v) return;
+  document.getElementById("demo-frame").src=v;
+  setTimeout(chequearDemo,1400);
+}
+/* El respaldo solo aparece si el prototipo realmente no cargó.
+   Un iframe de otro origen no se puede inspeccionar: si disparó load,
+   se asume cargado en vez de tapar una app que sí está funcionando. */
+let demoCargo=false;
+function chequearDemo(){
+  const f=document.getElementById("demo-frame"), r=document.getElementById("demo-respaldo");
+  let ok=demoCargo;
+  try{
+    const d=f.contentDocument;
+    if(d) ok = /Thays|Bot[áa]nico/i.test(d.title||"") || !!d.querySelector(".tabbar");
+  }catch(e){ ok=true; }
+  r.style.display = ok ? "none" : "flex";
+}
+document.getElementById("demo-frame").addEventListener("load",()=>{
+  demoCargo=true; setTimeout(chequearDemo,220);
+});
+setTimeout(()=>{ if(!demoCargo) chequearDemo(); },3200);
+
+/* arrastrar el panel por su barra */
+(function(){
+  const barra=document.getElementById("demo-barra");
+  let d=null;
+  barra.addEventListener("pointerdown",e=>{
+    if(e.target.closest("button")) return;
+    const r=panelDemo.getBoundingClientRect();
+    d={x:e.clientX,y:e.clientY,l:r.left,t:r.top};
+    panelDemo.style.right="auto"; panelDemo.style.bottom="auto";
+    panelDemo.style.left=r.left+"px"; panelDemo.style.top=r.top+"px";
+    barra.setPointerCapture(e.pointerId);
+  });
+  barra.addEventListener("pointermove",e=>{
+    if(!d) return;
+    panelDemo.style.left=Math.max(4,Math.min(innerWidth-panelDemo.offsetWidth-4, d.l+e.clientX-d.x))+"px";
+    panelDemo.style.top =Math.max(4,Math.min(innerHeight-90, d.t+e.clientY-d.y))+"px";
+  });
+  barra.addEventListener("pointerup",()=>{d=null});
+  barra.addEventListener("pointercancel",()=>{d=null});
+})();
+addEventListener("keydown",e=>{ if(e.key==="d"||e.key==="D") alternarDemo(); });
+
 pintar();
 </script>
 

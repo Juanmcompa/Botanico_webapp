@@ -95,6 +95,8 @@ Reúne unas **5.500 especies** arbustivas, arbóreas y herbáceas organizadas po
 - **Recorridos prearmados** — cinco itinerarios con duración, distancia, paradas numeradas, traza sobre el mapa y modo de seguimiento paso a paso.
 
 ### Should have
+- **Arranque de primera vez** — tres pantallas: selección de idioma, tres ítems de cómo funciona la app, y ajuste de tamaño de texto y contraste antes de entrar.
+- **Selector de idioma** — español, inglés y portugués en la interfaz de arranque, la barra de secciones y la pantalla de inicio, accesible después desde el globo del encabezado.
 - **Audioguía por número** — cada parada tiene un número de audio que se teclea con botones grandes, se reproduce con la voz del sistema y trae transcripción completa.
 - **Navegación paso a paso** — distancia en metros y giro hacia la parada siguiente, calculados sobre la geometría del plano.
 - **Accesibilidad** — tres tamaños de texto, alto contraste, transcripciones permanentes, capa de servicios accesibles en el mapa y ficha de accesibilidad por recorrido.
@@ -262,6 +264,17 @@ Cada recorrido declara además: aptitud para silla de ruedas, superficie, pendie
 
 **La decisión estructural:** el número del cartel, y no el código QR, es la puerta principal a la audioguía. Funciona sin cámara, sin GPS, sin señal, con visión reducida y con un teléfono viejo. El QR queda como atajo.
 
+### M5 quater · Arranque e idioma
+La primera vez que se abre la app, antes de cualquier contenido:
+
+1. **Idioma** — español, inglés o portugués, en botones grandes con el nombre en su propia lengua.
+2. **Cómo funciona** — tres ítems con ícono: la rueda del año, el número del cartel y los recorridos con paradas.
+3. **¿Lo ves cómodo?** — tamaño de texto y alto contraste, ofrecidos en la puerta y no escondidos en ajustes.
+
+Queda guardado en el dispositivo: en la segunda visita no vuelve a aparecer. El idioma se cambia después desde el globo del encabezado de inicio.
+
+**Alcance del multiidioma en el prototipo:** la interfaz de arranque, la barra de secciones y la pantalla de inicio. El contenido botánico permanece en español y la app lo declara en pantalla con un aviso, en lugar de fingir una traducción que no existe. Traducir las 36 fichas es trabajo de contenido de fase 2, no de interfaz.
+
 ### M6 · Galería
 Grilla del feed oficial más fotos de la comunidad con hashtag. Sincronización cada seis horas por la API de Instagram, con moderación previa. Visor con autor, epígrafe y etiqueta temática.
 
@@ -291,6 +304,20 @@ Actividades por fecha con horario, tipo y cupo. Los tres programas del Área Edu
 
 ### Por qué oscuro
 Tres razones, ninguna estética. La app se usa a la intemperie bajo un dosel arbóreo, donde el contraste alto cansa menos que un fondo blanco reflejando el cielo. La fotografía botánica se lee mejor sobre negro. Y el consumo de batería importa en una visita de una hora sin enchufes.
+
+### Las tres escalas
+
+El sistema descansa en tres escalas y no admite valores intermedios elegidos a ojo:
+
+| Escala | Valores | Para qué |
+|---|---|---|
+| **Elevación** | `--e0` fondo · `--e1` superficie · `--e2` elevada · `--e3` interactiva | Que no todo pese igual: listas en un plano, tarjetas en otro, campos y teclas en un tercero |
+| **Espaciado** | 4 · 8 · 12 · 20 · 32 · 48 | Un ritmo vertical único en toda la app |
+| **Tipografía** | 30 · 22 · 16 · 14 · 12 · 10 | Seis pasos: display, título, bajada, cuerpo, metadato, rótulo |
+
+A eso se suman **tres radios** —14 para controles, 22 para tarjetas, 30 para paneles— y **una sola cabecera de pantalla**, con o sin retroceso, en lugar de que cada sección resolviera el suyo.
+
+**Un destacado por pantalla.** Existe un tratamiento `.destacado` con degradado y borde de acento, reservado a un único elemento por vista. Si todo está destacado, nada lo está.
 
 ### Color
 

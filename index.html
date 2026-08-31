@@ -19,33 +19,58 @@
    deliberado. Todos los colores se declaran explícitamente.
    ============================================================ */
 
+/* ============================================================
+   SISTEMA
+   Tres decisiones que faltaban y que producían la sensación de
+   "todo pesa igual": una escala de elevación, una escala de
+   espaciado y una escala tipográfica de seis pasos, sin valores
+   intermedios elegidos a ojo.
+   ============================================================ */
 :root{
-  /* grounds — negros con sesgo verde */
-  --night:#070C09;
-  --bark:#0F1913;
-  --moss:#17251C;
-  --raise:#1E3026;
-  --line:rgba(233,245,235,.11);
+  /* elevación: cuatro planos, no uno solo con bordes */
+  --e0:#070C09;   /* fondo de la app */
+  --e1:#0F1913;   /* superficie: listas, contenido corrido */
+  --e2:#18261D;   /* elevada: tarjetas, paneles */
+  --e3:#22352A;   /* interactiva: hover, campos, teclas */
+
+  /* alias heredados */
+  --night:var(--e0); --bark:var(--e1); --moss:var(--e2); --raise:var(--e3);
+
+  --line:rgba(233,245,235,.09);
   --line-2:rgba(233,245,235,.20);
 
-  /* tinta */
+  /* tinta: exactamente tres niveles */
   --text:#ECF3ED;
-  --muted:#8FA396;
+  --muted:#93A79A;
   --faint:#63756A;
 
-  /* acentos, tomados del jardín */
-  --rosa:#F0709B;      /* palo borracho en flor */
+  /* acentos del Jardín */
+  --rosa:#F0709B;
   --rosa-deep:#8E2E4C;
-  --ambar:#E8B24C;     /* tipa e ibirá pitá */
-  --vidrio:#7ED8C3;    /* vidrio del Invernáculo N.º 1 */
-  --marmol:#DED6C6;    /* esculturas */
-
+  --ambar:#E8B24C;
+  --vidrio:#7ED8C3;
+  --marmol:#DED6C6;
   --ok:#6FD38F;
   --warn:#E8B24C;
 
-  --r-s:10px; --r-m:16px; --r-l:24px; --r-xl:32px;
-  --sheet-ease:cubic-bezier(.22,.9,.24,1);
+  /* espaciado: 4 · 8 · 12 · 20 · 32 · 48 */
+  --s1:4px; --s2:8px; --s3:12px; --s4:20px; --s5:32px; --s6:48px;
 
+  /* radios: tres, no siete */
+  --r1:14px;   /* controles y elementos chicos */
+  --r2:22px;   /* tarjetas y contenedores */
+  --r3:30px;   /* paneles y hojas */
+  --r-s:var(--r1); --r-m:var(--r1); --r-l:var(--r2); --r-xl:var(--r3);
+
+  /* tipografía: seis pasos */
+  --t-display:30px;  /* título de pantalla */
+  --t-title:22px;    /* título de sección */
+  --t-lead:16px;     /* bajada */
+  --t-body:14px;     /* cuerpo */
+  --t-meta:12px;     /* metadatos */
+  --t-label:10px;    /* rótulos en versalitas */
+
+  --sheet-ease:cubic-bezier(.22,.9,.24,1);
   --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --serif:"Fraunces",Georgia,"Times New Roman",serif;
   --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
@@ -92,18 +117,18 @@ input,select,textarea{font:inherit;color:inherit}
   margin:0 0 14px;letter-spacing:-.02em;text-wrap:balance;
 }
 .stage-note h1 em{font-style:italic;color:var(--vidrio)}
-.stage-note p{margin:0 0 10px;font-size:13.5px;line-height:1.6;color:var(--muted)}
+.stage-note p{margin:0 0 10px;font-size:var(--t-body);line-height:1.6;color:var(--muted)}
 .eyebrow{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  font-family:var(--mono);font-size:var(--t-label);letter-spacing:.16em;
   text-transform:uppercase;color:var(--faint);margin:0 0 16px;
 }
 .keyhint{
   margin-top:22px;display:flex;flex-direction:column;gap:7px;
-  font-size:12px;color:var(--faint);
+  font-size:var(--t-meta);color:var(--faint);
 }
 .keyhint div{display:flex;align-items:center;gap:8px}
 kbd{
-  font-family:var(--mono);font-size:10px;
+  font-family:var(--mono);font-size:var(--t-label);
   border:1px solid var(--line-2);border-radius:5px;
   padding:2px 6px;color:var(--muted);background:rgba(255,255,255,.03);
 }
@@ -125,19 +150,19 @@ kbd{
 .screen{
   position:relative;
   width:100%;height:100%;
-  border-radius:36px;
+  border-radius:34px;
   overflow:hidden;overflow:clip;
   background:var(--night);
   isolation:isolate;
 }
 .notch{
   position:absolute;top:9px;left:50%;transform:translateX(-50%);
-  width:104px;height:26px;border-radius:14px;background:#050806;z-index:60;
+  width:104px;height:26px;border-radius:var(--r1);background:#050806;z-index:60;
 }
 .statusbar{
   position:absolute;top:0;left:0;right:0;height:46px;z-index:55;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;font-size:12.5px;font-weight:600;
+  padding:0 24px;font-size:var(--t-meta);font-weight:600;
   color:var(--text);pointer-events:none;
   text-shadow:0 1px 6px rgba(0,0,0,.6);
 }
@@ -170,11 +195,11 @@ kbd{
 }
 .tab{
   display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:6px 2px 4px;border-radius:14px;
+  padding:6px 2px 4px;border-radius:var(--r1);
   color:var(--faint);transition:color .18s ease;
 }
 .tab svg{width:21px;height:21px;stroke-width:1.6}
-.tab span{font-size:9.5px;letter-spacing:.02em;font-weight:600}
+.tab span{font-size:var(--t-label);letter-spacing:.02em;font-weight:600}
 .tab.on{color:var(--text)}
 .tab.on svg{stroke:var(--vidrio)}
 .tab:hover{color:var(--muted)}
@@ -184,16 +209,16 @@ kbd{
 .stack{display:flex;flex-direction:column}
 .row{display:flex;align-items:center}
 .sec-title{
-  font-family:var(--serif);font-weight:400;font-size:22px;
-  letter-spacing:-.015em;margin:0;text-wrap:balance;
+  font-family:var(--serif);font-weight:400;font-size:var(--t-title);
+  letter-spacing:-.018em;margin:0;text-wrap:balance;
 }
 .sec-head{
   display:flex;align-items:center;justify-content:space-between;
   gap:12px;margin:22px 0 12px;
 }
-.sec-head .more{font-size:12px;color:var(--vidrio);font-weight:600}
+.sec-head .more{display:inline-flex;align-items:center;font-size:var(--t-meta);color:var(--vidrio);font-weight:600}
 .kicker{
-  font-family:var(--mono);font-size:10px;letter-spacing:.15em;
+  font-family:var(--mono);font-size:var(--t-label);letter-spacing:.16em;
   text-transform:uppercase;color:var(--faint);
 }
 .binomial{font-family:var(--serif);font-style:italic;font-weight:400}
@@ -208,7 +233,7 @@ kbd{
 .chip{
   flex:none;padding:7px 13px;border-radius:999px;
   border:1px solid var(--line-2);
-  font-size:12px;font-weight:600;color:var(--muted);
+  font-size:var(--t-meta);font-weight:600;color:var(--muted);
   background:rgba(255,255,255,.025);
   transition:all .16s ease;white-space:nowrap;
 }
@@ -218,7 +243,7 @@ kbd{
 
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  padding:14px 20px;border-radius:14px;font-weight:600;font-size:14px;
+  padding:14px 20px;border-radius:var(--r1);font-weight:600;font-size:var(--t-body);
   background:var(--text);color:var(--night);
   transition:transform .12s ease,opacity .16s ease;
 }
@@ -229,13 +254,24 @@ kbd{
 .btn svg{width:17px;height:17px;stroke-width:1.8}
 
 .card{
-  background:var(--bark);border:1px solid var(--line);
-  border-radius:var(--r-l);overflow:hidden;
+  background:var(--e2);border:1px solid var(--line);
+  border-radius:var(--r2);overflow:hidden;
+}
+/* Un elemento por pantalla puede ser el destacado. Uno solo:
+   si todo está destacado, nada lo está. */
+.destacado{
+  background:linear-gradient(158deg,rgba(240,112,155,.13),var(--e2) 62%);
+  border:1px solid rgba(240,112,155,.34);
+  border-radius:var(--r2);
+}
+.destacado.vidrio{
+  background:linear-gradient(158deg,rgba(126,216,195,.13),var(--e2) 62%);
+  border-color:rgba(126,216,195,.34);
 }
 .tag{
   display:inline-flex;align-items:center;gap:5px;white-space:nowrap;
   padding:4px 9px;border-radius:999px;
-  font-size:10.5px;font-weight:700;letter-spacing:.02em;
+  font-size:var(--t-label);font-weight:700;letter-spacing:.02em;
 }
 .tag.rosa{background:rgba(240,112,155,.16);color:var(--rosa)}
 .tag.ambar{background:rgba(232,178,76,.16);color:var(--ambar)}
@@ -263,7 +299,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   display:inline-flex;align-items:center;gap:7px;
   padding:6px 12px;border-radius:999px;
   background:rgba(7,12,9,.55);border:1px solid var(--line-2);
-  backdrop-filter:blur(10px);font-size:11.5px;font-weight:600;
+  backdrop-filter:blur(10px);font-size:var(--t-meta);font-weight:600;
 }
 .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(111,211,143,.18)}
 
@@ -271,35 +307,35 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .quick{
   display:flex;flex-direction:column;gap:9px;align-items:flex-start;
   padding:15px;border-radius:var(--r-m);
-  background:var(--bark);border:1px solid var(--line);
+  background:var(--e2);border:1px solid var(--line);
   text-align:left;transition:border-color .16s ease,background .16s ease;
 }
 .quick:hover{border-color:var(--line-2);background:var(--moss)}
 .quick svg{width:20px;height:20px;stroke-width:1.6;color:var(--vidrio)}
-.quick b{font-size:13.5px;font-weight:600;display:block}
-.quick small{font-size:11.5px;color:var(--faint);line-height:1.4;display:block;margin-top:2px}
+.quick b{font-size:var(--t-body);font-weight:600;display:block}
+.quick small{font-size:var(--t-meta);color:var(--faint);line-height:1.4;display:block;margin-top:2px}
 
 .bloomscroll{display:flex;gap:12px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
 .bloomscroll::-webkit-scrollbar{display:none}
 .bloomcard{
   flex:none;width:158px;border-radius:var(--r-m);overflow:hidden;
-  background:var(--bark);border:1px solid var(--line);text-align:left;
+  background:var(--e2);border:1px solid var(--line);text-align:left;
   transition:transform .18s var(--sheet-ease);
 }
 .bloomcard:active{transform:scale(.98)}
 .bloomcard .thumb{height:104px;position:relative}
 .bloomcard .thumb canvas{position:absolute;inset:0;width:100%;height:100%}
 .bloomcard .meta{padding:11px 12px 13px}
-.bloomcard .meta b{display:block;font-size:13px;font-weight:600;line-height:1.25}
-.bloomcard .meta i{display:block;font-size:11px;color:var(--faint);margin-top:3px;font-family:var(--serif);font-style:italic}
+.bloomcard .meta b{display:block;font-size:var(--t-body);font-weight:600;line-height:1.25}
+.bloomcard .meta i{display:block;font-size:var(--t-label);color:var(--faint);margin-top:3px;font-family:var(--serif);font-style:italic}
 
 .factcard{
   margin:0 20px;padding:18px;border-radius:var(--r-l);
   background:linear-gradient(150deg,rgba(126,216,195,.10),rgba(240,112,155,.07));
   border:1px solid var(--line-2);
 }
-.factcard p{margin:8px 0 0;font-size:13.5px;line-height:1.55;color:#D8E4DA}
-.factcard .src{margin-top:10px;font-size:10.5px;color:var(--faint);font-family:var(--mono)}
+.factcard p{margin:8px 0 0;font-size:var(--t-body);line-height:1.55;color:#D8E4DA}
+.factcard .src{margin-top:10px;font-size:var(--t-label);color:var(--faint);font-family:var(--mono)}
 
 /* ---------- mapa ---------- */
 .mapwrap{position:absolute;inset:0;background:#08110C;touch-action:none}
@@ -310,12 +346,12 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 }
 .map-search{
   margin:0 16px;display:flex;align-items:center;gap:10px;
-  padding:11px 14px;border-radius:14px;
+  padding:11px 14px;border-radius:var(--r1);
   background:rgba(15,25,19,.82);backdrop-filter:blur(18px);
   border:1px solid var(--line-2);
 }
 .map-search input{
-  flex:1;background:none;border:0;outline:none;font-size:14px;
+  flex:1;background:none;border:0;outline:none;font-size:var(--t-body);
 }
 .map-search input::placeholder{color:var(--faint)}
 .map-search svg{width:17px;height:17px;stroke-width:1.7;color:var(--muted);flex:none}
@@ -332,7 +368,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   display:flex;flex-direction:column;gap:8px;
 }
 .mtool{
-  width:42px;height:42px;border-radius:13px;
+  width:42px;height:42px;border-radius:var(--r1);
   display:grid;place-items:center;
   background:rgba(15,25,19,.85);backdrop-filter:blur(14px);
   border:1px solid var(--line-2);color:var(--text);
@@ -409,21 +445,21 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 }
 .datagrid div{background:var(--bark);padding:12px 14px}
 .datagrid dt{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;
+  font-family:var(--mono);font-size:var(--t-label);letter-spacing:.13em;
   text-transform:uppercase;color:var(--faint);margin:0 0 5px;
 }
-.datagrid dd{margin:0;font-size:13px;font-weight:600;line-height:1.35}
+.datagrid dd{margin:0;font-size:var(--t-body);font-weight:600;line-height:1.35}
 
 .bloomstrip{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin:12px 20px 0}
 .bloomstrip div{
   height:34px;border-radius:5px;background:rgba(255,255,255,.05);
-  display:grid;place-items:center;font-size:8.5px;font-weight:700;
+  display:grid;place-items:center;font-size:var(--t-label);font-weight:700;
   color:var(--faint);font-family:var(--mono);
 }
 .bloomstrip div.f{background:rgba(240,112,155,.32);color:#FFD9E5}
 .bloomstrip div.now{outline:1.5px solid var(--vidrio);outline-offset:1px}
 
-.prose{padding:0 20px;font-size:14px;line-height:1.62;color:#CFDDD2}
+.prose{padding:0 20px;font-size:var(--t-body);line-height:1.62;color:#CFDDD2}
 .prose p{margin:0 0 12px}
 .prose strong{color:var(--text);font-weight:600}
 
@@ -432,7 +468,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   background:rgba(232,178,76,.07);border:1px solid rgba(232,178,76,.22);
 }
 .notecard .kicker{color:var(--ambar);margin-bottom:7px}
-.notecard p{margin:0;font-size:13px;line-height:1.55;color:#E5DCC8}
+.notecard p{margin:0;font-size:var(--t-body);line-height:1.55;color:#E5DCC8}
 
 /* ---------- listas ---------- */
 .listitem{
@@ -441,20 +477,20 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 }
 .listitem:hover{background:rgba(255,255,255,.03)}
 .listitem .lthumb{
-  display:block;width:56px;height:56px;border-radius:14px;overflow:hidden;flex:none;position:relative;
+  display:block;width:56px;height:56px;border-radius:var(--r1);overflow:hidden;flex:none;position:relative;
   background:var(--moss);
 }
 .listitem .lbody{display:block}
 .nowplaying .np-thumb,.nowplaying .np-body{display:block}
 .listitem .lthumb canvas{position:absolute;inset:0;width:100%;height:100%}
 .listitem .lbody{flex:1;min-width:0}
-.listitem .lbody b{display:block;font-size:14px;font-weight:600;line-height:1.3}
+.listitem .lbody b{display:block;font-size:var(--t-body);font-weight:600;line-height:1.3}
 .listitem .lbody i{
   display:block;font-family:var(--serif);font-style:italic;
-  font-size:12px;color:var(--muted);margin-top:2px;
+  font-size:var(--t-meta);color:var(--muted);margin-top:2px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.listitem .lbody .l3{font-size:11px;color:var(--faint);margin-top:4px}
+.listitem .lbody .l3{font-size:var(--t-label);color:var(--faint);margin-top:4px}
 .listitem .arrow{color:var(--faint);flex:none}
 .listitem .arrow svg{width:16px;height:16px;stroke-width:2}
 
@@ -469,8 +505,8 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .routecard .rtop .g{position:absolute;inset:0;background:linear-gradient(to top,var(--bark),transparent 70%)}
 .routecard .rbody{padding:0 16px 16px;margin-top:-12px;position:relative}
 .routecard h3{font-family:var(--serif);font-weight:400;font-size:19px;margin:0 0 6px;letter-spacing:-.01em}
-.routecard p{margin:0 0 11px;font-size:12.5px;line-height:1.5;color:var(--muted)}
-.rmeta{display:flex;gap:14px;font-size:11.5px;color:var(--faint);font-weight:600}
+.routecard p{margin:0 0 11px;font-size:var(--t-meta);line-height:1.5;color:var(--muted)}
+.rmeta{display:flex;gap:14px;font-size:var(--t-meta);color:var(--faint);font-weight:600}
 .rmeta span{display:flex;align-items:center;gap:5px}
 .rmeta svg{width:13px;height:13px;stroke-width:1.9}
 
@@ -486,11 +522,11 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 }
 .stop.done::before{background:var(--rosa)}
 .stop .n{
-  font-family:var(--mono);font-size:10px;color:var(--faint);
+  font-family:var(--mono);font-size:var(--t-label);color:var(--faint);
   padding-top:3px;width:18px;flex:none;
 }
-.stop b{display:block;font-size:14px;font-weight:600;margin-bottom:3px}
-.stop small{display:block;font-size:12px;color:var(--muted);line-height:1.45}
+.stop b{display:block;font-size:var(--t-body);font-weight:600;margin-bottom:3px}
+.stop small{display:block;font-size:var(--t-meta);color:var(--muted);line-height:1.45}
 
 .runner{
   position:absolute;left:12px;right:12px;bottom:88px;z-index:45;
@@ -514,7 +550,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .gal .ov{
   position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;
   background:linear-gradient(to top,rgba(4,8,6,.85),transparent);
-  font-size:10px;font-weight:600;color:#DCE7DE;text-align:left;
+  font-size:var(--t-label);font-weight:600;color:#DCE7DE;text-align:left;
   opacity:0;transition:opacity .2s ease;
 }
 .gal button:hover .ov{opacity:1}
@@ -545,7 +581,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 }
 .opt.on{border-color:var(--rosa);background:rgba(240,112,155,.1)}
 .opt svg{width:34px;height:34px}
-.opt span{font-size:10.5px;font-weight:600;line-height:1.25;text-align:center;color:var(--muted)}
+.opt span{font-size:var(--t-label);font-weight:600;line-height:1.25;text-align:center;color:var(--muted)}
 .opt.on span{color:var(--text)}
 
 .matchrow{
@@ -555,7 +591,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .matchrow:last-child{border-bottom:0}
 .matchbar{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
 .matchbar i{display:block;height:100%;background:linear-gradient(90deg,var(--vidrio),var(--rosa));transition:width .8s var(--sheet-ease)}
-.matchpct{font-family:var(--mono);font-size:12px;font-weight:700;width:42px;text-align:right;font-variant-numeric:tabular-nums}
+.matchpct{font-family:var(--mono);font-size:var(--t-meta);font-weight:700;width:42px;text-align:right;font-variant-numeric:tabular-nums}
 
 .steps{display:flex;gap:5px;margin:0 0 16px}
 .steps i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.1)}
@@ -567,31 +603,31 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   width:100%;text-align:left;
 }
 .eventdate{
-  width:52px;flex:none;border-radius:12px;background:var(--moss);
+  width:52px;flex:none;border-radius:var(--r1);background:var(--moss);
   border:1px solid var(--line);padding:8px 0;text-align:center;
 }
 .eventdate b{display:block;font-size:19px;font-weight:700;line-height:1;font-family:var(--serif)}
-.eventdate small{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-top:3px}
-.eventbody b{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
-.eventbody p{margin:0 0 7px;font-size:12px;color:var(--muted);line-height:1.45}
+.eventdate small{display:block;font-size:var(--t-label);text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-top:3px}
+.eventbody b{display:block;font-size:var(--t-body);font-weight:600;margin-bottom:4px}
+.eventbody p{margin:0 0 7px;font-size:var(--t-meta);color:var(--muted);line-height:1.45}
 
 .field{margin-bottom:14px}
-.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px}
+.field label{display:block;font-size:var(--t-meta);font-weight:600;color:var(--muted);margin-bottom:6px}
 .field input,.field select,.field textarea{
-  width:100%;padding:12px 13px;border-radius:12px;
-  background:var(--moss);border:1px solid var(--line-2);
-  font-size:14px;outline:none;transition:border-color .16s ease;
+  width:100%;padding:12px 13px;border-radius:var(--r1);
+  background:var(--e3);border:1px solid var(--line-2);
+  font-size:var(--t-body);outline:none;transition:border-color .16s ease;
 }
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--vidrio)}
 .field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
   background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%;background-size:5px 5px;background-repeat:no-repeat}
-.checkline{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--muted);line-height:1.5}
+.checkline{display:flex;gap:10px;align-items:flex-start;font-size:var(--t-meta);color:var(--muted);line-height:1.5}
 .checkline input{width:17px;height:17px;flex:none;margin-top:1px;accent-color:var(--rosa)}
 
 .toast{
   position:absolute;left:20px;right:20px;bottom:100px;z-index:95;
-  padding:14px 16px;border-radius:14px;
-  background:var(--vidrio);color:#04231C;font-size:13px;font-weight:600;
+  padding:14px 16px;border-radius:var(--r1);
+  background:var(--vidrio);color:#04231C;font-size:var(--t-body);font-weight:600;
   transform:translateY(14px);opacity:0;visibility:hidden;
   transition:all .3s var(--sheet-ease);
   box-shadow:0 16px 40px -14px rgba(0,0,0,.8);
@@ -599,17 +635,22 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .toast.on{transform:none;opacity:1;visibility:visible}
 
 /* ---------- cabecera de pantalla ---------- */
-.vhead{padding:60px 20px 6px}
+/* Una sola cabecera de pantalla, con o sin retroceso. Antes cada
+   sección resolvía su encabezado por su cuenta. */
+.vhead{padding:var(--s6) var(--s4) var(--s2)}
 .vhead h2{
-  font-family:var(--serif);font-weight:300;font-size:32px;
-  letter-spacing:-.025em;margin:6px 0 6px;line-height:1.04;
+  font-family:var(--serif);font-optical-sizing:auto;font-weight:300;
+  font-size:var(--t-display);letter-spacing:-.028em;margin:0 0 var(--s2);line-height:1.04;
 }
-.vhead p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.5}
+.vhead p{margin:0;font-size:var(--t-lead);color:var(--muted);line-height:1.45;max-width:34ch}
+.vhead .kicker{display:block;margin-bottom:var(--s2)}
 .backbar{
-  position:sticky;top:0;z-index:40;padding:52px 20px 10px;
-  background:linear-gradient(to bottom,var(--night) 60%,transparent);
+  position:sticky;top:0;z-index:40;padding:var(--s6) var(--s4) 0;
+  background:linear-gradient(to bottom,var(--e0) 68%,transparent);
 }
-.backbtn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--muted)}
+.backbar + .vhead{padding-top:var(--s3)}
+.backbtn{display:inline-flex;align-items:center;gap:6px;font-size:var(--t-meta);font-weight:600;color:var(--muted)}
+.backbtn:hover{color:var(--text)}
 .backbtn svg{width:15px;height:15px;stroke-width:2.2}
 
 /* ---------- hub descubrí ---------- */
@@ -622,7 +663,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .hub .g{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,12,9,.92) 15%,rgba(7,12,9,.15))}
 .hub .t{position:absolute;left:13px;right:13px;bottom:12px}
 .hub b{display:block;font-family:var(--serif);font-weight:400;font-size:17px;letter-spacing:-.01em}
-.hub small{display:block;font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+.hub small{display:block;font-size:var(--t-label);color:var(--muted);margin-top:3px;line-height:1.35}
 
 
 /* ============================================================
@@ -635,7 +676,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .rueda .seg{transition:opacity .3s ease,transform .3s ease;transform-origin:160px 160px}
 .rueda .anillo-g{transition:transform .72s cubic-bezier(.34,1.16,.36,1)}
 .rueda .etiqueta{
-  font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.04em;
+  font-family:var(--sans);font-size:var(--t-meta);font-weight:700;letter-spacing:.04em;
   fill:var(--faint);transition:fill .3s ease;pointer-events:none;
 }
 .rueda .etiqueta.on{fill:var(--text)}
@@ -651,55 +692,55 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   font-size:27px;line-height:1;letter-spacing:-.03em;text-transform:capitalize;
   display:block;margin-bottom:6px;
 }
-.nucleo .cuenta{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
+.nucleo .cuenta{display:block;font-size:var(--t-meta);color:var(--muted);line-height:1.35}
 .nucleo .cuenta b{color:var(--rosa);font-weight:700}
 .nucleo .hoy-chip{
   display:inline-block;margin-top:8px;padding:3px 9px;border-radius:999px;
   background:rgba(126,216,195,.16);color:var(--vidrio);
-  font-size:9.5px;font-weight:700;letter-spacing:.1em;
+  font-size:var(--t-label);font-weight:700;letter-spacing:.1em;
 }
 
 .pista{
   display:flex;align-items:center;justify-content:center;gap:7px;
-  margin:-4px 0 14px;font-size:11px;color:var(--faint);
+  margin:-4px 0 14px;font-size:var(--t-label);color:var(--faint);
 }
 .pista svg{width:14px;height:14px;stroke-width:1.8}
 .tirames{display:flex;gap:10px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
 .tirames::-webkit-scrollbar{display:none}
 .florcard{
   flex:none;width:124px;border-radius:var(--r-m);overflow:hidden;
-  background:var(--bark);border:1px solid var(--line);text-align:left;
+  background:var(--e2);border:1px solid var(--line);text-align:left;
   animation:subir .45s cubic-bezier(.22,.9,.24,1) backwards;
 }
 @keyframes subir{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .florcard .th{display:block;height:78px;position:relative}
 .florcard .mt{display:block;padding:10px 11px 12px}
-.florcard .mt b{display:block;font-size:12.5px;font-weight:600;line-height:1.25}
-.florcard .mt i{display:block;font-size:10.5px;color:var(--faint);margin-top:3px;font-family:var(--serif);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.florcard .mt b{display:block;font-size:var(--t-meta);font-weight:600;line-height:1.25}
+.florcard .mt i{display:block;font-size:var(--t-label);color:var(--faint);margin-top:3px;font-family:var(--serif);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 .acciones{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 20px}
 .accion{
   display:flex;flex-direction:column;align-items:center;gap:7px;
   padding:14px 4px;border-radius:var(--r-m);
-  background:var(--bark);border:1px solid var(--line);
+  background:var(--e2);border:1px solid var(--line);
   transition:transform .16s var(--sheet-ease),border-color .16s ease;
 }
 .accion:active{transform:scale(.95)}
 .accion:hover{border-color:var(--line-2)}
 .accion svg{width:21px;height:21px;stroke-width:1.6;color:var(--vidrio)}
-.accion span{font-size:10px;font-weight:600;color:var(--muted);text-align:center;line-height:1.2}
+.accion span{font-size:var(--t-label);font-weight:600;color:var(--muted);text-align:center;line-height:1.2}
 
 .cabecera{
   display:flex;align-items:center;justify-content:space-between;
   padding:44px 20px 6px;gap:12px;
 }
 .cabecera .marca{font-family:var(--serif);font-size:17px;font-weight:400;letter-spacing:-.01em;line-height:1.15}
-.cabecera .marca small{display:block;font-family:var(--sans);font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+.cabecera .marca small{display:block;font-family:var(--sans);font-size:var(--t-label);color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
 
 /* ---------- barra de pestañas: indicador deslizante ---------- */
 .tabbar{position:relative}
 .tabind{
-  position:absolute;top:7px;height:44px;border-radius:14px;
+  position:absolute;top:7px;height:44px;border-radius:var(--r1);
   background:rgba(126,216,195,.13);border:1px solid rgba(126,216,195,.24);
   transition:transform .42s cubic-bezier(.34,1.14,.36,1),width .42s cubic-bezier(.34,1.14,.36,1);
   pointer-events:none;z-index:0;
@@ -708,6 +749,55 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .tab svg{transition:transform .32s cubic-bezier(.34,1.3,.36,1)}
 .tab.on svg{transform:translateY(-1px) scale(1.08)}
 .tab span{transition:opacity .25s ease}
+
+/* ---------- intro de primera vez ---------- */
+.intro{
+  position:absolute;inset:0;z-index:120;background:var(--e0);
+  display:flex;flex-direction:column;
+  opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s;
+}
+.intro.on{opacity:1;visibility:visible}
+.intro .fondo{position:absolute;inset:0;opacity:.5}
+.intro .fondo canvas{position:absolute;inset:0;width:100%;height:100%}
+.intro .velo{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,12,9,.6),var(--e0) 62%)}
+.intro .contenido{
+  position:relative;flex:1;display:flex;flex-direction:column;
+  padding:var(--s6) var(--s4) var(--s4);overflow-y:auto;
+}
+.intro h2{
+  font-family:var(--serif);font-optical-sizing:auto;font-weight:300;
+  font-size:32px;line-height:1.05;letter-spacing:-.03em;margin:var(--s2) 0 var(--s3);
+}
+.intro p{margin:0 0 var(--s4);font-size:var(--t-lead);line-height:1.45;color:var(--muted);max-width:32ch}
+.intro .pasos{display:flex;gap:var(--s1);margin-bottom:var(--s5)}
+.intro .pasos i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.12)}
+.intro .pasos i.on{background:var(--rosa)}
+.idiomas{display:flex;flex-direction:column;gap:var(--s2)}
+.idioma{
+  display:flex;align-items:center;gap:var(--s3);padding:16px var(--s4);
+  border-radius:var(--r2);background:var(--e2);border:1px solid var(--line);
+  text-align:left;transition:border-color .16s ease,background .16s ease;
+}
+.idioma.on{background:var(--text);color:var(--e0);border-color:var(--text)}
+.idioma b{display:block;font-size:17px;font-weight:600}
+.idioma small{display:block;font-size:var(--t-meta);color:var(--faint);margin-top:2px}
+.idioma.on small{color:rgba(7,12,9,.6)}
+.idioma .tick{margin-left:auto;width:20px;height:20px;flex:none}
+.comoitem{display:flex;gap:var(--s3);align-items:flex-start;padding:14px 0}
+.comoitem .ci{
+  width:42px;height:42px;border-radius:var(--r1);flex:none;display:grid;place-items:center;
+  background:rgba(126,216,195,.12);color:var(--vidrio);
+}
+.comoitem .ci svg{width:21px;height:21px}
+.comoitem b{display:block;font-size:var(--t-body);font-weight:600;margin-bottom:3px}
+.comoitem small{display:block;font-size:var(--t-meta);color:var(--muted);line-height:1.45}
+.intro .pie{position:relative;padding:0 var(--s4) var(--s5);display:flex;gap:var(--s2)}
+.avisoidioma{
+  margin:var(--s4) var(--s4) 0;padding:12px 14px;border-radius:var(--r1);
+  background:rgba(232,178,76,.09);border:1px solid rgba(232,178,76,.24);
+  font-size:var(--t-meta);color:#E5DCC8;line-height:1.45;display:flex;gap:9px;align-items:flex-start;
+}
+.avisoidioma svg{width:15px;height:15px;flex:none;margin-top:1px;color:var(--ambar)}
 
 /* ---------- responsive: en mobile la app ocupa todo ---------- */
 @media (max-width:900px){
@@ -740,9 +830,9 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 /* ---------- selector de planta (patrón audioguía de museo) ---------- */
 .plantas{display:flex;gap:6px;margin:0 16px}
 .planta{
-  flex:1;padding:9px 6px;border-radius:11px;border:1px solid var(--line-2);
+  flex:1;padding:9px 6px;border-radius:var(--r1);border:1px solid var(--line-2);
   background:rgba(15,25,19,.85);backdrop-filter:blur(14px);
-  font-size:11.5px;font-weight:700;color:var(--muted);
+  font-size:var(--t-meta);font-weight:700;color:var(--muted);
 }
 .planta.on{background:var(--text);color:var(--night);border-color:var(--text)}
 
@@ -750,7 +840,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   position:absolute;left:50%;transform:translateX(-50%) translateY(6px);
   bottom:170px;z-index:22;padding:8px 14px;border-radius:999px;
   background:rgba(7,12,9,.9);border:1px solid var(--line-2);backdrop-filter:blur(12px);
-  font-size:11.5px;color:var(--muted);white-space:nowrap;
+  font-size:var(--t-meta);color:var(--muted);white-space:nowrap;
   opacity:0;transition:opacity .3s ease,transform .3s ease;pointer-events:none;
 }
 .maphint.on{opacity:1;transform:translateX(-50%)}
@@ -767,7 +857,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 /* ---------- barra de recorrido (Anterior · Listado · Teclado · Mapa · Siguiente) ---------- */
 .guidebar{
   position:absolute;left:8px;right:8px;bottom:70px;z-index:52;
-  display:none;background:rgba(11,20,15,.97);border-radius:20px;
+  display:none;background:rgba(11,20,15,.97);border-radius:var(--r2);
   backdrop-filter:blur(22px) saturate(1.4);border:1px solid var(--line-2);
   box-shadow:0 18px 40px -18px rgba(0,0,0,.9);overflow:hidden;
 }
@@ -778,10 +868,10 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   border-bottom:1px solid var(--line);
 }
 .guiahead .gt{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
-.guiahead .gt b{font-size:11.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.guiahead .gt b{font-size:var(--t-meta);font-weight:700;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .guiahead svg{width:16px;height:16px;stroke-width:2}
 .gicon{
-  width:34px;height:34px;border-radius:11px;flex:none;display:grid;place-items:center;
+  width:34px;height:34px;border-radius:var(--r1);flex:none;display:grid;place-items:center;
   color:var(--muted);border:1px solid transparent;
 }
 .gicon:hover{color:var(--text);border-color:var(--line-2)}
@@ -792,10 +882,10 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   display:flex;gap:11px;align-items:center;padding:10px 14px;
   border-bottom:1px solid var(--line);width:100%;text-align:left;
 }
-.nowplaying .np-thumb{width:46px;height:46px;border-radius:11px;overflow:hidden;position:relative;flex:none;background:var(--moss)}
+.nowplaying .np-thumb{width:46px;height:46px;border-radius:var(--r1);overflow:hidden;position:relative;flex:none;background:var(--moss)}
 .nowplaying .np-body{flex:1;min-width:0}
-.nowplaying .np-body b{display:block;font-size:13.5px;font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.nowplaying .np-body span{display:block;font-size:11px;color:var(--faint);margin-top:2px}
+.nowplaying .np-body b{display:block;font-size:var(--t-body);font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nowplaying .np-body span{display:block;font-size:var(--t-label);color:var(--faint);margin-top:2px}
 .np-play{
   width:42px;height:42px;border-radius:50%;flex:none;display:grid;place-items:center;
   background:var(--rosa);color:#2A0713;
@@ -804,27 +894,27 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .np-prog{height:2px;background:rgba(255,255,255,.12)}
 .np-prog i{display:block;height:100%;background:var(--rosa);width:0;transition:width .25s linear}
 .guidenav{display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
-.gnav{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;color:var(--faint);border-radius:12px}
+.gnav{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;color:var(--faint);border-radius:var(--r1)}
 .gnav svg{width:20px;height:20px;stroke-width:1.7}
-.gnav span{font-size:9.5px;font-weight:600}
+.gnav span{font-size:var(--t-label);font-weight:600}
 .gnav.on{color:var(--rosa)}
 .gnav:disabled{opacity:.32}
 
 /* ---------- teclado numérico ---------- */
 .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px}
 .key{
-  padding:18px 0;border-radius:16px;background:var(--moss);border:1px solid var(--line-2);
+  padding:18px 0;border-radius:var(--r2);background:var(--e3);border:1px solid var(--line-2);
   font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;
   transition:background .12s ease;
 }
 .key:active{background:var(--raise)}
-.key.wide{grid-column:span 1;font-size:13px;font-weight:700;color:var(--muted)}
+.key.wide{grid-column:span 1;font-size:var(--t-body);font-weight:700;color:var(--muted)}
 .keydisplay{
-  margin:0 20px 18px;padding:20px;border-radius:18px;text-align:center;
-  background:var(--bark);border:1px solid var(--line);
+  margin:0 20px 18px;padding:20px;border-radius:var(--r2);text-align:center;
+  background:var(--e2);border:1px solid var(--line);
 }
 .keydisplay b{display:block;font-family:var(--mono);font-size:42px;letter-spacing:.1em;line-height:1;font-variant-numeric:tabular-nums}
-.keydisplay small{display:block;font-size:12px;color:var(--faint);margin-top:9px}
+.keydisplay small{display:block;font-size:var(--t-meta);color:var(--faint);margin-top:9px}
 
 /* ---------- reproductor y transcripción ---------- */
 .player{
@@ -840,22 +930,22 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .player .big svg{width:22px;height:22px}
 .player .pbar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.14);overflow:hidden}
 .player .pbar i{display:block;height:100%;background:var(--rosa);width:0;transition:width .25s linear}
-.velbtn{padding:6px 11px;border-radius:999px;border:1px solid var(--line-2);font-size:11.5px;font-weight:700;color:var(--muted)}
+.velbtn{padding:6px 11px;border-radius:999px;border:1px solid var(--line-2);font-size:var(--t-meta);font-weight:700;color:var(--muted)}
 .transcript{
   margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
-  font-size:13.5px;line-height:1.6;color:#CFDDD2;max-height:180px;overflow-y:auto;
+  font-size:var(--t-body);line-height:1.6;color:#CFDDD2;max-height:180px;overflow-y:auto;
 }
 .screen[data-transcripcion="1"] .transcript{max-height:none}
 
 /* ---------- accesibilidad: ficha de recorrido ---------- */
 .accgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:0 20px}
 .accitem{
-  display:flex;gap:9px;align-items:flex-start;padding:12px;border-radius:14px;
-  background:var(--bark);border:1px solid var(--line);
+  display:flex;gap:9px;align-items:flex-start;padding:12px;border-radius:var(--r1);
+  background:var(--e2);border:1px solid var(--line);
 }
 .accitem svg{width:17px;height:17px;flex:none;margin-top:1px;stroke-width:1.8}
-.accitem b{display:block;font-size:12px;font-weight:700}
-.accitem small{display:block;font-size:11px;color:var(--faint);line-height:1.4;margin-top:2px}
+.accitem b{display:block;font-size:var(--t-meta);font-weight:700}
+.accitem small{display:block;font-size:var(--t-label);color:var(--faint);line-height:1.4;margin-top:2px}
 .acc-si{color:var(--ok)} .acc-parcial{color:var(--ambar)} .acc-no{color:var(--rosa)}
 
 .switchrow{
@@ -863,14 +953,14 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
   padding:14px 20px;border-bottom:1px solid var(--line);width:100%;text-align:left;
 }
 .switchrow .sw-b{flex:1}
-.switchrow b{display:block;font-size:14px;font-weight:600}
-.switchrow small{display:block;font-size:11.5px;color:var(--faint);line-height:1.45;margin-top:3px}
+.switchrow b{display:block;font-size:var(--t-body);font-weight:600}
+.switchrow small{display:block;font-size:var(--t-meta);color:var(--faint);line-height:1.45;margin-top:3px}
 .switch{width:46px;height:27px;border-radius:999px;background:rgba(255,255,255,.14);position:relative;flex:none;transition:background .2s}
 .switch i{position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;transition:transform .2s var(--sheet-ease)}
 .switch.on{background:var(--vidrio)}
 .switch.on i{transform:translateX(19px)}
 .segrow{display:flex;gap:6px;padding:0 20px 16px}
-.seg{flex:1;padding:11px 0;min-height:52px;display:grid;place-items:center;border-radius:12px;border:1px solid var(--line-2);font-size:12.5px;font-weight:700;color:var(--muted)}
+.seg{flex:1;padding:11px 0;min-height:52px;display:grid;place-items:center;border-radius:var(--r1);border:1px solid var(--line-2);font-size:var(--t-meta);font-weight:700;color:var(--muted)}
 .seg.on{background:var(--text);color:var(--night);border-color:var(--text)}
 
 /* ---------- fotos reales encima de la composición generada ---------- */
@@ -884,7 +974,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
 .pickbox svg{width:14px;height:14px;stroke-width:3}
 .orderpill{
   width:24px;height:24px;border-radius:50%;background:var(--rosa);color:#2A0713;
-  display:grid;place-items:center;font-size:11px;font-weight:700;flex:none;
+  display:grid;place-items:center;font-size:var(--t-label);font-weight:700;flex:none;
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -929,6 +1019,7 @@ canvas.art{display:block;width:100%;height:100%;object-fit:cover}
         <div class="toast" id="toast" role="status"></div>
       </div>
 
+      <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Bienvenida"></div>
       <div class="sheet-scrim" id="scrim"></div>
       <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Detalle"></div>
       <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto"></div>
@@ -1713,6 +1804,7 @@ Object.assign(I,{
   ojo:'<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
   share:'<circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 10.8 7.4-4.3M8.3 13.2l7.4 4.3"/>',
   mas:'<path d="M12 5v14M5 12h14"/>',
+  globo:'<circle cx="12" cy="12" r="9"/><path d="M3.2 9h17.6M3.2 15h17.6"/><path d="M12 3c2.4 2.6 3.6 5.6 3.6 9s-1.2 6.4-3.6 9c-2.4-2.6-3.6-5.6-3.6-9s1.2-6.4 3.6-9Z"/>',
   tap:'<path d="M9 11.5V6a2 2 0 0 1 4 0v6.5"/><path d="M13 10.5a2 2 0 1 1 4 0V15a6 6 0 0 1-6 6 6 6 0 0 1-5.2-3l-2-3.5a2 2 0 0 1 3.4-2L9 14"/>',
   teclas:'<rect x="2.5" y="6" width="19" height="12" rx="3"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h12"/>',
   movimiento:'<path d="M4 9c2.4-2.6 4.8-2.6 7.2 0s4.8 2.6 7.2 0"/><path d="M4 15c2.4-2.6 4.8-2.6 7.2 0s4.8 2.6 7.2 0"/>',
@@ -1807,7 +1899,7 @@ function textoA11y(v){ S.a11y.texto=v; aplicarA11y(); go("accesibilidad",{back:t
 
 /* ---------- persistencia liviana, tolerante a fallos ---------- */
 function guardar(){
-  try{ localStorage.setItem("thays", JSON.stringify({a11y:S.a11y, fav:[...S.fav], miRuta:S.miRuta})); }catch(e){}
+  try{ localStorage.setItem("thays", JSON.stringify({a11y:S.a11y, fav:[...S.fav], miRuta:S.miRuta, idioma:S.idioma, vistoIntro:S.vistoIntro})); }catch(e){}
 }
 function recuperar(){
   try{
@@ -1815,6 +1907,8 @@ function recuperar(){
     if(d.a11y) Object.assign(S.a11y,d.a11y);
     if(Array.isArray(d.fav)) S.fav=new Set(d.fav);
     if(Array.isArray(d.miRuta)) S.miRuta=d.miRuta;
+    if(d.idioma) S.idioma=d.idioma;
+    if(d.vistoIntro) S.vistoIntro=true;
   }catch(e){}
 }
 
@@ -1822,6 +1916,58 @@ function recuperar(){
 /* ============================================================
    4. ESTADO Y NAVEGACIÓN
    ============================================================ */
+/* ============================================================
+   IDIOMA
+   Alcance del prototipo: la interfaz de selección y las cadenas
+   del arranque, la barra de secciones y la home. El contenido
+   botánico permanece en español y se avisa en pantalla, en vez de
+   fingir una traducción que no existe.
+   ============================================================ */
+const IDIOMAS = [
+  {id:"es", nom:"Español",    sub:"Argentina", voz:"es-AR"},
+  {id:"en", nom:"English",    sub:"United States", voz:"en-US"},
+  {id:"pt", nom:"Português",  sub:"Brasil", voz:"pt-BR"}
+];
+const T = {
+  es:{inicio:"Inicio",mapa:"Mapa",recorridos:"Recorridos",descubri:"Descubrí",agenda:"Agenda",
+      abierto:"Abierto",cerrado:"Cerrado",girar:"Arrastrá para girar el año",
+      enflor:"especies en flor",unaflor:"especie en flor",sinflor:"Sin floraciones fichadas",ahora:"AHORA",
+      empeza:"Empezá por acá",catalogo:"Catálogo",donde:"Dónde<br>estoy",audionum:"Audio por<br>número",
+      primera:"Primera<br>vez",juego:"Armá tu<br>planta",dato:"Dato del día",finde:"Este fin de semana",
+      idiomaT:"Elegí tu idioma",idiomaP:"Podés cambiarlo cuando quieras desde el inicio.",
+      comoT:"Tres cosas y entrás",como1t:"La rueda del año",como1p:"Girala y vas a ver qué florece cada mes.",
+      como2t:"Cada cartel tiene un número",como2p:"Marcalo en el teclado y suena su audioguía. Sin cámara ni señal.",
+      como3t:"Recorridos con paradas",como3p:"Te van indicando a cuántos metros está la siguiente.",
+      accT:"¿Lo ves cómodo?",accP:"Podés ajustarlo ahora o después, desde Descubrí.",
+      siguiente:"Siguiente",entrar:"Entrar al Jardín",saltar:"Saltar",
+      aviso:"El contenido botánico de este prototipo está en español."},
+  en:{inicio:"Home",mapa:"Map",recorridos:"Tours",descubri:"Discover",agenda:"What's on",
+      abierto:"Open",cerrado:"Closed",girar:"Drag to spin the year",
+      enflor:"species in bloom",unaflor:"species in bloom",sinflor:"No recorded blooms",ahora:"NOW",
+      empeza:"Start here",catalogo:"Catalogue",donde:"Where<br>am I",audionum:"Audio by<br>number",
+      primera:"First<br>visit",juego:"Build a<br>plant",dato:"Fact of the day",finde:"This weekend",
+      idiomaT:"Choose your language",idiomaP:"You can change it any time from the home screen.",
+      comoT:"Three things and you're in",como1t:"The year wheel",como1p:"Spin it to see what blooms each month.",
+      como2t:"Every sign has a number",como2p:"Type it on the keypad and its audio guide plays. No camera, no signal.",
+      como3t:"Tours with numbered stops",como3p:"They tell you how many metres to the next one.",
+      accT:"Can you read it comfortably?",accP:"Adjust it now, or later from Discover.",
+      siguiente:"Next",entrar:"Enter the Garden",saltar:"Skip",
+      aviso:"Botanical content in this prototype is in Spanish."},
+  pt:{inicio:"Início",mapa:"Mapa",recorridos:"Percursos",descubri:"Descubra",agenda:"Agenda",
+      abierto:"Aberto",cerrado:"Fechado",girar:"Arraste para girar o ano",
+      enflor:"espécies em flor",unaflor:"espécie em flor",sinflor:"Sem floradas registradas",ahora:"AGORA",
+      empeza:"Comece por aqui",catalogo:"Catálogo",donde:"Onde<br>estou",audionum:"Áudio por<br>número",
+      primera:"Primeira<br>vez",juego:"Monte sua<br>planta",dato:"Dado do dia",finde:"Neste fim de semana",
+      idiomaT:"Escolha seu idioma",idiomaP:"Você pode trocar quando quiser, na tela inicial.",
+      comoT:"Três coisas e você entra",como1t:"A roda do ano",como1p:"Gire e veja o que floresce em cada mês.",
+      como2t:"Cada placa tem um número",como2p:"Digite no teclado e o áudio toca. Sem câmera e sem sinal.",
+      como3t:"Percursos com paradas",como3p:"Indicam a quantos metros está a próxima.",
+      accT:"Está confortável de ler?",accP:"Ajuste agora ou depois, em Descubra.",
+      siguiente:"Próximo",entrar:"Entrar no Jardim",saltar:"Pular",
+      aviso:"O conteúdo botânico deste protótipo está em espanhol."}
+};
+const t = k => (T[S.idioma]||T.es)[k] ?? T.es[k] ?? k;
+
 const S = {
   view:"home", stack:[], fav:new Set(), sector:null, focus:null,
   capas:{especies:true, patrimonio:true, servicios:false, sectores:true, accesible:false, enflor:false},
@@ -1833,15 +1979,16 @@ const S = {
   planta:"predio",                                 /* predio | invernaculo1 */
   audio:{id:null,tipo:null,sonando:false,vel:1,pct:0},
   a11y:{texto:0, contraste:false, transcripcion:false, soloAccesible:false},
-  miRuta:[], teclado:"", mesRueda:new Date().getMonth(), guiaAbierta:true
+  miRuta:[], teclado:"", mesRueda:new Date().getMonth(), guiaAbierta:true,
+  idioma:"es", intro:0, vistoIntro:false
 };
 
 const TABS = [
-  {id:"home",       nom:"Inicio",     icon:I.home},
-  {id:"mapa",       nom:"Mapa",       icon:I.map},
-  {id:"recorridos", nom:"Recorridos", icon:I.route},
-  {id:"descubri",   nom:"Descubrí",   icon:I.leaf},
-  {id:"agenda",     nom:"Agenda",     icon:I.cal}
+  {id:"home",       k:"inicio",     icon:I.home},
+  {id:"mapa",       k:"mapa",       icon:I.map},
+  {id:"recorridos", k:"recorridos", icon:I.route},
+  {id:"descubri",   k:"descubri",   icon:I.leaf},
+  {id:"agenda",     k:"agenda",     icon:I.cal}
 ];
 const PARENT = {
   especies:"descubri", puntos:"descubri", galeria:"descubri", juego:"descubri",
@@ -1877,7 +2024,7 @@ function back(){
 function tabbar(){
   document.getElementById("tabbar").innerHTML =
     `<span class="tabind" aria-hidden="true"></span>` +
-    TABS.map(t=>`<button class="tab${t.id===S.view?" on":""}" data-tab="${t.id}" onclick="go('${t.id}')" aria-label="${t.nom}">${svg(t.icon)}<span>${t.nom}</span></button>`).join("");
+    TABS.map(x=>`<button class="tab${x.id===S.view?" on":""}" data-tab="${x.id}" onclick="go('${x.id}')" aria-label="${t(x.k)}">${svg(x.icon)}<span>${t(x.k)}</span></button>`).join("");
   requestAnimationFrame(moverIndicador);
 }
 function moverIndicador(){
@@ -1998,13 +2145,13 @@ function nucleoHTML(){
   const m=S.mesRueda, l=florDelMes(m), hoy=m===new Date().getMonth();
   return `<div class="nucleo">
     <span class="mes">${MESES_L[m]}</span>
-    <span class="cuenta">${l.length?`<b>${l.length}</b> especie${l.length===1?"":"s"} en flor`:"Sin floraciones fichadas"}</span>
-    ${hoy?`<span class="hoy-chip">AHORA</span>`:""}
+    <span class="cuenta">${l.length?`<b>${l.length}</b> ${l.length===1?t("unaflor"):t("enflor")}`:t("sinflor")}</span>
+    ${hoy?`<span class="hoy-chip">${t("ahora")}</span>`:""}
   </div>`;
 }
 function tiraMesHTML(){
   const l=florDelMes(S.mesRueda);
-  if(!l.length) return `<p class="faint" style="font-size:12.5px;padding:0 20px;margin:0;line-height:1.5">
+  if(!l.length) return `<p class="faint" style="font-size:var(--t-meta);padding:0 20px;margin:0;line-height:1.5">
     Ningún ejemplar fichado florece en ${MESES_L[S.mesRueda]}. Es el mes del follaje: mirá el ginkgo y el liquidámbar.</p>`;
   return l.map((e,i)=>`
     <button class="florcard" style="animation-delay:${i*45}ms" onclick="ficha('${e.id}')">
@@ -2032,32 +2179,99 @@ function hookRueda(){
   svg.onpointerup=svg.onpointercancel=()=>{ arr=null; };
 }
 
+/* ---------- intro de primera vez ---------- */
+function pintarIntro(){
+  const el=document.getElementById("intro"); if(!el) return;
+  const paso=S.intro;
+  const pasos = `<div class="pasos">${[0,1,2].map(i=>`<i class="${i<=paso?"on":""}"></i>`).join("")}</div>`;
+  let cuerpo="", pie="";
+
+  if(paso===0){
+    cuerpo=`<h2>${t("idiomaT")}</h2><p>${t("idiomaP")}</p>
+      <div class="idiomas">${IDIOMAS.map(l=>`
+        <button class="idioma${S.idioma===l.id?" on":""}" onclick="elegirIdioma('${l.id}')"
+                aria-pressed="${S.idioma===l.id}" lang="${l.id}">
+          <span><b>${l.nom}</b><small>${l.sub}</small></span>
+          ${S.idioma===l.id?`<span class="tick">${svg(I.check)}</span>`:""}
+        </button>`).join("")}</div>
+      ${S.idioma!=="es"?`<div class="avisoidioma" style="margin-left:0;margin-right:0">${svg(I.info)}<span>${t("aviso")}</span></div>`:""}`;
+  }
+  else if(paso===1){
+    cuerpo=`<h2>${t("comoT")}</h2>
+      <div class="comoitem"><span class="ci">${svg(I.girar)}</span><span><b>${t("como1t")}</b><small>${t("como1p")}</small></span></div>
+      <div class="comoitem"><span class="ci">${svg(I.keypad)}</span><span><b>${t("como2t")}</b><small>${t("como2p")}</small></span></div>
+      <div class="comoitem"><span class="ci">${svg(I.route)}</span><span><b>${t("como3t")}</b><small>${t("como3p")}</small></span></div>`;
+  }
+  else{
+    cuerpo=`<h2>${t("accT")}</h2><p>${t("accP")}</p>
+      <div class="segrow" style="padding:0">
+        ${[["A",14],["A",19],["A",25]].map((x,i)=>
+          `<button class="seg${S.a11y.texto===i?" on":""}" onclick="S.a11y.texto=${i};aplicarA11y();guardar();pintarIntro()"
+             aria-pressed="${S.a11y.texto===i}" aria-label="Tamaño de texto ${i+1} de 3">
+             <span style="font-size:${x[1]}px;font-weight:700;line-height:1">${x[0]}</span></button>`).join("")}
+      </div>
+      <button class="switchrow" style="padding:16px 0;border-top:1px solid var(--line);margin-top:var(--s4)"
+              onclick="toggleA11y('contraste');pintarIntro()" aria-pressed="${S.a11y.contraste}">
+        <span style="color:var(--vidrio)">${svg(I.contraste)}</span>
+        <span class="sw-b"><b>Alto contraste</b></span>
+        <span class="switch${S.a11y.contraste?" on":""}"><i></i></span>
+      </button>`;
+  }
+
+  pie = paso<2
+    ? `<button class="btn ghost" style="flex:none;padding-left:var(--s4);padding-right:var(--s4)" onclick="cerrarIntro()">${t("saltar")}</button>
+       <button class="btn rose" style="flex:1" onclick="S.intro=${paso+1};pintarIntro()">${t("siguiente")}</button>`
+    : `<button class="btn rose full" onclick="cerrarIntro()">${t("entrar")}</button>`;
+
+  el.innerHTML=`
+    <div class="fondo">${art("intro-dosel","canopy")}<div class="velo"></div></div>
+    <div class="contenido">${pasos}${cuerpo}</div>
+    <div class="pie">${pie}</div>`;
+  el.classList.add("on");
+  paintAll(el);
+}
+function elegirIdioma(id){
+  S.idioma=id; guardar();
+  document.documentElement.lang=id;
+  tabbar(); pintarIntro();
+  if(S.view==="home") go("home",{back:true});
+}
+function cerrarIntro(){
+  S.vistoIntro=true; guardar();
+  const el=document.getElementById("intro"); if(el) el.classList.remove("on");
+  go("home",{back:true});
+}
+function abrirIdioma(){ S.intro=0; pintarIntro(); }
+
 RENDER.home = () => {
   const [a,b]=horarioHoy(), abierto=estaAbierto();
   return `
   <div class="cabecera">
     <div class="marca">Jardín Botánico<small>Carlos Thays · Palermo</small></div>
     <span class="livepill"><span class="dot" style="background:${abierto?"var(--ok)":"var(--warn)"}"></span>
-      ${abierto?"Abierto":"Cerrado"} · ${String(a).padStart(2,"0")}–${b}h</span>
+      ${abierto?t("abierto"):t("cerrado")} · ${String(a).padStart(2,"0")}–${b}h</span>
+    <button class="gicon" onclick="abrirIdioma()" aria-label="Cambiar idioma · change language">
+      ${svg(I.globo)}<span style="font-size:var(--t-label);font-weight:700;letter-spacing:.06em">${S.idioma.toUpperCase()}</span></button>
   </div>
 
+  ${S.idioma!=="es"?`<div class="avisoidioma">${svg(I.info)}<span>${t("aviso")}</span></div>`:""}
   <div class="anillo">${ruedaSVG()}${nucleoHTML()}</div>
-  <div class="pista">${svg(I.girar)}<span>Arrastrá para girar el año</span></div>
+  <div class="pista">${svg(I.girar)}<span>${t("girar")}</span></div>
 
   <div class="tirames" id="tirames">${tiraMesHTML()}</div>
 
   <div class="sec-head pad" style="margin-bottom:12px">
-    <h3 class="sec-title">Empezá por acá</h3>
-    <button class="more" onclick="go('especies')" aria-label="Ver el catálogo completo de especies">Catálogo ${svg(I.next,"chipicon")}</button>
+    <h3 class="sec-title">${t("empeza")}</h3>
+    <button class="more" onclick="go('especies')" aria-label="${t("catalogo")}">${t("catalogo")} ${svg(I.next,"chipicon")}</button>
   </div>
   <div class="acciones">
-    <button class="accion" onclick="go('mapa')">${svg(I.locate)}<span>Dónde<br>estoy</span></button>
-    <button class="accion" onclick="go('teclado')">${svg(I.keypad)}<span>Audio por<br>número</span></button>
-    <button class="accion" onclick="abrirRuta('primera-vez')">${svg(I.play)}<span>Primera<br>vez</span></button>
-    <button class="accion" onclick="go('juego')">${svg(I.game)}<span>Armá tu<br>planta</span></button>
+    <button class="accion" onclick="go('mapa')">${svg(I.locate)}<span>${t("donde")}</span></button>
+    <button class="accion" onclick="go('teclado')">${svg(I.keypad)}<span>${t("audionum")}</span></button>
+    <button class="accion" onclick="abrirRuta('primera-vez')">${svg(I.play)}<span>${t("primera")}</span></button>
+    <button class="accion" onclick="go('juego')">${svg(I.game)}<span>${t("juego")}</span></button>
   </div>
 
-  <div class="sec-head pad"><h3 class="sec-title">Dato del día</h3></div>
+  <div class="sec-head pad"><h3 class="sec-title">${t("dato")}</h3></div>
   <div class="factcard">
     <span class="kicker" style="color:var(--vidrio)">Refugio climático</span>
     <p>Bajo el dosel del Jardín se registran temperaturas hasta <strong style="color:#fff">4,8 °C menores</strong> que en las calles que lo rodean. Por eso en marzo de 2023 fue designado el primer refugio climático de la Ciudad.</p>
@@ -2065,8 +2279,8 @@ RENDER.home = () => {
   </div>
 
   <div class="sec-head pad">
-    <h3 class="sec-title">Este fin de semana</h3>
-    <button class="more" onclick="go('agenda')">Agenda</button>
+    <h3 class="sec-title">${t("finde")}</h3>
+    <button class="more" onclick="go('agenda')">${t("agenda")} ${svg(I.next,"chipicon")}</button>
   </div>
   ${ACTIVIDADES.slice(0,2).map((ev,i)=>`
     <button class="listitem" onclick="go('agenda')">
@@ -2076,7 +2290,7 @@ RENDER.home = () => {
     </button>`).join("")}
 
   <div style="padding:26px 20px 10px">
-    <p class="faint" style="font-size:11px;line-height:1.6;margin:0">
+    <p class="faint" style="font-size:var(--t-label);line-height:1.6;margin:0">
       Prototipo académico sin fines comerciales. Datos botánicos, horarios y programación tomados de fuentes públicas del Gobierno de la Ciudad de Buenos Aires y del Área Educativa del Jardín Botánico Carlos Thays.</p>
   </div>`;
 };
@@ -2088,7 +2302,7 @@ function escanear(){
         <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${I.qr}</svg>
       </div>
       <h3 class="sec-title" style="margin-bottom:8px">Escaneá el cartel</h3>
-      <p class="muted" style="font-size:13.5px;line-height:1.55;margin:0 0 20px">
+      <p class="muted" style="font-size:var(--t-body);line-height:1.55;margin:0 0 20px">
         Cada especie del Jardín tiene un cartel con código QR. Apuntá la cámara y se abre su ficha técnica.</p>
       <p class="kicker" style="margin-bottom:10px">En el prototipo, elegí una</p>
     </div>
@@ -2390,13 +2604,13 @@ function tapSector(id){
     openSheet(`<div style="padding:22px 20px 6px">
       <span class="tag" style="background:${sec.c}28;color:${sec.c}">Sector</span>
       <h3 class="sec-title" style="margin:10px 0 6px;font-size:24px">${sec.nom}</h3>
-      <p class="muted" style="font-size:13px;margin:0 0 12px">${dentro.length} especie${dentro.length===1?"":"s"} fichada${dentro.length===1?"":"s"} en este sector.</p>
+      <p class="muted" style="font-size:var(--t-body);margin:0 0 12px">${dentro.length} especie${dentro.length===1?"":"s"} fichada${dentro.length===1?"":"s"} en este sector.</p>
     </div>
     ${dentro.map(e=>`<button class="listitem" onclick="closeSheet();ficha('${e.id}')">
       <div class="lthumb">${imagen(e,"bloom")}</div>
       <div class="lbody"><b>${e.nom}</b><i>${e.bin}</i></div>
       <span class="arrow">${svg(I.next)}</span></button>`).join("") ||
-      `<p class="pad muted" style="font-size:13px">Todavía no hay fichas cargadas de este sector.</p>`}
+      `<p class="pad muted" style="font-size:var(--t-body)">Todavía no hay fichas cargadas de este sector.</p>`}
     <div style="height:10px"></div>`);
   }
 }
@@ -2414,7 +2628,7 @@ function pinTap(g,id){
     const x=SERVICIOS.find(v=>v.id===id);
     openSheet(`<div style="padding:24px 20px 8px"><span class="tag vidrio">${x.tipo}</span>
       <h3 class="sec-title" style="margin:10px 0 6px">${x.nom}</h3>
-      <p class="muted" style="font-size:13.5px;margin:0">${x.sub||"Punto de servicio del Jardín."}</p></div>`);
+      <p class="muted" style="font-size:var(--t-body);margin:0">${x.sub||"Punto de servicio del Jardín."}</p></div>`);
   }
 }
 function previewEsp(id){
@@ -2425,7 +2639,7 @@ function previewEsp(id){
       <span class="tag rosa">${secNom(e.sector)}</span>
       <h3 class="sec-title" style="margin:10px 0 3px;font-size:24px">${e.nom}</h3>
       <p class="binomial" style="margin:0 0 12px;color:var(--vidrio);font-size:15px">${e.bin}</p>
-      <p class="muted" style="font-size:13.5px;line-height:1.55;margin:0 0 16px">${e.desc.slice(0,140)}…</p>
+      <p class="muted" style="font-size:var(--t-body);line-height:1.55;margin:0 0 16px">${e.desc.slice(0,140)}…</p>
       <div style="display:flex;gap:9px">
         <button class="btn" style="flex:1" onclick="closeSheet();ficha('${e.id}')">Ver ficha completa</button>
         <button class="btn ghost" onclick="fav('${e.id}')" aria-label="Guardar">${svg(I.heart)}</button>
@@ -2439,10 +2653,10 @@ function previewPoi(id){
     <div style="padding:0 20px 4px;margin-top:-28px;position:relative">
       <span class="tag marmol">${p.tipo}${p.letra?" · "+p.letra:""}</span>
       <h3 class="sec-title" style="margin:10px 0 4px;font-size:24px">${p.nom}</h3>
-      ${p.sub?`<p class="faint" style="margin:0 0 10px;font-size:12.5px">${p.sub}</p>`:'<div style="height:6px"></div>'}
-      <p style="font-size:13.5px;line-height:1.6;color:#CFDDD2;margin:0 0 14px">${p.desc}</p>
+      ${p.sub?`<p class="faint" style="margin:0 0 10px;font-size:var(--t-meta)">${p.sub}</p>`:'<div style="height:6px"></div>'}
+      <p style="font-size:var(--t-body);line-height:1.6;color:#CFDDD2;margin:0 0 14px">${p.desc}</p>
       <div class="notecard" style="margin:0 0 12px"><span class="kicker">Dato</span><p>${p.dato}</p></div>
-      ${p.aprox?`<p class="faint" style="font-size:11px;line-height:1.5;margin:0 0 12px">Ubicación indicativa: el plano oficial del Jardín no señala la posición de las esculturas.</p>`:""}
+      ${p.aprox?`<p class="faint" style="font-size:var(--t-label);line-height:1.5;margin:0 0 12px">Ubicación indicativa: el plano oficial del Jardín no señala la posición de las esculturas.</p>`:""}
     </div>
     ${reproductor(p,"poi")}
     <div style="padding:16px 20px 0"><button class="btn full ghost" onclick="verEnMapa('${p.id}','poi')">${svg(I.pin)} Ver en el mapa</button></div>`);
@@ -2459,7 +2673,7 @@ function buscarMapa(q){
   ].slice(0,5);
   box.innerHTML = res.length? `<div class="card" style="border-radius:14px;overflow:hidden">${res.map(r=>`
     <button class="listitem" style="padding:10px 14px" onclick="irA('${r.g}','${r.id}',${r.x},${r.y})">
-      <div class="lbody"><b style="font-size:13px">${r.nom}</b><i style="font-size:11px">${r.sub}</i></div>
+      <div class="lbody"><b style="font-size:var(--t-body)">${r.nom}</b><i style="font-size:var(--t-label)">${r.sub}</i></div>
       <span class="arrow">${svg(I.next)}</span></button>`).join("")}</div>` : "";
 }
 function irA(g,id,x,y){
@@ -2523,7 +2737,7 @@ function tapAccesible(id){
   openSheet(`<div style="padding:24px 20px 10px">
     <span class="tag vidrio">${a.tipo}</span>
     <h3 class="sec-title" style="margin:10px 0 8px">${a.nom}</h3>
-    <p class="muted" style="font-size:13.5px;line-height:1.55;margin:0">
+    <p class="muted" style="font-size:var(--t-body);line-height:1.55;margin:0">
       Punto relevado de la capa de accesibilidad. En producción, cada uno se verifica en el lugar y se actualiza desde el gestor de contenidos del Jardín.</p>
   </div>`);
 }
@@ -2623,8 +2837,8 @@ RENDER["mi-ruta"] = () => {
   <div class="pad" style="margin:16px 0 4px">
     <div class="card" style="padding:15px">
       <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
-        <b style="font-size:14px">${S.miRuta.length} parada${S.miRuta.length===1?"":"s"}</b>
-        <button class="faint" style="font-size:11.5px;font-weight:600" onclick="S.miRuta=[];guardar();go('mi-ruta',{back:true})">Vaciar</button>
+        <b style="font-size:var(--t-body)">${S.miRuta.length} parada${S.miRuta.length===1?"":"s"}</b>
+        <button class="faint" style="font-size:var(--t-meta);font-weight:600" onclick="S.miRuta=[];guardar();go('mi-ruta',{back:true})">Vaciar</button>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
         ${S.miRuta.map((id,i)=>{const o=espById(id)||poiById(id);return `<span class="tag rosa">${i+1}. ${o.nom}</span>`;}).join("")}
@@ -2634,15 +2848,15 @@ RENDER["mi-ruta"] = () => {
         <button class="btn ghost" onclick="compartirMiRuta()" aria-label="Compartir">${svg(I.share)}</button>
       </div>
     </div>
-  </div>`:`<div class="pad" style="margin:16px 0 4px"><p class="faint" style="font-size:12.5px;line-height:1.55;margin:0">Tocá las paradas de la lista para sumarlas. Con dos alcanza para empezar.</p></div>`}
+  </div>`:`<div class="pad" style="margin:16px 0 4px"><p class="faint" style="font-size:var(--t-meta);line-height:1.55;margin:0">Tocá las paradas de la lista para sumarlas. Con dos alcanza para empezar.</p></div>`}
   <div class="sec-head pad"><h3 class="sec-title">Paradas disponibles</h3></div>
   ${todo.map(o=>{
     const on=S.miRuta.includes(o.id), i=S.miRuta.indexOf(o.id);
     return `<button class="pickrow" onclick="togglePick('${o.id}')" aria-pressed="${on}">
       <span class="pickbox${on?" on":""}">${svg(I.check)}</span>
       <span style="flex:1;min-width:0">
-        <b style="display:block;font-size:13.5px">${o.nom}</b>
-        <span style="display:block;font-size:11px;color:var(--faint);margin-top:2px">${o.t==="esp"?o.bin:o.tipo} · Audio ${o.n}</span>
+        <b style="display:block;font-size:var(--t-body)">${o.nom}</b>
+        <span style="display:block;font-size:var(--t-label);color:var(--faint);margin-top:2px">${o.t==="esp"?o.bin:o.tipo} · Audio ${o.n}</span>
       </span>
       ${on?`<span class="orderpill">${i+1}</span>`:""}
     </button>`;}).join("")}
@@ -2667,7 +2881,7 @@ function reproductor(o,tipo){
               aria-label="${son?"Pausar":"Reproducir"} audioguía de ${o.nom}">${svg(son?I.pause:I.play)}</button>
       <div style="flex:1">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px">
-          <span style="font-size:12.5px;font-weight:600">Audio ${o.n}</span>
+          <span style="font-size:var(--t-meta);font-weight:600">Audio ${o.n}</span>
           <button class="velbtn" data-audiovel onclick="velAudio()" aria-label="Cambiar velocidad">${S.audio.vel}×</button>
         </div>
         <div class="pbar"><i data-audioprog style="width:${S.audio.id===o.id?S.audio.pct:0}%"></i></div>
@@ -2697,16 +2911,16 @@ function ficha(id){
   <dl class="datagrid">
     <div><dt>Familia</dt><dd>${e.fam}</dd></div>
     <div><dt>Altura</dt><dd>${e.alt}</dd></div>
-    <div style="grid-column:1/-1"><dt>Origen</dt><dd style="font-weight:500;font-size:12.5px;line-height:1.4">${e.origen}</dd></div>
+    <div style="grid-column:1/-1"><dt>Origen</dt><dd style="font-weight:500;font-size:var(--t-meta);line-height:1.4">${e.origen}</dd></div>
     <div><dt>Follaje</dt><dd>Hoja ${e.hoja}</dd></div>
-    <div><dt>Conservación</dt><dd style="font-weight:500;font-size:12.5px;line-height:1.4">${e.conserva}</dd></div>
+    <div><dt>Conservación</dt><dd style="font-weight:500;font-size:var(--t-meta);line-height:1.4">${e.conserva}</dd></div>
   </dl>
 
   <div style="padding:22px 20px 0"><span class="kicker">Calendario de floración</span></div>
   <div class="bloomstrip">
     ${MESES.map((m,i)=>`<div class="${e.flor.includes(i)?"f":""}${i===S.mes?" now":""}">${m}</div>`).join("")}
   </div>
-  <p class="faint" style="padding:8px 20px 0;font-size:11.5px;margin:0">
+  <p class="faint" style="padding:8px 20px 0;font-size:var(--t-meta);margin:0">
     ${e.flor.length? `Florece en ${e.flor.map(i=>MESES_L[i]).join(", ")}. Flor ${e.color}.` : "No produce flores: es una gimnosperma o se reproduce por esporas."}
   </p>
 
@@ -2742,7 +2956,7 @@ function listaEspecies(){
   const q=S.busqueda.trim().toLowerCase();
   if(q) lista=lista.filter(e=>(e.nom+" "+e.bin+" "+e.fam).toLowerCase().includes(q));
   lista.sort((a,b)=>a.nom.localeCompare(b.nom,"es"));
-  if(!lista.length) return `<p class="pad muted" style="font-size:13.5px">Ninguna especie coincide con la búsqueda. Probá con otro nombre o quitá los filtros.</p>`;
+  if(!lista.length) return `<p class="pad muted" style="font-size:var(--t-body)">Ninguna especie coincide con la búsqueda. Probá con otro nombre o quitá los filtros.</p>`;
   return lista.map(e=>`
     <button class="listitem" onclick="ficha('${e.id}')">
       <div class="lthumb">${imagen(e,"bloom")}</div>
@@ -2844,7 +3058,7 @@ RENDER.ruta = (o) => {
       <span>${svg(I.pin)} ${r.paradas.length} paradas</span>
       <span class="acc-${r.acc.silla}">${svg(I.silla)} ${r.acc.silla==="si"?"Apto silla de ruedas":r.acc.silla==="parcial"?"Parcialmente accesible":"No accesible"}</span>
     </div>
-    <p style="font-size:14px;line-height:1.6;color:#CFDDD2;margin:0 0 18px">${r.res}</p>
+    <p style="font-size:var(--t-body);line-height:1.6;color:#CFDDD2;margin:0 0 18px">${r.res}</p>
     <button class="btn full ${activo?"ghost":"rose"}" onclick="${activo?`quitarRuta();go('ruta',{id:'${r.id}',back:true})`:`iniciarRuta('${r.id}')`}">
       ${activo?"Terminar recorrido":svg(I.play)+" Iniciar recorrido"}</button>
   </div>
@@ -2904,7 +3118,7 @@ function celebrarRuta(){
     <div style="width:84px;height:84px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;background:rgba(240,112,155,.16);color:var(--rosa)">
       <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${I.check}</svg></div>
     <h3 class="sec-title" style="margin:0 0 8px">Recorrido completado</h3>
-    <p class="muted" style="font-size:13.5px;line-height:1.55;margin:0 0 20px">
+    <p class="muted" style="font-size:var(--t-body);line-height:1.55;margin:0 0 20px">
       Terminaste «${r.nom}»: ${r.paradas.length} paradas y ${largoRuta(r)} metros. Sumaste una insignia a tu colección.</p>
     <button class="btn full rose" onclick="closeSheet();quitarRuta();go('recorridos')">Elegir otro recorrido</button>
     <div style="height:10px"></div>
@@ -2946,7 +3160,7 @@ function pintarGuia(){
     <div class="guidebody">
       ${tr?`<div style="display:flex;align-items:center;gap:9px;padding:10px 14px;border-top:1px solid var(--line);background:rgba(126,216,195,.07)">
         <span style="color:var(--vidrio);display:grid;place-items:center">${svg(I.giro)}</span>
-        <span style="font-size:12px;color:#CFDDD2;flex:1;line-height:1.35"><b style="font-weight:700">${tr.giro}</b> · ${tr.m} m</span>
+        <span style="font-size:var(--t-meta);color:#CFDDD2;flex:1;line-height:1.35"><b style="font-weight:700">${tr.giro}</b> · ${tr.m} m</span>
         <button onclick="simularCaminata()" class="tag vidrio" style="border:0" aria-label="Simular la caminata hasta la próxima parada">${svg(I.play,"chipicon")}Simular</button>
       </div>`:""}
       <div class="guidenav">
@@ -2999,9 +3213,9 @@ RENDER.listado = () => {
       <span class="lthumb" style="position:relative">${imagen(o,t==="esp"?"bloom":o.kind)}</span>
       <span class="lbody">
         <b>${o.nom}</b>
-        ${t==="esp"?`<i>${o.bin}</i>`:`<i style="font-style:normal;font-family:var(--sans);font-size:11.5px">${o.tipo}</i>`}
+        ${t==="esp"?`<i>${o.bin}</i>`:`<i style="font-style:normal;font-family:var(--sans);font-size:var(--t-meta)">${o.tipo}</i>`}
         <span class="l3" style="display:flex;align-items:center;gap:6px;margin-top:5px">
-          <span style="width:22px;height:22px;border-radius:50%;background:${act?"var(--text)":"rgba(240,112,155,.22)"};color:${act?"var(--night)":"var(--rosa)"};display:grid;place-items:center;font-size:10px;font-weight:700">${i+1}</span>
+          <span style="width:22px;height:22px;border-radius:50%;background:${act?"var(--text)":"rgba(240,112,155,.22)"};color:${act?"var(--night)":"var(--rosa)"};display:grid;place-items:center;font-size:var(--t-label);font-weight:700">${i+1}</span>
           <span style="color:var(--faint)">Audio ${o.n}</span>
         </span>
       </span>
@@ -3074,12 +3288,12 @@ RENDER.descubri = () => `
   <div class="pad">
     <div class="card" style="padding:18px">
       <div style="display:flex;gap:20px">
-        <div><div style="font-family:var(--serif);font-size:30px;line-height:1">${S.fav.size}</div><div class="faint" style="font-size:11px">guardadas</div></div>
-        <div><div style="font-family:var(--serif);font-size:30px;line-height:1">${S.ruta?1:0}</div><div class="faint" style="font-size:11px">recorridos</div></div>
-        <div><div style="font-family:var(--serif);font-size:30px;line-height:1">${Math.round(S.fav.size/ESPECIES.length*100)}%</div><div class="faint" style="font-size:11px">del catálogo</div></div>
+        <div><div style="font-family:var(--serif);font-size:30px;line-height:1">${S.fav.size}</div><div class="faint" style="font-size:var(--t-label)">guardadas</div></div>
+        <div><div style="font-family:var(--serif);font-size:30px;line-height:1">${S.ruta?1:0}</div><div class="faint" style="font-size:var(--t-label)">recorridos</div></div>
+        <div><div style="font-family:var(--serif);font-size:30px;line-height:1">${Math.round(S.fav.size/ESPECIES.length*100)}%</div><div class="faint" style="font-size:var(--t-label)">del catálogo</div></div>
       </div>
       ${S.fav.size? `<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px">${[...S.fav].map(id=>`<button class="tag rosa" onclick="ficha('${id}')">${espById(id).nom}</button>`).join("")}</div>`
-      : `<p class="faint" style="font-size:12.5px;margin:12px 0 0;line-height:1.5">Todavía no guardaste ninguna especie. Tocá el corazón en cualquier ficha para armar tu herbario personal.</p>`}
+      : `<p class="faint" style="font-size:var(--t-meta);margin:12px 0 0;line-height:1.5">Todavía no guardaste ninguna especie. Tocá el corazón en cualquier ficha para armar tu herbario personal.</p>`}
     </div>
   </div>
   <div style="height:20px"></div>`;
@@ -3103,7 +3317,7 @@ RENDER.puntos = () => {
     <button class="listitem" onclick="previewPoi('${p.id}')">
       <div class="lthumb">${imagen(p,p.kind)}</div>
       <div class="lbody"><b>${p.nom}</b>
-        <i style="font-style:normal;font-family:var(--sans);font-size:11.5px">${p.tipo}</i>
+        <i style="font-style:normal;font-family:var(--sans);font-size:var(--t-meta)">${p.tipo}</i>
         <div class="l3">${p.desc.slice(0,68)}…</div></div>
       <span class="arrow">${svg(I.next)}</span>
     </button>`).join("")}
@@ -3148,11 +3362,11 @@ function light(id){
     <div class="lbmeta">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
         <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--vidrio),var(--rosa))"></div>
-        <b style="font-size:13px">jardinbotanicoba</b>
+        <b style="font-size:var(--t-body)">jardinbotanicoba</b>
         <span class="tag plain" style="margin-left:auto">#${g.tag}</span>
       </div>
-      <p style="font-size:14px;line-height:1.55;margin:0 0 10px;color:#DDE8DF">${g.cap}</p>
-      <div class="faint" style="font-size:11.5px;display:flex;align-items:center;gap:6px">
+      <p style="font-size:var(--t-body);line-height:1.55;margin:0 0 10px;color:#DDE8DF">${g.cap}</p>
+      <div class="faint" style="font-size:var(--t-meta);display:flex;align-items:center;gap:6px">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F0709B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${I.heart}</svg>
         <span style="font-variant-numeric:tabular-nums">${g.likes.toLocaleString("es-AR")} me gusta</span>
       </div>
@@ -3318,13 +3532,13 @@ RENDER.juego = () => {
     <div class="gamestage">${plantaSVG()}</div>
     ${done? `
       <h3 class="sec-title" style="margin:4px 0 4px">Tu planta se parece a…</h3>
-      <p class="muted" style="font-size:13px;line-height:1.5;margin:0 0 6px">Comparamos los cuatro rasgos contra las ${ESPECIES.length} especies fichadas.</p>
+      <p class="muted" style="font-size:var(--t-body);line-height:1.5;margin:0 0 6px">Comparamos los cuatro rasgos contra las ${ESPECIES.length} especies fichadas.</p>
       ${res.map(({e,s})=>`
         <button class="matchrow" onclick="ficha('${e.id}')">
           <div style="width:44px;height:44px;border-radius:12px;overflow:hidden;position:relative;flex:none">${art("m-"+e.id,"bloom")}</div>
           <div style="flex:1;min-width:0">
-            <b style="display:block;font-size:14px">${e.nom}</b>
-            <i class="binomial" style="font-size:11.5px;color:var(--muted)">${e.bin}</i>
+            <b style="display:block;font-size:var(--t-body)">${e.nom}</b>
+            <i class="binomial" style="font-size:var(--t-meta);color:var(--muted)">${e.bin}</i>
             <div class="matchbar" style="margin-top:6px"><i style="width:${s}%"></i></div>
           </div>
           <span class="matchpct">${s}%</span>
@@ -3333,7 +3547,7 @@ RENDER.juego = () => {
         <button class="btn ghost" style="flex:1" onclick="reiniciarJuego()">Jugar de nuevo</button>
         <button class="btn rose" style="flex:1" onclick="toast('Compartido en tu historia')">Compartir</button>
       </div>
-      <p class="faint" style="font-size:11.5px;line-height:1.55;margin:18px 0 0">
+      <p class="faint" style="font-size:var(--t-meta);line-height:1.55;margin:18px 0 0">
         Las hojas pesan 30 puntos, la flor 26, el tronco 24 y el hábitat 20. Un 100 % significa que reconstruiste exactamente el perfil de esa especie.</p>
     ` : `
       <span class="kicker">Paso ${j.step+1} de ${PASOS.length}</span>
@@ -3382,13 +3596,13 @@ RENDER.agenda = () => `
 
   <div class="sec-head pad"><h3 class="sec-title">Voluntariado</h3></div>
   <div class="pad">
-    <p class="muted" style="font-size:13.5px;line-height:1.6;margin:0 0 16px">
+    <p class="muted" style="font-size:var(--t-body);line-height:1.6;margin:0 0 16px">
       El Área Educativa del Jardín abre tres programas de voluntariado. La convocatoria se realiza entre febrero y marzo de cada año.</p>
     ${VOLUNTARIADOS.map(v=>`
       <div class="card" style="padding:16px;margin-bottom:11px">
         <span class="tag ${v.tag}">${v.nom}</span>
-        <p style="font-size:13.5px;line-height:1.55;margin:11px 0 9px;color:#CFDDD2">${v.desc}</p>
-        <p class="faint" style="font-size:11.5px;margin:0">${v.req}</p>
+        <p style="font-size:var(--t-body);line-height:1.55;margin:11px 0 9px;color:#CFDDD2">${v.desc}</p>
+        <p class="faint" style="font-size:var(--t-meta);margin:0">${v.req}</p>
       </div>`).join("")}
     <button class="btn full rose" style="margin-top:6px" onclick="go('voluntariado')">${svg(I.hand)} Quiero ser voluntario</button>
   </div>
@@ -3422,7 +3636,7 @@ RENDER.voluntariado = () => `
       <span>Confirmo que soy mayor de 18 años y acepto que el Jardín use estos datos para contactarme sobre el programa.</span>
     </label>
     <button class="btn full rose" type="submit">Enviar postulación</button>
-    <p class="faint" style="font-size:11.5px;line-height:1.55;margin:16px 0 0">
+    <p class="faint" style="font-size:var(--t-meta);line-height:1.55;margin:16px 0 0">
       Prototipo: el formulario no envía datos reales. En producción se integra con el sistema del Área Educativa.</p>
   </form>
   <div style="height:24px"></div>`;
@@ -3450,7 +3664,7 @@ tabbar();
     openSheet(`<div style="padding:26px 22px 10px">
       <span class="tag rosa">Recorrido compartido</span>
       <h3 class="sec-title" style="margin:12px 0 8px">Alguien te compartió un recorrido</h3>
-      <p class="muted" style="font-size:13.5px;line-height:1.55;margin:0 0 6px">${ids.length} paradas elegidas a mano.</p>
+      <p class="muted" style="font-size:var(--t-body);line-height:1.55;margin:0 0 6px">${ids.length} paradas elegidas a mano.</p>
       <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 18px">
         ${ids.map((id,i)=>{const o=espById(id)||poiById(id);return `<span class="tag plain">${i+1}. ${o.nom}</span>`}).join("")}
       </div>
@@ -3463,6 +3677,8 @@ tabbar();
 
 go("home");
 aplicarA11y();
+document.documentElement.lang=S.idioma;
+if(!S.vistoIntro) setTimeout(pintarIntro,300);
 setTimeout(()=>paintAll(document),60);
 </script>
 
