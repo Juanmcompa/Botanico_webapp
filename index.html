@@ -1,0 +1,2169 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070C09">
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Jardín Botánico Thays</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..600&display=swap">
+
+<style>
+/* ============================================================
+   THAYS — prototipo de app del Jardín Botánico Carlos Thays
+   Dirección visual: "naturaleza inmersiva" — tema oscuro único,
+   deliberado. Todos los colores se declaran explícitamente.
+   ============================================================ */
+
+:root{
+  /* grounds — negros con sesgo verde */
+  --night:#070C09;
+  --bark:#0F1913;
+  --moss:#17251C;
+  --raise:#1E3026;
+  --line:rgba(233,245,235,.11);
+  --line-2:rgba(233,245,235,.20);
+
+  /* tinta */
+  --text:#ECF3ED;
+  --muted:#8FA396;
+  --faint:#63756A;
+
+  /* acentos, tomados del jardín */
+  --rosa:#F0709B;      /* palo borracho en flor */
+  --rosa-deep:#8E2E4C;
+  --ambar:#E8B24C;     /* tipa e ibirá pitá */
+  --vidrio:#7ED8C3;    /* vidrio del Invernáculo N.º 1 */
+  --marmol:#DED6C6;    /* esculturas */
+
+  --ok:#6FD38F;
+  --warn:#E8B24C;
+
+  --r-s:10px; --r-m:16px; --r-l:24px; --r-xl:32px;
+  --sheet-ease:cubic-bezier(.22,.9,.24,1);
+
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--night);
+  color:var(--text);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--vidrio);outline-offset:2px;border-radius:6px}
+::-webkit-scrollbar{width:0;height:0}
+
+/* ---------- escenario de escritorio ---------- */
+.stage{
+  position:fixed;inset:0;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:0;
+  background:var(--night);
+}
+#ambient{position:fixed;inset:0;width:100%;height:100%;opacity:.5;filter:saturate(.75);pointer-events:none;z-index:0}
+.stage::after{
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(120% 80% at 50% 40%,transparent 20%,rgba(7,12,9,.86) 78%);
+}
+
+.stage-note{
+  position:relative;z-index:3;
+  padding:0 40px;max-width:340px;justify-self:end;
+}
+.stage-note.right{justify-self:start;max-width:300px}
+.stage-note h1{
+  font-family:var(--serif);
+  font-optical-sizing:auto;
+  font-weight:400;font-size:34px;line-height:1.08;
+  margin:0 0 14px;letter-spacing:-.02em;text-wrap:balance;
+}
+.stage-note h1 em{font-style:italic;color:var(--vidrio)}
+.stage-note p{margin:0 0 10px;font-size:13.5px;line-height:1.6;color:var(--muted)}
+.eyebrow{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--faint);margin:0 0 16px;
+}
+.keyhint{
+  margin-top:22px;display:flex;flex-direction:column;gap:7px;
+  font-size:12px;color:var(--faint);
+}
+.keyhint div{display:flex;align-items:center;gap:8px}
+kbd{
+  font-family:var(--mono);font-size:10px;
+  border:1px solid var(--line-2);border-radius:5px;
+  padding:2px 6px;color:var(--muted);background:rgba(255,255,255,.03);
+}
+.legend-swatch{width:9px;height:9px;border-radius:3px;flex:none}
+
+/* ---------- el teléfono ---------- */
+.device{
+  position:relative;z-index:3;
+  width:392px;height:min(846px,94vh);
+  border-radius:46px;
+  padding:11px;
+  background:linear-gradient(160deg,#2b3830,#0b120e 40%,#232f27);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.07),
+    0 50px 90px -30px rgba(0,0,0,.9),
+    0 0 120px -40px rgba(126,216,195,.25);
+  justify-self:center;
+}
+.screen{
+  position:relative;
+  width:100%;height:100%;
+  border-radius:36px;
+  overflow:hidden;overflow:clip;
+  background:var(--night);
+  isolation:isolate;
+}
+.notch{
+  position:absolute;top:9px;left:50%;transform:translateX(-50%);
+  width:104px;height:26px;border-radius:14px;background:#050806;z-index:60;
+}
+.statusbar{
+  position:absolute;top:0;left:0;right:0;height:46px;z-index:55;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;font-size:12.5px;font-weight:600;
+  color:var(--text);pointer-events:none;
+  text-shadow:0 1px 6px rgba(0,0,0,.6);
+}
+.statusbar .sb-r{display:flex;gap:5px;align-items:center}
+.sb-bar{width:3px;border-radius:1px;background:currentColor;display:inline-block}
+
+/* ---------- capa de la app ---------- */
+.app{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;overflow:clip}
+.views{position:relative;flex:1;overflow:hidden}
+.view{
+  position:absolute;inset:0;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:92px;
+  opacity:0;visibility:hidden;transform:translateY(8px);
+  transition:opacity .26s ease,transform .32s var(--sheet-ease),visibility .26s;
+}
+.view.on{opacity:1;visibility:visible;transform:none}
+.view.nopad{padding-bottom:0}
+
+/* ---------- barra de pestañas ---------- */
+.tabbar{
+  position:absolute;left:0;right:0;bottom:0;z-index:50;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  padding:9px 8px calc(9px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(to top,rgba(7,12,9,.97) 55%,rgba(7,12,9,.6) 85%,transparent);
+  backdrop-filter:blur(22px) saturate(1.4);
+  -webkit-backdrop-filter:blur(22px) saturate(1.4);
+  border-top:1px solid var(--line);
+}
+.tab{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:6px 2px 4px;border-radius:14px;
+  color:var(--faint);transition:color .18s ease;
+}
+.tab svg{width:21px;height:21px;stroke-width:1.6}
+.tab span{font-size:9.5px;letter-spacing:.02em;font-weight:600}
+.tab.on{color:var(--text)}
+.tab.on svg{stroke:var(--vidrio)}
+.tab:hover{color:var(--muted)}
+
+/* ---------- primitivas ---------- */
+.pad{padding:0 20px}
+.stack{display:flex;flex-direction:column}
+.row{display:flex;align-items:center}
+.sec-title{
+  font-family:var(--serif);font-weight:400;font-size:22px;
+  letter-spacing:-.015em;margin:0;text-wrap:balance;
+}
+.sec-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:12px;margin:30px 0 14px;
+}
+.sec-head .more{font-size:12px;color:var(--vidrio);font-weight:600}
+.kicker{
+  font-family:var(--mono);font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--faint);
+}
+.binomial{font-family:var(--serif);font-style:italic;font-weight:400}
+.muted{color:var(--muted)}
+.faint{color:var(--faint)}
+
+.chiprow{
+  display:flex;gap:8px;overflow-x:auto;padding:2px 20px 2px;
+  scrollbar-width:none;
+}
+.chiprow::-webkit-scrollbar{display:none}
+.chip{
+  flex:none;padding:7px 13px;border-radius:999px;
+  border:1px solid var(--line-2);
+  font-size:12px;font-weight:600;color:var(--muted);
+  background:rgba(255,255,255,.025);
+  transition:all .16s ease;white-space:nowrap;
+}
+.chip.on{background:var(--text);color:var(--night);border-color:var(--text)}
+.chip:hover:not(.on){border-color:var(--line-2);color:var(--text)}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 20px;border-radius:14px;font-weight:600;font-size:14px;
+  background:var(--text);color:var(--night);
+  transition:transform .12s ease,opacity .16s ease;
+}
+.btn:active{transform:scale(.975)}
+.btn.ghost{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--line-2)}
+.btn.rose{background:var(--rosa);color:#2A0713}
+.btn.full{width:100%}
+.btn svg{width:17px;height:17px;stroke-width:1.8}
+
+.card{
+  background:var(--bark);border:1px solid var(--line);
+  border-radius:var(--r-l);overflow:hidden;
+}
+.tag{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 9px;border-radius:999px;
+  font-size:10.5px;font-weight:700;letter-spacing:.02em;
+}
+.tag.rosa{background:rgba(240,112,155,.16);color:var(--rosa)}
+.tag.ambar{background:rgba(232,178,76,.16);color:var(--ambar)}
+.tag.vidrio{background:rgba(126,216,195,.15);color:var(--vidrio)}
+.tag.marmol{background:rgba(222,214,198,.13);color:var(--marmol)}
+.tag.plain{background:rgba(255,255,255,.07);color:var(--muted)}
+
+canvas.art{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ---------- inicio ---------- */
+.hero{position:relative;height:430px;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-grad{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(7,12,9,.5) 0%,transparent 30%,rgba(7,12,9,.35) 62%,var(--night) 99%);
+}
+.hero-body{position:absolute;left:20px;right:20px;bottom:20px}
+.hero-body h2{
+  font-family:var(--serif);font-optical-sizing:auto;
+  font-weight:300;font-size:38px;line-height:1.02;letter-spacing:-.03em;
+  margin:10px 0 10px;text-wrap:balance;
+}
+.hero-body h2 em{font-style:italic;font-weight:400}
+.livepill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 12px;border-radius:999px;
+  background:rgba(7,12,9,.55);border:1px solid var(--line-2);
+  backdrop-filter:blur(10px);font-size:11.5px;font-weight:600;
+}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(111,211,143,.18)}
+
+.quickgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.quick{
+  display:flex;flex-direction:column;gap:9px;align-items:flex-start;
+  padding:15px;border-radius:var(--r-m);
+  background:var(--bark);border:1px solid var(--line);
+  text-align:left;transition:border-color .16s ease,background .16s ease;
+}
+.quick:hover{border-color:var(--line-2);background:var(--moss)}
+.quick svg{width:20px;height:20px;stroke-width:1.6;color:var(--vidrio)}
+.quick b{font-size:13.5px;font-weight:600;display:block}
+.quick small{font-size:11.5px;color:var(--faint);line-height:1.4;display:block;margin-top:2px}
+
+.bloomscroll{display:flex;gap:12px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
+.bloomscroll::-webkit-scrollbar{display:none}
+.bloomcard{
+  flex:none;width:158px;border-radius:var(--r-m);overflow:hidden;
+  background:var(--bark);border:1px solid var(--line);text-align:left;
+  transition:transform .18s var(--sheet-ease);
+}
+.bloomcard:active{transform:scale(.98)}
+.bloomcard .thumb{height:104px;position:relative}
+.bloomcard .thumb canvas{position:absolute;inset:0;width:100%;height:100%}
+.bloomcard .meta{padding:11px 12px 13px}
+.bloomcard .meta b{display:block;font-size:13px;font-weight:600;line-height:1.25}
+.bloomcard .meta i{display:block;font-size:11px;color:var(--faint);margin-top:3px;font-family:var(--serif);font-style:italic}
+
+.factcard{
+  margin:0 20px;padding:18px;border-radius:var(--r-l);
+  background:linear-gradient(150deg,rgba(126,216,195,.10),rgba(240,112,155,.07));
+  border:1px solid var(--line-2);
+}
+.factcard p{margin:8px 0 0;font-size:13.5px;line-height:1.55;color:#D8E4DA}
+.factcard .src{margin-top:10px;font-size:10.5px;color:var(--faint);font-family:var(--mono)}
+
+/* ---------- mapa ---------- */
+.mapwrap{position:absolute;inset:0;background:#08110C;touch-action:none}
+#mapsvg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.map-top{
+  position:absolute;top:52px;left:0;right:0;z-index:20;
+  display:flex;flex-direction:column;gap:10px;
+}
+.map-search{
+  margin:0 16px;display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border-radius:14px;
+  background:rgba(15,25,19,.82);backdrop-filter:blur(18px);
+  border:1px solid var(--line-2);
+}
+.map-search input{
+  flex:1;background:none;border:0;outline:none;font-size:14px;
+}
+.map-search input::placeholder{color:var(--faint)}
+.map-search svg{width:17px;height:17px;stroke-width:1.7;color:var(--muted);flex:none}
+.map-tools{
+  position:absolute;right:16px;bottom:112px;z-index:20;
+  display:flex;flex-direction:column;gap:8px;
+}
+.mtool{
+  width:42px;height:42px;border-radius:13px;
+  display:grid;place-items:center;
+  background:rgba(15,25,19,.85);backdrop-filter:blur(14px);
+  border:1px solid var(--line-2);color:var(--text);
+}
+.mtool svg{width:18px;height:18px;stroke-width:1.7}
+.mtool.on{background:var(--vidrio);color:#04231C;border-color:var(--vidrio)}
+
+.pin{cursor:pointer}
+.pin circle.hit{fill:transparent}
+.pin .bubble{transition:r .18s var(--sheet-ease)}
+.pin.sel .bubble{r:14}
+.sector-label{
+  font-family:var(--sans);font-size:13px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  fill:rgba(236,243,237,.42);pointer-events:none;
+}
+.path-line{fill:none;stroke:rgba(222,214,198,.16);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.path-line.thin{stroke-width:4;stroke-dasharray:1 9;stroke:rgba(222,214,198,.28)}
+.route-line{fill:none;stroke:var(--rosa);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;
+  filter:drop-shadow(0 0 8px rgba(240,112,155,.55));stroke-dasharray:1000;animation:draw 1.6s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.route-line{stroke-dashoffset:1000}
+
+.youare{transform-box:fill-box;transform-origin:center}
+@keyframes ping{0%{r:8;opacity:.65}100%{r:26;opacity:0}}
+.youare-ping{animation:ping 2.6s ease-out infinite;fill:none;stroke:var(--vidrio);stroke-width:2}
+
+/* ---------- bottom sheet ---------- */
+.sheet-scrim{
+  position:absolute;inset:0;z-index:70;background:rgba(4,8,6,.6);
+  backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .28s ease,visibility .28s;
+}
+.sheet-scrim.on{opacity:1;visibility:visible}
+.sheet{
+  position:absolute;left:0;right:0;bottom:0;z-index:80;
+  max-height:88%;overflow-y:auto;
+  background:var(--bark);
+  border-top:1px solid var(--line-2);
+  border-radius:var(--r-xl) var(--r-xl) 0 0;
+  transform:translateY(102%);
+  visibility:hidden;
+  transition:transform .38s var(--sheet-ease),visibility .38s;
+  box-shadow:0 -24px 60px -20px rgba(0,0,0,.8);
+  padding-bottom:26px;
+}
+.sheet.on{transform:none;visibility:visible}
+.grabber{
+  width:38px;height:4px;border-radius:2px;background:var(--line-2);
+  margin:10px auto 0;
+}
+.sheet-close{
+  position:absolute;top:14px;right:14px;z-index:5;
+  width:32px;height:32px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(7,12,9,.6);backdrop-filter:blur(10px);
+  border:1px solid var(--line);
+}
+.sheet-close svg{width:15px;height:15px;stroke-width:2}
+
+/* ---------- ficha técnica ---------- */
+.ficha-hero{position:relative;height:250px;margin-top:-1px}
+.ficha-hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.ficha-hero .grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,25,19,.25),transparent 40%,var(--bark))}
+.ficha-hero .titles{position:absolute;left:20px;right:20px;bottom:14px}
+.ficha-hero h2{
+  font-family:var(--serif);font-weight:300;font-size:30px;line-height:1.05;
+  letter-spacing:-.02em;margin:8px 0 4px;text-wrap:balance;
+}
+.ficha-hero .bin{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--vidrio)}
+.datagrid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:var(--line);border:1px solid var(--line);
+  border-radius:var(--r-m);overflow:hidden;margin:0 20px;
+}
+.datagrid div{background:var(--bark);padding:12px 14px}
+.datagrid dt{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--faint);margin:0 0 5px;
+}
+.datagrid dd{margin:0;font-size:13px;font-weight:600;line-height:1.35}
+
+.bloomstrip{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin:12px 20px 0}
+.bloomstrip div{
+  height:34px;border-radius:5px;background:rgba(255,255,255,.05);
+  display:grid;place-items:center;font-size:8.5px;font-weight:700;
+  color:var(--faint);font-family:var(--mono);
+}
+.bloomstrip div.f{background:rgba(240,112,155,.32);color:#FFD9E5}
+.bloomstrip div.now{outline:1.5px solid var(--vidrio);outline-offset:1px}
+
+.prose{padding:0 20px;font-size:14px;line-height:1.62;color:#CFDDD2}
+.prose p{margin:0 0 12px}
+.prose strong{color:var(--text);font-weight:600}
+
+.notecard{
+  margin:0 20px;padding:15px 16px;border-radius:var(--r-m);
+  background:rgba(232,178,76,.07);border:1px solid rgba(232,178,76,.22);
+}
+.notecard .kicker{color:var(--ambar);margin-bottom:7px}
+.notecard p{margin:0;font-size:13px;line-height:1.55;color:#E5DCC8}
+
+/* ---------- listas ---------- */
+.listitem{
+  display:flex;gap:13px;align-items:center;width:100%;text-align:left;
+  padding:12px 20px;transition:background .16s ease;
+}
+.listitem:hover{background:rgba(255,255,255,.03)}
+.listitem .lthumb{
+  width:56px;height:56px;border-radius:14px;overflow:hidden;flex:none;position:relative;
+  background:var(--moss);
+}
+.listitem .lthumb canvas{position:absolute;inset:0;width:100%;height:100%}
+.listitem .lbody{flex:1;min-width:0}
+.listitem .lbody b{display:block;font-size:14px;font-weight:600;line-height:1.3}
+.listitem .lbody i{
+  display:block;font-family:var(--serif);font-style:italic;
+  font-size:12px;color:var(--muted);margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.listitem .lbody .l3{font-size:11px;color:var(--faint);margin-top:4px}
+.listitem .arrow{color:var(--faint);flex:none}
+.listitem .arrow svg{width:16px;height:16px;stroke-width:2}
+
+/* ---------- recorridos ---------- */
+.routecard{
+  position:relative;margin:0 20px 14px;border-radius:var(--r-l);
+  overflow:hidden;border:1px solid var(--line);display:block;width:calc(100% - 40px);
+  text-align:left;background:var(--bark);
+}
+.routecard .rtop{position:relative;height:132px}
+.routecard .rtop canvas{position:absolute;inset:0;width:100%;height:100%}
+.routecard .rtop .g{position:absolute;inset:0;background:linear-gradient(to top,var(--bark),transparent 70%)}
+.routecard .rbody{padding:0 16px 16px;margin-top:-12px;position:relative}
+.routecard h3{font-family:var(--serif);font-weight:400;font-size:19px;margin:0 0 6px;letter-spacing:-.01em}
+.routecard p{margin:0 0 11px;font-size:12.5px;line-height:1.5;color:var(--muted)}
+.rmeta{display:flex;gap:14px;font-size:11.5px;color:var(--faint);font-weight:600}
+.rmeta span{display:flex;align-items:center;gap:5px}
+.rmeta svg{width:13px;height:13px;stroke-width:1.9}
+
+.stoplist{position:relative;margin:0 20px;padding-left:26px}
+.stoplist::before{
+  content:"";position:absolute;left:7px;top:12px;bottom:12px;width:2px;
+  background:linear-gradient(to bottom,var(--rosa),rgba(240,112,155,.15));
+}
+.stop{position:relative;padding:11px 0;display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left}
+.stop::before{
+  content:"";position:absolute;left:-24px;top:17px;width:12px;height:12px;
+  border-radius:50%;background:var(--night);border:2px solid var(--rosa);
+}
+.stop.done::before{background:var(--rosa)}
+.stop .n{
+  font-family:var(--mono);font-size:10px;color:var(--faint);
+  padding-top:3px;width:18px;flex:none;
+}
+.stop b{display:block;font-size:14px;font-weight:600;margin-bottom:3px}
+.stop small{display:block;font-size:12px;color:var(--muted);line-height:1.45}
+
+.runner{
+  position:absolute;left:12px;right:12px;bottom:88px;z-index:45;
+  background:rgba(15,25,19,.93);backdrop-filter:blur(20px);
+  border:1px solid var(--line-2);border-radius:var(--r-l);
+  padding:14px 16px;display:none;
+  box-shadow:0 20px 50px -20px rgba(0,0,0,.9);
+}
+.runner.on{display:block}
+.progress{height:3px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden;margin:10px 0 12px}
+.progress i{display:block;height:100%;background:var(--rosa);transition:width .4s var(--sheet-ease)}
+
+/* ---------- galería ---------- */
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:0 5px}
+.gal button{
+  position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;
+  background:var(--moss);
+}
+.gal button:nth-child(7n+1){grid-column:span 2;aspect-ratio:16/11}
+.gal canvas{position:absolute;inset:0;width:100%;height:100%}
+.gal .ov{
+  position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;
+  background:linear-gradient(to top,rgba(4,8,6,.85),transparent);
+  font-size:10px;font-weight:600;color:#DCE7DE;text-align:left;
+  opacity:0;transition:opacity .2s ease;
+}
+.gal button:hover .ov{opacity:1}
+
+.lightbox{
+  position:absolute;inset:0;z-index:90;background:rgba(4,8,6,.96);
+  display:flex;flex-direction:column;
+  opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s;
+}
+.lightbox.on{opacity:1;visibility:visible}
+.lightbox .lbimg{flex:1;position:relative;min-height:0}
+.lightbox canvas{position:absolute;inset:0;width:100%;height:100%}
+.lightbox .lbmeta{padding:16px 20px 26px}
+
+/* ---------- juego ---------- */
+.gamewrap{padding:0 20px}
+.gamestage{
+  position:relative;height:212px;border-radius:var(--r-l);overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 100%,#1B3227,#0A120D);
+  border:1px solid var(--line);margin-bottom:16px;
+}
+#plantsvg{position:absolute;inset:0;width:100%;height:100%}
+.optgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.opt{
+  border:1px solid var(--line);background:var(--bark);border-radius:var(--r-m);
+  padding:11px 8px;display:flex;flex-direction:column;align-items:center;gap:7px;
+  transition:all .16s ease;
+}
+.opt.on{border-color:var(--rosa);background:rgba(240,112,155,.1)}
+.opt svg{width:34px;height:34px}
+.opt span{font-size:10.5px;font-weight:600;line-height:1.25;text-align:center;color:var(--muted)}
+.opt.on span{color:var(--text)}
+
+.matchrow{
+  display:flex;align-items:center;gap:12px;padding:13px 0;
+  border-bottom:1px solid var(--line);width:100%;text-align:left;
+}
+.matchrow:last-child{border-bottom:0}
+.matchbar{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.matchbar i{display:block;height:100%;background:linear-gradient(90deg,var(--vidrio),var(--rosa));transition:width .8s var(--sheet-ease)}
+.matchpct{font-family:var(--mono);font-size:12px;font-weight:700;width:42px;text-align:right;font-variant-numeric:tabular-nums}
+
+.steps{display:flex;gap:5px;margin:0 0 16px}
+.steps i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.1)}
+.steps i.on{background:var(--rosa)}
+
+/* ---------- agenda / formularios ---------- */
+.eventcard{
+  display:flex;gap:14px;padding:15px 20px;border-bottom:1px solid var(--line);
+  width:100%;text-align:left;
+}
+.eventdate{
+  width:52px;flex:none;border-radius:12px;background:var(--moss);
+  border:1px solid var(--line);padding:8px 0;text-align:center;
+}
+.eventdate b{display:block;font-size:19px;font-weight:700;line-height:1;font-family:var(--serif)}
+.eventdate small{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-top:3px}
+.eventbody b{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.eventbody p{margin:0 0 7px;font-size:12px;color:var(--muted);line-height:1.45}
+
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px}
+.field input,.field select,.field textarea{
+  width:100%;padding:12px 13px;border-radius:12px;
+  background:var(--moss);border:1px solid var(--line-2);
+  font-size:14px;outline:none;transition:border-color .16s ease;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--vidrio)}
+.field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+.checkline{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--muted);line-height:1.5}
+.checkline input{width:17px;height:17px;flex:none;margin-top:1px;accent-color:var(--rosa)}
+
+.toast{
+  position:absolute;left:20px;right:20px;bottom:100px;z-index:95;
+  padding:14px 16px;border-radius:14px;
+  background:var(--vidrio);color:#04231C;font-size:13px;font-weight:600;
+  transform:translateY(14px);opacity:0;visibility:hidden;
+  transition:all .3s var(--sheet-ease);
+  box-shadow:0 16px 40px -14px rgba(0,0,0,.8);
+}
+.toast.on{transform:none;opacity:1;visibility:visible}
+
+/* ---------- cabecera de pantalla ---------- */
+.vhead{padding:60px 20px 6px}
+.vhead h2{
+  font-family:var(--serif);font-weight:300;font-size:32px;
+  letter-spacing:-.025em;margin:6px 0 6px;line-height:1.04;
+}
+.vhead p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.5}
+.backbar{
+  position:sticky;top:0;z-index:40;padding:52px 20px 10px;
+  background:linear-gradient(to bottom,var(--night) 60%,transparent);
+}
+.backbtn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--muted)}
+.backbtn svg{width:15px;height:15px;stroke-width:2.2}
+
+/* ---------- hub descubrí ---------- */
+.hubgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:0 20px}
+.hub{
+  position:relative;height:146px;border-radius:var(--r-l);overflow:hidden;
+  border:1px solid var(--line);text-align:left;
+}
+.hub canvas{position:absolute;inset:0;width:100%;height:100%}
+.hub .g{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,12,9,.92) 15%,rgba(7,12,9,.15))}
+.hub .t{position:absolute;left:13px;right:13px;bottom:12px}
+.hub b{display:block;font-family:var(--serif);font-weight:400;font-size:17px;letter-spacing:-.01em}
+.hub small{display:block;font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+
+/* ---------- responsive: en mobile la app ocupa todo ---------- */
+@media (max-width:900px){
+  .stage{display:block}
+  .stage-note{display:none}
+  #ambient{display:none}
+  .stage::after{display:none}
+  .device{
+    width:100%;height:100%;height:100dvh;
+    padding:0;border-radius:0;box-shadow:none;background:var(--night);
+  }
+  .screen{border-radius:0}
+  .notch{display:none}
+  .statusbar{display:none}
+  .view{padding-top:env(safe-area-inset-top,0px)}
+  .vhead{padding-top:calc(24px + env(safe-area-inset-top,0px))}
+  .backbar{padding-top:calc(16px + env(safe-area-inset-top,0px))}
+  .map-top{top:calc(16px + env(safe-area-inset-top,0px))}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+
+<div class="stage">
+  <canvas id="ambient" aria-hidden="true" style="display:none"></canvas>
+  <aside class="stage-note">
+    <p class="eyebrow">Prototipo · Diseño Gráfico 3</p>
+    <h1>Thays, la app del <em>Jardín Botánico</em> de Buenos Aires</h1>
+    <p>Prototipo navegable de alta fidelidad. Mapa interactivo, 19 fichas técnicas, 5 recorridos guiados, juego de identificación, galería y agenda.</p>
+    <p>Los datos botánicos, horarios, esculturas y programas son reales. Las imágenes son composiciones generadas en el navegador: en producción se reemplazan por fotografía del archivo del Jardín.</p>
+    <div class="keyhint">
+      <div><kbd>Tab</kbd> recorré la interfaz con teclado</div>
+      <div><kbd>Esc</kbd> cerrar panel abierto</div>
+      <div>Abrilo en el celular y ocupa toda la pantalla</div>
+    </div>
+  </aside>
+
+  <div class="device">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="statusbar">
+        <span id="clock">10:24</span>
+        <span class="sb-r" aria-hidden="true">
+          <span class="sb-bar" style="height:5px"></span>
+          <span class="sb-bar" style="height:8px"></span>
+          <span class="sb-bar" style="height:11px"></span>
+          <svg width="15" height="11" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="18" height="10" rx="3"/><rect x="3" y="5" width="13" height="6" rx="1.5" fill="currentColor" stroke="none"/><path d="M21 6.5v3"/></svg>
+        </span>
+      </div>
+
+      <div class="app">
+        <div class="views" id="views"></div>
+
+        <nav class="tabbar" id="tabbar" aria-label="Navegación principal"></nav>
+
+        <div class="runner" id="runner"></div>
+        <div class="toast" id="toast" role="status"></div>
+      </div>
+
+      <div class="sheet-scrim" id="scrim"></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Detalle"></div>
+      <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto"></div>
+    </div>
+  </div>
+
+  <aside class="stage-note right">
+    <p class="eyebrow">Qué incluye</p>
+    <p><strong style="color:var(--text);font-weight:600">Imprescindible</strong><br>Mapa interactivo · Fichas técnicas · Recorridos guiados</p>
+    <p style="margin-top:14px"><strong style="color:var(--text);font-weight:600">Deseable</strong><br>Armá tu planta · Galería del feed · Puntos de interés · Actividades y voluntariado</p>
+    <div class="keyhint" style="margin-top:20px">
+      <div><span class="legend-swatch" style="background:#F0709B"></span> Palo borracho — acento primario</div>
+      <div><span class="legend-swatch" style="background:#E8B24C"></span> Tipa e ibirá pitá — secundario</div>
+      <div><span class="legend-swatch" style="background:#7ED8C3"></span> Vidrio del invernáculo — interacción</div>
+      <div><span class="legend-swatch" style="background:#DED6C6"></span> Mármol — patrimonio</div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* ============================================================
+   1. DATOS — botánica, patrimonio y programación reales del
+   Jardín Botánico Carlos Thays (Palermo, CABA).
+   ============================================================ */
+
+const MESES = ["E","F","M","A","M","J","J","A","S","O","N","D"];
+const MESES_L = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+const SECTORES = [
+  {id:"frances",  nom:"Jardín Francés",              x:400, y:190, rx:95, ry:55, rot:0,   c:"#6E8F72"},
+  {id:"casona",   nom:"Casona y Museo",              x:275, y:320, rx:80, ry:48, rot:-8,  c:"#8A7A63"},
+  {id:"invern",   nom:"Invernáculos",                x:520, y:320, rx:75, ry:48, rot:6,   c:"#5E9A8C"},
+  {id:"romano",   nom:"Jardín Romano",               x:185, y:460, rx:80, ry:48, rot:-6,  c:"#7C8A6A"},
+  {id:"argentina",nom:"Argentina y el Litoral",      x:400, y:460, rx:88, ry:50, rot:0,   c:"#4F8A63"},
+  {id:"mariposas",nom:"Jardín de Mariposas",         x:615, y:460, rx:70, ry:46, rot:8,   c:"#9A6E86"},
+  {id:"america",  nom:"América",                     x:175, y:600, rx:80, ry:48, rot:4,   c:"#55876F"},
+  {id:"yerbal",   nom:"Yerbal de Thays",             x:395, y:600, rx:80, ry:48, rot:0,   c:"#568A55"},
+  {id:"asia",     nom:"Asia",                        x:595, y:600, rx:78, ry:48, rot:-5,  c:"#6C8496"},
+  {id:"europa",   nom:"Europa",                      x:200, y:730, rx:78, ry:46, rot:-4,  c:"#7A8A7E"},
+  {id:"utiles",   nom:"Plantas útiles",              x:400, y:730, rx:80, ry:46, rot:0,   c:"#8C8352"},
+  {id:"oceania",  nom:"Oceanía",                     x:585, y:730, rx:75, ry:46, rot:5,   c:"#5F8280"},
+  {id:"africa",   nom:"África",                      x:300, y:845, rx:85, ry:40, rot:-3,  c:"#8A7455"},
+  {id:"escuela",  nom:"Escuela de Jardinería",       x:500, y:845, rx:85, ry:40, rot:2,   c:"#6E7A88"}
+];
+const secNom = id => (SECTORES.find(s=>s.id===id)||{}).nom || "—";
+
+/* floracion: índices de mes (0 = enero) */
+const ESPECIES = [
+  {id:"palo-borracho", nom:"Palo borracho rosado", bin:"Ceiba speciosa", fam:"Malvaceae",
+   origen:"Nordeste argentino, sur de Brasil y Paraguay", alt:"hasta 25 m", sector:"america", x:175, y:585,
+   flor:[10,11,0,1,2], color:"rosa", hoja:"palmeada", tronco:"abultado", habitat:"selva",
+   desc:"El árbol más fotografiado del Jardín. Su tronco se ensancha en forma de botella para almacenar agua y está cubierto de aguijones cónicos que lo defienden de los herbívoros. Cuando pierde las hojas, a fines del verano, se cubre entero de flores rosadas de cinco pétalos.",
+   dato:"Los frutos se abren y liberan una fibra sedosa llamada paina, que se usó para rellenar almohadas y salvavidas.",
+   usos:"Ornamental, fibra textil (paina), madera liviana", conserva:"Preocupación menor"},
+
+  {id:"jacaranda", nom:"Jacarandá", bin:"Jacaranda mimosifolia", fam:"Bignoniaceae",
+   origen:"Yungas del noroeste argentino", alt:"15 a 18 m", sector:"argentina", x:385, y:452,
+   flor:[10,11], color:"violeta", hoja:"compuesta", tronco:"recto", habitat:"selva",
+   desc:"Follaje plumoso, semipersistente, y una floración violeta que en noviembre tiñe la ciudad entera. Es árbol distintivo de Buenos Aires desde 2014: hay más de 11.000 ejemplares en el arbolado porteño.",
+   dato:"Aunque se lo asocia a Buenos Aires, es nativo de las Yungas de Tucumán, Salta y Jujuy. Thays fue quien lo trajo masivamente a la ciudad.",
+   usos:"Ornamental, arbolado urbano, madera liviana", conserva:"Vulnerable en su hábitat nativo"},
+
+  {id:"tipa", nom:"Tipa blanca", bin:"Tipuana tipu", fam:"Fabaceae",
+   origen:"Yungas de Tucumán, Salta y Jujuy", alt:"más de 20 m", sector:"argentina", x:435, y:492,
+   flor:[10,11], color:"amarilla", hoja:"compuesta", tronco:"recto", habitat:"selva",
+   desc:"Copa amplia y aparasolada, ideal para dar sombra. Florece amarillo a fines de la primavera y sus frutos alados giran como hélices al caer.",
+   dato:"Carlos Thays la describió como el árbol «que reúne el mayor número de cualidades de primer orden» para el arbolado de Buenos Aires.",
+   usos:"Sombra, arbolado urbano, madera para carpintería", conserva:"Preocupación menor"},
+
+  {id:"ombu", nom:"Ombú", bin:"Phytolacca dioica", fam:"Phytolaccaceae",
+   origen:"Pampa, Uruguay, sur de Brasil y Paraguay", alt:"7 a 12 m", sector:"argentina", x:340, y:490,
+   flor:[10,11,0], color:"blanca", hoja:"simple", tronco:"abultado", habitat:"pampa",
+   desc:"No es un árbol: es una hierba gigante. Su tronco no tiene anillos de crecimiento ni madera verdadera, sino tejido blando y esponjoso lleno de agua. Por eso no sirve para leña y por eso mismo resiste el fuego.",
+   dato:"Es dioico: hay ejemplares macho y hembra. Solo las hembras dan los racimos de frutos verdes.",
+   usos:"Sombra, ornamental de parques. No apto para veredas", conserva:"Preocupación menor"},
+
+  {id:"lapacho", nom:"Lapacho rosado", bin:"Handroanthus impetiginosus", fam:"Bignoniaceae",
+   origen:"Selva tucumano-oranense y Chaco húmedo", alt:"hasta 20 m", sector:"argentina", x:400, y:425,
+   flor:[7,8], color:"rosa", hoja:"palmeada", tronco:"recto", habitat:"selva",
+   desc:"Florece a comienzos de la primavera, todavía sin hojas: el árbol queda completamente rosado durante dos o tres semanas y después se cubre de verde.",
+   dato:"Su madera es tan dura y pesada que se hunde en el agua. Se usó para durmientes de ferrocarril y pisos.",
+   usos:"Ornamental, madera dura, corteza medicinal", conserva:"Casi amenazado por extracción de madera"},
+
+  {id:"ceibo", nom:"Ceibo", bin:"Erythrina crista-galli", fam:"Fabaceae",
+   origen:"Litoral argentino, Uruguay, sur de Brasil", alt:"5 a 10 m", sector:"argentina", x:300, y:552,
+   flor:[9,10,11,0,1], color:"roja", hoja:"compuesta", tronco:"multiple", habitat:"humedal",
+   desc:"Flor nacional argentina desde 1942. Crece en las orillas de ríos y bañados, con el tronco tortuoso y varias ramas principales desde la base. Las flores rojas cuelgan en racimos y son polinizadas por picaflores.",
+   dato:"El nombre científico crista-galli significa «cresta de gallo», por la forma del pétalo mayor.",
+   usos:"Ornamental, flor nacional, corteza medicinal", conserva:"Preocupación menor"},
+
+  {id:"ginkgo", nom:"Ginkgo", bin:"Ginkgo biloba", fam:"Ginkgoaceae",
+   origen:"China", alt:"hasta 25 m", sector:"asia", x:590, y:582,
+   flor:[], color:"sin flor", hoja:"abanico", tronco:"recto", habitat:"asia",
+   desc:"Un fósil viviente: el único sobreviviente de un grupo de plantas que dominó el planeta hace 270 millones de años. Sus hojas en forma de abanico se vuelven amarillo oro en otoño y caen casi todas el mismo día.",
+   dato:"Seis ginkgos sobrevivieron a la bomba de Hiroshima a menos de dos kilómetros del epicentro y siguen vivos.",
+   usos:"Ornamental, medicinal, arbolado urbano", conserva:"En peligro en estado silvestre"},
+
+  {id:"araucaria", nom:"Araucaria de Bidwill", bin:"Araucaria bidwillii", fam:"Araucariaceae",
+   origen:"Queensland, Australia", alt:"hasta 35 m", sector:"oceania", x:572, y:712,
+   flor:[], color:"sin flor", hoja:"escamosa", tronco:"recto", habitat:"oceania",
+   desc:"Conífera de silueta inconfundible, con ramas dispuestas en pisos regulares y hojas rígidas y punzantes. Sus conos pueden pesar diez kilos.",
+   dato:"Los aborígenes australianos organizaban grandes encuentros cada tres años, cuando el árbol fructificaba, para comer sus semillas.",
+   usos:"Ornamental de gran porte, semillas comestibles", conserva:"Preocupación menor"},
+
+  {id:"cipres-calvo", nom:"Ciprés calvo", bin:"Taxodium distichum", fam:"Cupressaceae",
+   origen:"Sureste de los Estados Unidos", alt:"hasta 30 m", sector:"america", x:210, y:632,
+   flor:[], color:"sin flor", hoja:"acicular", tronco:"tablar", habitat:"humedal",
+   desc:"Una de las poquísimas coníferas de hoja caduca: en otoño sus acículas se vuelven color canela y caen. Vive en pantanos y emite del suelo unos apéndices leñosos llamados neumatóforos, que le permiten respirar cuando las raíces están anegadas.",
+   dato:"Se conocen ejemplares silvestres de más de 2.600 años.",
+   usos:"Madera imputrescible, ornamental de zonas húmedas", conserva:"Preocupación menor"},
+
+  {id:"ibira-pita", nom:"Ibirá pitá", bin:"Peltophorum dubium", fam:"Fabaceae",
+   origen:"Selva en galería del noreste argentino, Brasil, Paraguay", alt:"hasta 30 m", sector:"yerbal", x:408, y:588,
+   flor:[11,0,1], color:"amarilla", hoja:"compuesta", tronco:"recto", habitat:"selva",
+   desc:"Árbol majestuoso de follaje verde profundo y brillante. En verano se cubre de grandes panículas de flores amarillas que se ven desde lejos.",
+   dato:"Su nombre en guaraní significa «árbol colorado», por el tono rojizo de la madera.",
+   usos:"Sombra, madera de construcción, ornamental", conserva:"Preocupación menor"},
+
+  {id:"yerba-mate", nom:"Yerba mate", bin:"Ilex paraguariensis", fam:"Aquifoliaceae",
+   origen:"Selva paranaense: Misiones, Paraguay, sur de Brasil", alt:"6 a 8 m", sector:"yerbal", x:372, y:625,
+   flor:[9,10], color:"blanca", hoja:"simple", tronco:"recto", habitat:"selva",
+   desc:"El yerbal del Jardín no es decorativo: es un sitio histórico. Acá Carlos Thays reprodujo el método de germinación de la yerba mate, sumergiendo las semillas en agua a temperatura elevada para romper su latencia.",
+   dato:"Ese hallazgo, publicado en 1898, hizo posible el cultivo sistemático de la yerba en Misiones y transformó la economía del noreste argentino.",
+   usos:"Infusión, industria yerbatera, medicinal", conserva:"Preocupación menor"},
+
+  {id:"liquidambar", nom:"Liquidámbar", bin:"Liquidambar styraciflua", fam:"Altingiaceae",
+   origen:"Este de América del Norte y América Central", alt:"12 a 15 m", sector:"america", x:145, y:552,
+   flor:[], color:"sin flor", hoja:"palmeada", tronco:"recto", habitat:"norteamerica",
+   desc:"Copa piramidal y hojas de cinco lóbulos, parecidas a una estrella. Es el mejor árbol de otoño del Jardín: vira del verde al púrpura y al escarlata en pocas semanas.",
+   dato:"Su resina aromática, el estoraque, se usó durante siglos en perfumería y como bálsamo.",
+   usos:"Ornamental, resina aromática, madera", conserva:"Preocupación menor"},
+
+  {id:"crespon", nom:"Crespón", bin:"Lagerstroemia indica", fam:"Lythraceae",
+   origen:"China y norte de Australia", alt:"4 a 7 m", sector:"asia", x:625, y:618,
+   flor:[11,0,1,2], color:"rosa", hoja:"simple", tronco:"exfoliante", habitat:"asia",
+   desc:"Árbol chico de tronco liso color canela que se descascara en placas, dejando la superficie sedosa al tacto. Florece todo el verano en racimos de pétalos arrugados como papel crepé, de donde viene su nombre.",
+   dato:"En el clima húmedo porteño es propenso al oídio, un hongo blanquecino que le cubre las hojas.",
+   usos:"Ornamental de veredas y patios", conserva:"Preocupación menor"},
+
+  {id:"gomero", nom:"Gomero", bin:"Ficus macrophylla", fam:"Moraceae",
+   origen:"Este de Australia", alt:"hasta 30 m", sector:"oceania", x:605, y:748,
+   flor:[], color:"sin flor", hoja:"simple", tronco:"tablar", habitat:"oceania",
+   desc:"Hojas coriáceas y brillantes, y raíces tablares que emergen del suelo como paredes. En su hábitat empieza su vida como epífito sobre otro árbol y termina estrangulándolo.",
+   dato:"Cada especie de Ficus es polinizada por una única especie de avispa diminuta que entra al fruto para poner sus huevos.",
+   usos:"Sombra en grandes parques. No apto para veredas", conserva:"Preocupación menor"},
+
+  {id:"platano", nom:"Plátano", bin:"Platanus × acerifolia", fam:"Platanaceae",
+   origen:"Híbrido cultivado, difundido en Europa desde el siglo XVII", alt:"18 a 25 m", sector:"europa", x:212, y:742,
+   flor:[], color:"sin flor", hoja:"palmeada", tronco:"exfoliante", habitat:"norteamerica",
+   desc:"La corteza se desprende en placas y deja un tronco jaspeado en gris, verde y crema. Tolera la poda drástica y la contaminación como pocos árboles, por eso llenó las calles de las ciudades del siglo XX.",
+   dato:"Su pelusa y su polen lo hicieron impopular: hoy se lo acusa de alergógeno y ya casi no se planta en veredas nuevas.",
+   usos:"Arbolado urbano, sombra, absorción de contaminantes", conserva:"Preocupación menor"},
+
+  {id:"magnolia", nom:"Magnolia", bin:"Magnolia grandiflora", fam:"Magnoliaceae",
+   origen:"Sureste de los Estados Unidos", alt:"hasta 20 m", sector:"america", x:196, y:545,
+   flor:[10,11,0], color:"blanca", hoja:"simple", tronco:"recto", habitat:"norteamerica",
+   desc:"Hojas gruesas, oscuras y lustrosas por el haz, con el envés cubierto de una pelusa ferruginosa. Sus flores blancas miden hasta 25 cm y perfuman a varios metros.",
+   dato:"Las magnolias aparecieron antes que las abejas: sus flores robustas evolucionaron para ser polinizadas por escarabajos.",
+   usos:"Ornamental, perfumería, madera", conserva:"Preocupación menor"},
+
+  {id:"helecho", nom:"Helecho arborescente", bin:"Dicksonia sellowiana", fam:"Dicksoniaceae",
+   origen:"Selva atlántica y Yungas", alt:"hasta 6 m", sector:"invern", x:505, y:312,
+   flor:[], color:"sin flor", hoja:"compuesta", tronco:"recto", habitat:"selva",
+   desc:"Uno de los habitantes del Invernáculo N.º 1. No tiene tronco leñoso: lo que parece tronco es una columna formada por las bases de las hojas viejas y por raíces adventicias. Se reproduce por esporas, no por semillas.",
+   dato:"El invernáculo alberga doce especies de helechos entre sus 2.500 plantas tropicales.",
+   usos:"Ornamental de interior húmedo. Especie protegida", conserva:"Amenazado por extracción"},
+
+  {id:"bromelia", nom:"Bromelia", bin:"Aechmea fasciata", fam:"Bromeliaceae",
+   origen:"Selva atlántica de Brasil", alt:"40 a 60 cm", sector:"invern", x:542, y:334,
+   flor:[1,2,3], color:"rosa", hoja:"simple", tronco:"multiple", habitat:"selva",
+   desc:"Epífita: vive sobre las ramas de otros árboles sin parasitarlos. Sus hojas forman una roseta que retiene agua de lluvia en el centro, un micro-estanque donde viven insectos, ranas y larvas.",
+   dato:"La inflorescencia rosada dura hasta seis meses; las flores azules verdaderas, apenas unos días.",
+   usos:"Ornamental de interior, colección de invernáculo", conserva:"Preocupación menor"},
+
+  {id:"aguaribay", nom:"Aguaribay", bin:"Schinus areira", fam:"Anacardiaceae",
+   origen:"Valles áridos del noroeste argentino y los Andes centrales", alt:"6 a 10 m", sector:"utiles", x:395, y:726,
+   flor:[10,11], color:"blanca", hoja:"compuesta", tronco:"recto", habitat:"pampa",
+   desc:"De ramas colgantes y follaje fino y aromático. Sus frutos son bolitas rosadas que se venden como «pimienta rosa». Resiste sequía, salinidad y viento.",
+   dato:"En la medicina tradicional andina sus hojas se usan como antiséptico; el olor característico proviene de resinas volátiles.",
+   usos:"Pimienta rosa, medicinal, cortina forestal", conserva:"Preocupación menor"}
+];
+const espById = id => ESPECIES.find(e=>e.id===id);
+
+const POIS = [
+  {id:"invernaculo1", nom:"Invernáculo N.º 1", tipo:"Patrimonio", x:520, y:298, kind:"glass",
+   desc:"Estructura art nouveau de hierro y vidrio, de 35 metros de largo por 8 de ancho. Fue exhibida y premiada en la Exposición Universal de París de 1889 y llegó a Buenos Aires en 1897. Es el único de los cinco invernáculos abierto al público.",
+   dato:"Alberga unas 2.500 plantas tropicales y subtropicales: bromeliáceas, helechos y monocotiledóneas."},
+  {id:"casona", nom:"Casona y Museo Botánico", tipo:"Patrimonio", x:272, y:316, kind:"marble",
+   desc:"Casona de estilo inglés en ladrillo rojo, diseñada por el ingeniero Jordan Wysocki y construida en 1881. Fue sede del Departamento Nacional de Agricultura y del Museo Histórico Nacional antes de que Thays viviera en ella durante su gestión.",
+   dato:"Hoy funciona como centro de visitantes, administración y biblioteca botánica."},
+  {id:"columna", nom:"Columna Meteorológica", tipo:"Patrimonio", x:418, y:242, kind:"marble",
+   desc:"Monumento en forma de obelisco coronado por una esfera armilar, donado por el Imperio austrohúngaro en 1910 para el Centenario de la Revolución de Mayo.",
+   dato:"Integraba una red internacional de columnas meteorológicas instaladas en capitales de todo el mundo."},
+  {id:"ondina", nom:"Ondina del Plata", tipo:"Escultura", x:448, y:166, kind:"marble",
+   desc:"Mármol de Lucio Correa Morales, uno de los primeros escultores argentinos profesionales. Corona la fuente conocida como «La Primavera».",
+   dato:"Las ondinas son ninfas del agua en la mitología europea; Correa Morales la trasladó al Río de la Plata."},
+  {id:"loba", nom:"Loba Capitolina", tipo:"Escultura", x:348, y:224, kind:"marble",
+   desc:"Reproducción en bronce de la loba que amamanta a Rómulo y Remo, donada por el rey Vittorio Emanuele III de Italia.",
+   dato:"Marca el ingreso al Jardín Romano, plantado con las especies que Plinio el Joven tenía en su villa."},
+  {id:"primeros-frios", nom:"Los primeros fríos", tipo:"Escultura", x:462, y:206, kind:"marble",
+   desc:"Mármol del catalán Miguel Blay y Fábrega: un anciano abriga a una niña con su capa. Es una de las piezas más queridas del Jardín.",
+   dato:"Forma parte de un conjunto de más de treinta obras de arte distribuidas entre los canteros."},
+  {id:"saturnalia", nom:"Saturnalia", tipo:"Escultura", x:248, y:398, kind:"marble",
+   desc:"Réplica en bronce de la obra de Ernesto Biondi. Representa una procesión de romanos ebrios volviendo de las fiestas saturnales.",
+   dato:"El original en mármol se exhibió en la Exposición Universal de París de 1900."},
+  {id:"sinfonia", nom:"Sinfonía Pastoral", tipo:"Escultura", x:648, y:512, kind:"marble",
+   desc:"Conjunto escultórico en mármol de Leone Tommasi. Cada figura representa un movimiento de la Sexta Sinfonía de Beethoven.",
+   dato:"Es el conjunto escultórico más extenso del Jardín."},
+  {id:"mariposas", nom:"Jardín de Mariposas", tipo:"Naturaleza", x:612, y:458, kind:"bloom",
+   desc:"Espacio a cielo abierto plantado con especies nutricias y nectaríferas, pensado para que las mariposas completen su ciclo de vida completo: huevo, oruga, crisálida y adulto.",
+   dato:"No es un mariposario cerrado: las mariposas entran y salen libremente."},
+  {id:"biblioteca", nom:"Biblioteca Infantil de la Naturaleza", tipo:"Servicio", x:302, y:348, kind:"marble",
+   desc:"Inaugurada en septiembre de 2012, reúne unos 1.000 libros de literatura infantil orientados a la divulgación científica.",
+   dato:"Abre sábados, domingos y feriados por la tarde."},
+  {id:"gatos", nom:"Los gatos del Botánico", tipo:"Naturaleza", x:472, y:658, kind:"canopy",
+   desc:"Una colonia felina histórica, hoy censada, castrada y cuidada por voluntarios. Son parte de la identidad del lugar desde hace décadas.",
+   dato:"Está prohibido alimentarlos por fuera de los puestos habilitados: la dieta descontrolada les hace mal y atrae fauna no deseada."},
+  {id:"jardin-romano", nom:"Jardín Romano", tipo:"Sector", x:182, y:458, kind:"canopy",
+   desc:"Recrea el jardín de la villa de Plinio el Joven con las especies que él mismo describió en sus cartas: cipreses, álamos, laureles y mirtos.",
+   dato:"Thays lo diseñó como una lección de historia botánica al aire libre."},
+  {id:"jardin-frances", nom:"Jardín Francés", tipo:"Sector", x:400, y:188, kind:"bloom",
+   desc:"Trazado simétrico de canteros geométricos inspirado en los jardines de Versalles. Es la primera imagen que recibe a quien entra por Plaza Italia.",
+   dato:"Thays se formó en Francia con Édouard André, discípulo directo de la tradición paisajista de Le Nôtre."},
+  {id:"refugio", nom:"Refugio climático", tipo:"Naturaleza", x:482, y:562, kind:"canopy",
+   desc:"En marzo de 2023 el Jardín fue designado primer refugio climático de Buenos Aires. Bajo su dosel se registran temperaturas hasta 4,8 °C menores que en las calles que lo rodean.",
+   dato:"El efecto se debe a la sombra, la evapotranspiración de las hojas y la permeabilidad del suelo."},
+  {id:"escuela", nom:"Escuela de Jardinería Hicken", tipo:"Patrimonio", x:500, y:842, kind:"canopy",
+   desc:"Escuela Técnica de Jardinería «Cristóbal María Hicken», incorporada al Jardín entre 1914 y 1918 bajo la dirección de Benito Javier Carrasco, sucesor de Thays.",
+   dato:"Sigue formando jardineros y paisajistas más de un siglo después."}
+];
+const poiById = id => POIS.find(p=>p.id===id);
+
+const SERVICIOS = [
+  {id:"e-plaza", nom:"Acceso Plaza Italia", tipo:"Acceso", x:415, y:90},
+  {id:"e-santafe", nom:"Acceso Av. Santa Fe", tipo:"Acceso", x:672, y:432},
+  {id:"e-lasheras", nom:"Acceso Av. Las Heras", tipo:"Acceso", x:104, y:592},
+  {id:"banos", nom:"Baños", tipo:"Servicio", x:330, y:372},
+  {id:"agua", nom:"Bebedero", tipo:"Servicio", x:452, y:620},
+  {id:"info", nom:"Punto de información", tipo:"Servicio", x:392, y:300}
+];
+
+const RECORRIDOS = [
+  {id:"primera-vez", nom:"Primera vez en el Jardín", min:45, km:1.2, dif:"Fácil", kind:"canopy",
+   res:"Lo esencial en una vuelta: el Jardín Francés, el invernáculo art nouveau, la casona de Thays y los árboles que definen a Buenos Aires.",
+   path:"M415,110 C412,170 404,190 400,215 C394,255 350,285 300,318 C270,338 262,395 250,430 C238,470 300,470 355,462 C400,456 402,500 400,545 C398,590 420,600 470,620 C520,640 545,600 560,560 C580,505 600,480 615,462 C640,440 660,445 672,432",
+   paradas:[
+     {ref:"poi:jardin-frances", txt:"Empezá por el trazado simétrico que abre el Jardín desde Plaza Italia."},
+     {ref:"poi:ondina", txt:"La fuente La Primavera y su ninfa de mármol."},
+     {ref:"poi:invernaculo1", txt:"Entrá al invernáculo premiado en París en 1889."},
+     {ref:"poi:casona", txt:"La casona de ladrillo donde vivió Carlos Thays."},
+     {ref:"poi:saturnalia", txt:"La procesión de bronce de Ernesto Biondi."},
+     {ref:"esp:jacaranda", txt:"El árbol distintivo de la ciudad, en su sector nativo."},
+     {ref:"esp:ombu", txt:"La hierba gigante que todos creen árbol."},
+     {ref:"poi:refugio", txt:"Sentí la diferencia de temperatura bajo el dosel."},
+     {ref:"poi:mariposas", txt:"Cerrá en el jardín de mariposas antes de salir por Santa Fe."}
+   ]},
+
+  {id:"arboles-ciudad", nom:"Árboles de mi Ciudad", min:40, km:1.0, dif:"Fácil", kind:"path",
+   res:"El sendero real del Jardín: doce especies que forman el arbolado porteño, con sus virtudes y sus problemas urbanos.",
+   path:"M415,110 C410,200 396,300 400,425 C404,470 380,490 340,490 C300,490 280,520 300,552 C320,585 200,560 175,585 C150,610 190,640 210,632 C240,620 300,700 212,742 C180,760 300,780 395,726 C450,695 560,740 605,748",
+   paradas:[
+     {ref:"esp:lapacho", txt:"Floración rosa a fines del invierno, sin una sola hoja."},
+     {ref:"esp:tipa", txt:"La favorita de Thays para dar sombra en la ciudad."},
+     {ref:"esp:jacaranda", txt:"Árbol distintivo de Buenos Aires desde 2014."},
+     {ref:"esp:ombu", txt:"Solo para parques: en vereda es imposible."},
+     {ref:"esp:ceibo", txt:"Flor nacional, de ribera y bañado."},
+     {ref:"esp:palo-borracho", txt:"Tronco botella y aguijones."},
+     {ref:"esp:cipres-calvo", txt:"Conífera caduca con neumatóforos."},
+     {ref:"esp:platano", txt:"El que llenó las calles del siglo XX y hoy retrocede."},
+     {ref:"esp:aguaribay", txt:"Resiste sequía, sal y viento."},
+     {ref:"esp:gomero", txt:"Raíces tablares: el enemigo de las veredas."}
+   ]},
+
+  {id:"thays", nom:"Thays y el jardín que soñó", min:50, km:1.1, dif:"Fácil", kind:"marble",
+   res:"La historia del paisajista francés que diseñó el Jardín, plantó Buenos Aires y descubrió cómo germinar la yerba mate.",
+   path:"M415,110 C412,180 420,220 418,242 C414,275 340,300 272,316 C240,325 260,380 250,430 C240,480 320,470 400,460 C440,455 400,540 395,600 C392,640 372,625 372,625 C372,625 440,700 500,842",
+   paradas:[
+     {ref:"poi:jardin-frances", txt:"1898: la escuela paisajista francesa aterriza en Palermo."},
+     {ref:"poi:columna", txt:"Regalo del Imperio austrohúngaro para el Centenario."},
+     {ref:"poi:casona", txt:"Su casa y su oficina durante veintidós años de gestión."},
+     {ref:"poi:jardin-romano", txt:"Una lección de historia botánica al aire libre."},
+     {ref:"esp:jacaranda", txt:"Thays trajo el jacarandá de las Yungas a la ciudad."},
+     {ref:"esp:yerba-mate", txt:"El yerbal donde resolvió la germinación en 1898."},
+     {ref:"poi:escuela", txt:"La escuela de jardinería que continuó su obra."}
+   ]},
+
+  {id:"marmoles", nom:"Mármoles bajo los árboles", min:35, km:0.8, dif:"Fácil", kind:"marble",
+   res:"Más de treinta obras conviven con las colecciones botánicas. Este recorrido visita las siete imprescindibles.",
+   path:"M415,110 C440,140 448,166 448,166 C450,190 470,200 462,206 C440,215 370,220 348,224 C330,228 420,238 418,242 C412,280 300,360 248,398 C220,420 400,450 500,470 C580,486 630,500 648,512",
+   paradas:[
+     {ref:"poi:ondina", txt:"Lucio Correa Morales, mármol, fuente La Primavera."},
+     {ref:"poi:primeros-frios", txt:"Miguel Blay: el anciano que abriga a la niña."},
+     {ref:"poi:loba", txt:"Bronce donado por Vittorio Emanuele III."},
+     {ref:"poi:columna", txt:"Obelisco con esfera armilar, 1910."},
+     {ref:"poi:saturnalia", txt:"Réplica en bronce de Ernesto Biondi."},
+     {ref:"poi:sinfonia", txt:"Leone Tommasi y la Sexta de Beethoven."}
+   ]},
+
+  {id:"familia", nom:"Expedición botánica en familia", min:30, km:0.7, dif:"Con chicos", kind:"bloom",
+   res:"Cinco misiones para hacer con chicos desde 5 años: buscar, oler, contar y descubrir. Inspirado en las Expediciones Botánicas de los sábados y domingos.",
+   path:"M415,110 C420,200 520,260 520,298 C520,340 505,312 505,312 C505,340 480,420 612,458 C640,466 500,540 482,562 C460,590 470,650 472,658 C474,680 350,760 302,348",
+   paradas:[
+     {ref:"poi:invernaculo1", txt:"Misión 1: encontrá tres helechos distintos adentro."},
+     {ref:"esp:bromelia", txt:"Misión 2: buscá el charquito de agua en el centro de la planta."},
+     {ref:"poi:mariposas", txt:"Misión 3: seguí una mariposa sin espantarla."},
+     {ref:"esp:palo-borracho", txt:"Misión 4: contá los aguijones de un solo cuadradito de tronco."},
+     {ref:"poi:gatos", txt:"Misión 5: encontrá un gato durmiendo, y dejalo dormir."},
+     {ref:"poi:biblioteca", txt:"Cierre: un cuento en la Biblioteca Infantil de la Naturaleza."}
+   ]}
+];
+
+const GALERIA = [
+  {id:"g1", cap:"El invernáculo a primera hora, antes de que abra al público.", tag:"invernaculo", kind:"glass", likes:1842},
+  {id:"g2", cap:"Noviembre. El jacarandá hace lo suyo.", tag:"floracion", kind:"bloom", likes:3210, hue:270},
+  {id:"g3", cap:"Los primeros fríos, de Miguel Blay, bajo la llovizna.", tag:"esculturas", kind:"marble", likes:967},
+  {id:"g4", cap:"Detalle de la corteza del plátano.", tag:"arboles", kind:"canopy", likes:604},
+  {id:"g5", cap:"Palo borracho en flor sobre el sendero de América.", tag:"floracion", kind:"bloom", likes:2755, hue:335},
+  {id:"g6", cap:"Uno de los gatos del Botánico eligió el mármol tibio.", tag:"gatos", kind:"marble", likes:5108},
+  {id:"g7", cap:"Bromelias epífitas, colección del Invernáculo N.º 1.", tag:"invernaculo", kind:"glass", likes:1120},
+  {id:"g8", cap:"Otoño en el liquidámbar.", tag:"arboles", kind:"bloom", likes:1980, hue:20},
+  {id:"g9", cap:"Los canteros del Jardín Francés desde arriba.", tag:"sectores", kind:"path", likes:1436},
+  {id:"g10", cap:"Mariposa monarca sobre asclepias.", tag:"mariposas", kind:"bloom", likes:2402, hue:30},
+  {id:"g11", cap:"Ginkgo biloba: el amarillo dura dos semanas y se cae todo junto.", tag:"arboles", kind:"bloom", likes:1677, hue:48},
+  {id:"g12", cap:"Neumatóforos del ciprés calvo asomando del pasto.", tag:"arboles", kind:"canopy", likes:812},
+  {id:"g13", cap:"La Loba Capitolina custodia el Jardín Romano.", tag:"esculturas", kind:"marble", likes:733},
+  {id:"g14", cap:"Sendero de Asia después de la lluvia.", tag:"sectores", kind:"path", likes:1290}
+];
+
+const ACTIVIDADES = [
+  {d:"SÁB", n:6, nom:"Visita guiada general", hora:"10:30 y 15:00", cupo:"Sin inscripción previa",
+   desc:"Recorrido con guías del Jardín por las colecciones principales y el patrimonio escultórico.", tipo:"Visita"},
+  {d:"SÁB", n:6, nom:"Expedición Botánica en Familia", hora:"15:30 a 18:00", cupo:"Desde 5 años, con adultos",
+   desc:"Desafíos y misiones para explorar, aprender y descubrir. Se realiza de octubre a abril.", tipo:"Familias"},
+  {d:"SÁB", n:6, nom:"Biblioteca Infantil de la Naturaleza", hora:"14:30 a 17:30", cupo:"Entrada libre",
+   desc:"Mil libros de literatura infantil orientados a la divulgación científica.", tipo:"Lectura"},
+  {d:"DOM", n:7, nom:"Visita guiada general", hora:"10:30 y 15:00", cupo:"Sin inscripción previa",
+   desc:"Mismo recorrido que los sábados. Se suspende por lluvia.", tipo:"Visita"},
+  {d:"DOM", n:7, nom:"Día Nacional de la Botánica", hora:"Todo el día", cupo:"Actividad especial",
+   desc:"Aniversario de la apertura del Jardín en 1898. Se conmemora cada 7 de septiembre.", tipo:"Especial"},
+  {d:"MAR", n:9, nom:"Taller de adultos: huerta urbana", hora:"10:00 a 12:00", cupo:"Inscripción por mail",
+   desc:"Ciclo de talleres de la Asociación Amigos del Jardín Botánico. Consultas a talleresaajb@gmail.com.", tipo:"Taller"},
+  {d:"JUE", n:11, nom:"Ciencia ciudadana con iNaturalist", hora:"11:00 a 13:00", cupo:"Traé tu celular",
+   desc:"Salida de registro fotográfico de fauna y flora para cargar observaciones a la plataforma.", tipo:"Ciencia"},
+  {d:"SÁB", n:13, nom:"Recorrido de floraciones de primavera", hora:"11:00", cupo:"Cupo limitado",
+   desc:"Visita temática por las especies en flor durante septiembre.", tipo:"Visita"}
+];
+
+const VOLUNTARIADOS = [
+  {id:"divulgadores", nom:"Divulgadores Botánicos", tag:"vidrio",
+   desc:"Acompañan a los visitantes en el recorrido y amplían la experiencia con información sobre las colecciones.",
+   req:"Mayor de edad · Disponibilidad de mañana · Capacitación previa"},
+  {id:"expedicion", nom:"Coordinación de Expediciones Botánicas", tag:"rosa",
+   desc:"Acompañan a familias con chicos a descubrir el Jardín a través de misiones y desafíos.",
+   req:"Mayor de edad · Fines de semana por la tarde · De octubre a abril"},
+  {id:"lazos", nom:"Lazos Huerteros", tag:"ambar",
+   desc:"Dan talleres a escuelas para acercar a las chicas y los chicos a las prácticas de siembra.",
+   req:"Mayor de edad · Días de semana · Interés en educación"}
+];
+
+/* ============================================================
+   2. IMÁGENES GENERADAS — composiciones atmosféricas dibujadas
+   en canvas. En producción se reemplazan por fotografía real
+   del archivo del Jardín.
+   ============================================================ */
+
+function hashStr(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function rng(seed){let a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+const MOODS = {
+  canopy:{sky:["#12251A","#050C08"], leaf:[["#1E4030",.9],["#2C5A3E",.75],["#3E7A52",.55]], glow:"#8FD6A8", petals:0},
+  bloom :{sky:["#22131C","#080C0A"], leaf:[["#1C3527",.85],["#2A4D36",.7],["#39674A",.5]], glow:"#F0709B", petals:34},
+  glass :{sky:["#0F2B28","#050F0E"], leaf:[["#17453E",.8],["#1F6155",.6],["#2E8577",.4]], glow:"#7ED8C3", petals:0, panes:true},
+  marble:{sky:["#1E2320","#07100B"], leaf:[["#242C26",.85],["#33403A",.6],["#4C5A50",.4]], glow:"#DED6C6", petals:0, stone:true},
+  path  :{sky:["#16241B","#060D09"], leaf:[["#1B3826",.85],["#28503A",.7],["#386C4C",.45]], glow:"#DED6C6", petals:0, trail:true}
+};
+
+function leafPath(ctx,x,y,len,wid,rot){
+  ctx.save();ctx.translate(x,y);ctx.rotate(rot);
+  ctx.beginPath();ctx.moveTo(0,0);
+  ctx.quadraticCurveTo(wid,-len*.45,0,-len);
+  ctx.quadraticCurveTo(-wid,-len*.45,0,0);
+  ctx.fill();ctx.restore();
+}
+
+function paintArt(cv){
+  const w=cv.clientWidth||cv.offsetWidth, h=cv.clientHeight||cv.offsetHeight;
+  if(!w||!h){requestAnimationFrame(()=>paintArt(cv));return;}
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  cv.width=w*dpr; cv.height=h*dpr;
+  const ctx=cv.getContext("2d"); ctx.scale(dpr,dpr);
+  const kind=cv.dataset.kind||"canopy";
+  const m=MOODS[kind]||MOODS.canopy;
+  const r=rng(hashStr(cv.dataset.seed||"x"));
+  const hue=cv.dataset.hue?+cv.dataset.hue:null;
+
+  // fondo
+  const g=ctx.createLinearGradient(0,0,w*.3,h);
+  g.addColorStop(0,m.sky[0]); g.addColorStop(1,m.sky[1]);
+  ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+
+  // claros de luz entre el follaje
+  ctx.globalCompositeOperation="lighter";
+  for(let i=0;i<7;i++){
+    const cx=r()*w, cy=r()*h*.75, rad=(28+r()*90)*(w/300);
+    const rg=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
+    rg.addColorStop(0,m.glow+"3A"); rg.addColorStop(1,m.glow+"00");
+    ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(cx,cy,rad,0,7); ctx.fill();
+  }
+  ctx.globalCompositeOperation="source-over";
+
+  // paneles de vidrio del invernáculo
+  if(m.panes){
+    ctx.strokeStyle="rgba(126,216,195,.16)"; ctx.lineWidth=1;
+    const step=w/7;
+    for(let i=0;i<=7;i++){ctx.beginPath();ctx.moveTo(i*step,0);ctx.lineTo(i*step-w*.12,h);ctx.stroke();}
+    for(let j=0;j<6;j++){const y=h*(j/5);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y*.94+h*.03);ctx.stroke();}
+  }
+  // volumen de piedra
+  if(m.stone){
+    const sx=w*(.28+r()*.35), sy=h*(.55+r()*.2), sr=Math.min(w,h)*(.30+r()*.14);
+    const sg=ctx.createRadialGradient(sx-sr*.35,sy-sr*.6,sr*.05,sx,sy,sr*1.5);
+    sg.addColorStop(0,"rgba(226,218,202,.55)"); sg.addColorStop(.55,"rgba(150,146,134,.28)"); sg.addColorStop(1,"rgba(150,146,134,0)");
+    ctx.fillStyle=sg; ctx.beginPath(); ctx.ellipse(sx,sy,sr*.62,sr,0,0,7); ctx.fill();
+  }
+  // sendero
+  if(m.trail){
+    ctx.fillStyle="rgba(214,205,186,.18)";
+    ctx.beginPath();
+    ctx.moveTo(w*.36,h); ctx.quadraticCurveTo(w*.48,h*.55,w*.52,h*.28);
+    ctx.lineTo(w*.60,h*.28); ctx.quadraticCurveTo(w*.66,h*.6,w*.80,h);
+    ctx.closePath(); ctx.fill();
+  }
+
+  // capas de follaje, del fondo al frente
+  m.leaf.forEach((layer,li)=>{
+    const [col,alpha]=layer;
+    const blur=(m.leaf.length-1-li)*3.2;
+    ctx.filter=blur>0?`blur(${blur}px)`:"none";
+    ctx.fillStyle=col; ctx.globalAlpha=alpha;
+    const n=Math.round((10+li*7)*(w*h)/48000)+8;
+    for(let i=0;i<n;i++){
+      const x=r()*w*1.15-w*.08;
+      const y=(li===0? r()*h*.6 : r()*h*1.1-h*.08);
+      const len=(16+r()*40)*(1+li*.35)*(w/300+.5);
+      leafPath(ctx,x,y,len,len*(.20+r()*.16),(r()-.5)*3.4);
+    }
+  });
+  ctx.filter="none"; ctx.globalAlpha=1;
+
+  // pétalos / flores
+  if(m.petals){
+    const base=hue!==null?hue:335;
+    for(let i=0;i<m.petals;i++){
+      const x=r()*w,y=r()*h,rad=(1.5+r()*4.5)*(w/300+.6);
+      ctx.globalAlpha=.28+r()*.5;
+      ctx.filter=r()>.62?"blur(2.5px)":"none";
+      ctx.fillStyle=`hsl(${base+(r()-.5)*26} ${58+r()*26}% ${62+r()*18}%)`;
+      ctx.beginPath();ctx.ellipse(x,y,rad,rad*.72,r()*3,0,7);ctx.fill();
+    }
+    ctx.filter="none"; ctx.globalAlpha=1;
+  }
+
+  // viñeta
+  const v=ctx.createRadialGradient(w/2,h*.42,Math.min(w,h)*.15,w/2,h*.5,Math.max(w,h)*.82);
+  v.addColorStop(0,"rgba(0,0,0,0)"); v.addColorStop(1,"rgba(4,8,6,.72)");
+  ctx.fillStyle=v; ctx.fillRect(0,0,w,h);
+
+  // grano
+  ctx.globalAlpha=.05;
+  for(let i=0;i<w*h/26;i++){
+    ctx.fillStyle=r()>.5?"#fff":"#000";
+    ctx.fillRect(r()*w,r()*h,1,1);
+  }
+  ctx.globalAlpha=1;
+}
+
+function art(seed,kind,hue){
+  return `<canvas class="art" data-seed="${seed}" data-kind="${kind||"canopy"}"${hue!=null?` data-hue="${hue}"`:""} aria-hidden="true"></canvas>`;
+}
+function paintAll(root){
+  (root||document).querySelectorAll("canvas.art").forEach(cv=>{ if(!cv.dataset.done){cv.dataset.done="1"; paintArt(cv);} });
+}
+
+/* fondo ambiente del escritorio */
+(function ambient(){
+  const cv=document.getElementById("ambient");
+  if(!cv) return;
+  cv.style.display="block";
+  cv.dataset.seed="ambiente-botanico"; cv.dataset.kind="canopy";
+  const fit=()=>{cv.dataset.done="";cv.width=0;paintArt(cv);};
+  fit(); addEventListener("resize",()=>{clearTimeout(cv._t);cv._t=setTimeout(fit,220);});
+})();
+
+/* ============================================================
+   3. ICONOS
+   ============================================================ */
+const I = {
+  home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>',
+  map:'<path d="M9 3 3 5.5v16L9 19l6 2.5 6-2.5v-16L15 5.5 9 3z"/><path d="M9 3v16M15 5.5v16"/>',
+  route:'<circle cx="6" cy="6" r="2.6"/><circle cx="18" cy="18" r="2.6"/><path d="M8.6 6H14a3.4 3.4 0 0 1 0 6.8h-4A3.4 3.4 0 0 0 10 18h5.4"/>',
+  leaf:'<path d="M4 20C3 12 8 4 20 4c0 12-7 16-13 15Z"/><path d="M4 20c4-6 8-9 12-11"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  close:'<path d="m6 6 12 12M18 6 6 18"/>',
+  back:'<path d="m14 6-6 6 6 6"/>',
+  next:'<path d="m9 6 6 6-6 6"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.2 2"/>',
+  ruler:'<path d="M3 8h18v8H3z"/><path d="M7 8v3M11 8v5M15 8v3M19 8v5"/>',
+  qr:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3zM20 14v3M14 20h6"/>',
+  pin:'<path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/>',
+  layers:'<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/>',
+  locate:'<circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/>',
+  play:'<path d="M8 5.5v13l11-6.5z"/>',
+  heart:'<path d="M12 20s-7.5-4.6-7.5-10A4.2 4.2 0 0 1 12 7.4 4.2 4.2 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10Z"/>',
+  camera:'<path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.8l1.3-2h6.8l1.3 2h1.8A2.5 2.5 0 0 1 21 8.5v9A2.5 2.5 0 0 1 18.5 20h-13A2.5 2.5 0 0 1 3 17.5z"/><circle cx="12" cy="13" r="3.6"/>',
+  game:'<path d="M12 4v6M8.5 6.5 12 10l3.5-3.5"/><path d="M6 20c-2 0-3-1.6-2.4-3.4L6 10h12l2.4 6.6C21 18.4 20 20 18 20c-1.5 0-2.3-.9-3-1.8-.8-1-1.6-1.8-3-1.8s-2.2.8-3 1.8C8.3 19.1 7.5 20 6 20Z"/>',
+  hand:'<path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1V4.5a1.5 1.5 0 0 1 3 0V11m0-.5v-4a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6v-2.5a1.5 1.5 0 0 1 3 0V15"/>',
+  check:'<path d="m5 12.5 4.5 4.5L19 7"/>',
+  audio:'<path d="M5 9v6h3.5L13 19V5L8.5 9H5Z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/>',
+  star:'<path d="m12 3.5 2.6 5.5 6 .8-4.4 4.2 1.1 6L12 17.2 6.7 20l1.1-6L3.4 9.8l6-.8L12 3.5Z"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  wc:'<circle cx="12" cy="12" r="9"/><path d="M8 12h8"/>',
+  door:'<path d="M14 3H6v18h8"/><path d="M14 3v18l4-2V5l-4-2Z"/>'
+};
+const svg = (d,cls) => `<svg class="${cls||""}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+
+/* ============================================================
+   4. ESTADO Y NAVEGACIÓN
+   ============================================================ */
+const S = {
+  view:"home", stack:[], fav:new Set(), sector:null,
+  capas:{especies:true, patrimonio:true, servicios:false},
+  ruta:null, paso:0, mes:new Date().getMonth(),
+  juego:{hoja:null,flor:null,tronco:null,habitat:null,step:0},
+  galFiltro:"todo", espFiltro:"todo", busqueda:""
+};
+
+const TABS = [
+  {id:"home",       nom:"Inicio",     icon:I.home},
+  {id:"mapa",       nom:"Mapa",       icon:I.map},
+  {id:"recorridos", nom:"Recorridos", icon:I.route},
+  {id:"descubri",   nom:"Descubrí",   icon:I.leaf},
+  {id:"agenda",     nom:"Agenda",     icon:I.cal}
+];
+const PARENT = {
+  especies:"descubri", puntos:"descubri", galeria:"descubri", juego:"descubri",
+  ruta:"recorridos", voluntariado:"agenda"
+};
+
+const views = document.getElementById("views");
+const RENDER = {};
+
+function go(id, opts={}){
+  const sh=document.getElementById("sheet"), sc=document.getElementById("scrim"), lbx=document.getElementById("lightbox");
+  if(sh) sh.classList.remove("on"); if(sc) sc.classList.remove("on"); if(lbx) lbx.classList.remove("on");
+  if(!opts.back && S.view!==id) S.stack.push(S.view);
+  S.view=id;
+  let el=document.getElementById("v-"+id);
+  if(!el){ el=document.createElement("section"); el.className="view"; el.id="v-"+id; views.appendChild(el); }
+  if(RENDER[id]) el.innerHTML=RENDER[id](opts);
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("on"));
+  requestAnimationFrame(()=>{ el.classList.add("on"); el.scrollTop=0; paintAll(el); });
+  const root=PARENT[id]||id;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.tab===root));
+  const run=document.getElementById("runner");
+  if(id==="mapa"){ requestAnimationFrame(()=>{ drawMap(); if(S.ruta) renderRunner(); }); }
+  else if(run) run.classList.remove("on");
+}
+function back(){
+  const prev=S.stack.pop()||"home";
+  go(prev,{back:true});
+}
+function tabbar(){
+  document.getElementById("tabbar").innerHTML = TABS.map(t=>
+    `<button class="tab${t.id===S.view?" on":""}" data-tab="${t.id}" onclick="go('${t.id}')" aria-label="${t.nom}">${svg(t.icon)}<span>${t.nom}</span></button>`
+  ).join("");
+}
+
+/* hoja / lightbox / toast */
+const sheetEl=document.getElementById("sheet"), scrimEl=document.getElementById("scrim");
+function openSheet(html){
+  sheetEl.innerHTML=`<div class="grabber"></div><button class="sheet-close" onclick="closeSheet()" aria-label="Cerrar">${svg(I.close)}</button>`+html;
+  sheetEl.classList.add("on"); scrimEl.classList.add("on"); sheetEl.scrollTop=0; paintAll(sheetEl);
+}
+function closeSheet(){ sheetEl.classList.remove("on"); scrimEl.classList.remove("on"); }
+scrimEl.onclick=closeSheet;
+
+let toastT;
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("on");
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("on"),2600);
+}
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    if(document.getElementById("lightbox").classList.contains("on")) closeLight();
+    else if(sheetEl.classList.contains("on")) closeSheet();
+  }
+});
+
+/* reloj */
+(function clock(){
+  const el=document.getElementById("clock");
+  const t=()=>{const d=new Date();el.textContent=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")};
+  t(); setInterval(t,20000);
+})();
+
+/* ============================================================
+   5. INICIO
+   ============================================================ */
+function esVerano(m){ return m>=10 || m<=2; }           /* nov a marzo */
+function horarioHoy(){ return esVerano(S.mes) ? [8,20] : [9,18]; }
+function estaAbierto(){ const h=new Date().getHours(), [a,b]=horarioHoy(); return h>=a && h<b; }
+function enFlor(){ return ESPECIES.filter(e=>e.flor.includes(S.mes)); }
+
+RENDER.home = () => {
+  const [a,b]=horarioHoy(), abierto=estaAbierto();
+  const flores=enFlor();
+  const hoy=ACTIVIDADES.slice(0,2);
+  return `
+  <div class="hero">
+    ${art("hero-botanico-thays","canopy")}
+    <div class="hero-grad"></div>
+    <div class="hero-body">
+      <span class="livepill"><span class="dot" style="background:${abierto?"var(--ok)":"var(--warn)"}"></span>
+        ${abierto?"Abierto ahora":"Cerrado"} · ${String(a).padStart(2,"0")}:00 a ${b}:00</span>
+      <h2>Buenos días.<br>El Jardín está <em>en flor</em>.</h2>
+      <p class="muted" style="font-size:13px;margin:0;max-width:270px;line-height:1.5">
+        Jardín Botánico Carlos Thays · Palermo · 7,7 hectáreas · 5.500 especies</p>
+    </div>
+  </div>
+
+  <div class="pad">
+    <div class="quickgrid">
+      <button class="quick" onclick="go('mapa')">${svg(I.locate)}<span><b>¿Dónde estoy?</b><small>Ubicate en el mapa del Jardín</small></span></button>
+      <button class="quick" onclick="escanear()">${svg(I.qr)}<span><b>Escanear cartel</b><small>Leé el QR de una especie</small></span></button>
+      <button class="quick" onclick="go('juego')">${svg(I.game)}<span><b>Armá tu planta</b><small>¿A qué especie te parecés?</small></span></button>
+      <button class="quick" onclick="abrirRuta('primera-vez')">${svg(I.play)}<span><b>Primera vez acá</b><small>Recorrido de 45 minutos</small></span></button>
+    </div>
+  </div>
+
+  <div class="sec-head pad">
+    <h3 class="sec-title">En flor en ${MESES_L[S.mes]}</h3>
+    <button class="more" onclick="go('especies')">Ver todas</button>
+  </div>
+  <div class="bloomscroll">
+    ${(flores.length?flores:ESPECIES.slice(0,5)).map(e=>`
+      <button class="bloomcard" onclick="ficha('${e.id}')">
+        <div class="thumb">${art("f-"+e.id,"bloom",e.color==="amarilla"?46:e.color==="roja"?4:e.color==="violeta"?268:e.color==="blanca"?60:335)}</div>
+        <div class="meta"><b>${e.nom}</b><i>${e.bin}</i></div>
+      </button>`).join("")}
+  </div>
+
+  <div class="sec-head pad"><h3 class="sec-title">Dato del día</h3></div>
+  <div class="factcard">
+    <span class="kicker" style="color:var(--vidrio)">Refugio climático</span>
+    <p>Bajo el dosel del Jardín se registran temperaturas hasta <strong style="color:#fff">4,8 °C menores</strong> que en las calles que lo rodean. Por eso en marzo de 2023 fue designado el primer refugio climático de la Ciudad.</p>
+    <p class="src">Agencia de Protección Ambiental · GCBA</p>
+  </div>
+
+  <div class="sec-head pad">
+    <h3 class="sec-title">Este fin de semana</h3>
+    <button class="more" onclick="go('agenda')">Agenda</button>
+  </div>
+  ${hoy.map((ev,i)=>`
+    <button class="listitem" onclick="go('agenda')">
+      <div class="lthumb">${art("ev-"+i,"path")}</div>
+      <div class="lbody"><b>${ev.nom}</b><i style="font-style:normal;font-family:var(--sans)">${ev.d} · ${ev.hora}</i><div class="l3">${ev.cupo}</div></div>
+      <span class="arrow">${svg(I.next)}</span>
+    </button>`).join("")}
+
+  <div style="padding:26px 20px 10px">
+    <p class="faint" style="font-size:11px;line-height:1.6;margin:0">
+      Prototipo académico sin fines comerciales. Datos botánicos, horarios y programación tomados de fuentes públicas del Gobierno de la Ciudad de Buenos Aires y del Área Educativa del Jardín Botánico Carlos Thays.</p>
+  </div>`;
+};
+
+function escanear(){
+  openSheet(`
+    <div style="padding:26px 22px 8px;text-align:center">
+      <div style="width:96px;height:96px;border-radius:26px;margin:0 auto 18px;display:grid;place-items:center;background:rgba(126,216,195,.12);border:1px solid rgba(126,216,195,.3);color:var(--vidrio)">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${I.qr}</svg>
+      </div>
+      <h3 class="sec-title" style="margin-bottom:8px">Escaneá el cartel</h3>
+      <p class="muted" style="font-size:13.5px;line-height:1.55;margin:0 0 20px">
+        Cada especie del Jardín tiene un cartel con código QR. Apuntá la cámara y se abre su ficha técnica.</p>
+      <p class="kicker" style="margin-bottom:10px">En el prototipo, elegí una</p>
+    </div>
+    ${["palo-borracho","ginkgo","yerba-mate"].map(id=>{const e=espById(id);return `
+      <button class="listitem" onclick="closeSheet();ficha('${e.id}')">
+        <div class="lthumb">${art("s-"+e.id,"bloom")}</div>
+        <div class="lbody"><b>${e.nom}</b><i>${e.bin}</i></div>
+        <span class="arrow">${svg(I.next)}</span>
+      </button>`}).join("")}
+    <div style="height:8px"></div>`);
+}
+
+/* ============================================================
+   6. MAPA INTERACTIVO
+   ============================================================ */
+const MAP_VB = {x:0,y:-165,w:760,h:1310};
+let vb = {...MAP_VB};
+const BORDE = "M415,70 L700,430 L640,880 L130,905 L70,430 Z";
+const SENDEROS = [
+  "M415,110 C400,220 300,270 265,330 C230,390 180,430 185,470 C190,520 250,540 300,555 C360,573 380,600 395,620 C420,655 470,660 500,690 C540,730 560,790 500,842",
+  "M672,432 C620,440 600,470 590,520 C578,580 545,600 500,620 C440,646 420,690 395,726 C360,776 320,820 300,845",
+  "M104,592 C160,585 180,570 210,555 C260,530 300,500 340,490 C400,475 450,470 500,470 C560,470 600,462 612,458",
+  "M415,110 C420,180 430,240 418,300 C405,365 400,420 400,470 C400,540 396,570 395,600"
+];
+
+RENDER.mapa = () => `
+  <div class="mapwrap">
+    <svg id="mapsvg" viewBox="0 -165 760 1310" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Mapa del Jardín Botánico"></svg>
+    <div class="map-top">
+      <div class="map-search">
+        ${svg(I.search)}
+        <input id="mapq" placeholder="Buscar especie, escultura o sector" oninput="buscarMapa(this.value)" aria-label="Buscar en el mapa">
+      </div>
+      <div class="chiprow" id="capas">
+        <button class="chip${S.capas.especies?" on":""}" onclick="capa('especies')">Especies</button>
+        <button class="chip${S.capas.patrimonio?" on":""}" onclick="capa('patrimonio')">Patrimonio</button>
+        <button class="chip${S.capas.servicios?" on":""}" onclick="capa('servicios')">Servicios</button>
+        <button class="chip${S.ruta?" on":""}" onclick="${S.ruta?"quitarRuta()":"go('recorridos')"}">${S.ruta?"Recorrido activo":"Recorridos"}</button>
+      </div>
+      <div id="mapres" style="padding:0 16px"></div>
+    </div>
+    <div class="map-tools">
+      <button class="mtool" onclick="zoom(0.75)" aria-label="Acercar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg></button>
+      <button class="mtool" onclick="zoom(1.33)" aria-label="Alejar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 12h12"/></svg></button>
+      <button class="mtool on" onclick="centrar()" aria-label="Centrar en mi ubicación">${svg(I.locate)}</button>
+    </div>
+  </div>`;
+
+function drawMap(){
+  const svgEl=document.getElementById("mapsvg"); if(!svgEl) return;
+  const ruta=S.ruta?RECORRIDOS.find(r=>r.id===S.ruta):null;
+  let pins=[];
+  if(S.capas.especies) pins=pins.concat(ESPECIES.map(e=>({...e,g:"esp"})));
+  if(S.capas.patrimonio) pins=pins.concat(POIS.map(p=>({...p,g:"poi"})));
+  if(S.capas.servicios) pins=pins.concat(SERVICIOS.map(s=>({...s,g:"srv"})));
+
+  svgEl.innerHTML=`
+  <defs>
+    <radialGradient id="gsuelo" cx="45%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#16281D"/><stop offset="100%" stop-color="#0B160F"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>
+  <rect x="-200" y="-200" width="1160" height="1380" fill="#070C09"/>
+  <g opacity=".5">
+    <path d="M415,40 L740,430" stroke="#1A211C" stroke-width="26"/>
+    <path d="M415,40 L40,430" stroke="#1A211C" stroke-width="26"/>
+    <path d="M60,440 L120,930 L660,905 L712,440" stroke="#1A211C" stroke-width="22" fill="none"/>
+    <text x="596" y="228" fill="#4A5750" font-size="17" font-family="Instrument Sans" transform="rotate(52 596 228)">AV. SANTA FE</text>
+    <text x="196" y="228" fill="#4A5750" font-size="17" font-family="Instrument Sans" transform="rotate(-46 196 228)">AV. LAS HERAS</text>
+    <text x="300" y="948" fill="#4A5750" font-size="17" font-family="Instrument Sans">REPÚBLICA ÁRABE DE SIRIA</text>
+  </g>
+
+  <path d="${BORDE}" fill="url(#gsuelo)" stroke="rgba(222,214,198,.22)" stroke-width="2.5"/>
+
+  <g>${SECTORES.map(s=>`
+    <g>
+      <ellipse cx="${s.x}" cy="${s.y}" rx="${s.rx}" ry="${s.ry}" transform="rotate(${s.rot} ${s.x} ${s.y})"
+        fill="${s.c}" opacity="${S.sector===s.id?".34":".17"}"/>
+      <ellipse cx="${s.x}" cy="${s.y}" rx="${s.rx}" ry="${s.ry}" transform="rotate(${s.rot} ${s.x} ${s.y})"
+        fill="none" stroke="${s.c}" stroke-opacity="${S.sector===s.id?".8":".35"}" stroke-width="1.5" stroke-dasharray="4 5"/>
+      <text class="sector-label" x="${s.x}" y="${s.y-s.ry-8}" text-anchor="middle">${s.nom}</text>
+    </g>`).join("")}
+  </g>
+
+  <g>${SENDEROS.map((d,i)=>`<path class="path-line${i>1?" thin":""}" d="${d}"/>`).join("")}</g>
+
+  ${ruta?`<path class="route-line" d="${ruta.path}"/>`:""}
+
+  <g class="youare">
+    <circle class="youare-ping" cx="415" cy="150" r="8"/>
+    <circle cx="415" cy="150" r="7" fill="#7ED8C3" stroke="#04231C" stroke-width="2.5"/>
+  </g>
+
+  <g>${pins.map(p=>{
+    const col = p.g==="esp" ? "#F0709B" : p.g==="poi" ? "#DED6C6" : "#7ED8C3";
+    const sel = S.focus===p.id;
+    return `<g class="pin${sel?" sel":""}" onclick="pinTap('${p.g}','${p.id}')" tabindex="0" role="button" aria-label="${p.nom}">
+      ${sel?`<circle cx="${p.x}" cy="${p.y}" r="26" fill="${col}" opacity=".18"/>`:""}
+      <circle class="hit" cx="${p.x}" cy="${p.y}" r="26"/>
+      <circle class="bubble" cx="${p.x}" cy="${p.y}" r="${sel?14:9}" fill="${col}" stroke="#070C09" stroke-width="2.4"/>
+      ${sel?`<text x="${p.x}" y="${p.y-26}" text-anchor="middle" fill="#ECF3ED" font-size="19" font-weight="600" font-family="Instrument Sans" paint-order="stroke" stroke="#070C09" stroke-width="4">${p.nom}</text>`:""}
+    </g>`}).join("")}
+  </g>`;
+
+  svgEl.setAttribute("viewBox",`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+  hookPan(svgEl);
+}
+
+function hookPan(el){
+  let drag=null;
+  el.onpointerdown=e=>{drag={x:e.clientX,y:e.clientY,vx:vb.x,vy:vb.y};el.setPointerCapture(e.pointerId)};
+  el.onpointermove=e=>{
+    if(!drag)return;
+    const r=el.getBoundingClientRect(), k=vb.w/r.width;
+    vb.x=drag.vx-(e.clientX-drag.x)*k; vb.y=drag.vy-(e.clientY-drag.y)*k;
+    el.setAttribute("viewBox",`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+  };
+  el.onpointerup=el.onpointercancel=()=>{drag=null};
+  el.onwheel=e=>{e.preventDefault();zoom(e.deltaY>0?1.12:0.89)};
+}
+function zoom(k){
+  const nw=Math.max(300,Math.min(1500,vb.w*k)), nh=nw*(MAP_VB.h/MAP_VB.w);
+  vb.x+=(vb.w-nw)/2; vb.y+=(vb.h-nh)/2; vb.w=nw; vb.h=nh;
+  const el=document.getElementById("mapsvg"); if(el) el.setAttribute("viewBox",`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+}
+function centrar(){ vb={...MAP_VB}; S.focus=null; drawMap(); }
+function focusOn(x,y,w){
+  vb.w=w||620; vb.h=vb.w*(MAP_VB.h/MAP_VB.w);
+  vb.x=x-vb.w/2; vb.y=y-vb.h/2;
+  const el=document.getElementById("mapsvg"); if(el) el.setAttribute("viewBox",`${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+}
+function capa(k){ S.capas[k]=!S.capas[k]; go("mapa",{back:true}); }
+function quitarRuta(){ S.ruta=null; S.paso=0; document.getElementById("runner").classList.remove("on"); go("mapa",{back:true}); }
+
+function pinTap(g,id){
+  S.focus=id;
+  const el=document.getElementById("mapsvg"); if(el) drawMap();
+  if(g==="esp"){ previewEsp(id); }
+  else if(g==="poi"){ previewPoi(id); }
+  else { const s=SERVICIOS.find(x=>x.id===id); openSheet(`<div style="padding:22px"><span class="tag vidrio">${s.tipo}</span><h3 class="sec-title" style="margin:10px 0 6px">${s.nom}</h3><p class="muted" style="font-size:13.5px;margin:0">Punto de servicio del Jardín.</p></div>`); }
+}
+function previewEsp(id){
+  const e=espById(id);
+  openSheet(`
+    <div style="position:relative;height:170px;margin:-1px 0 0">${art("p-"+e.id,"bloom")}<div style="position:absolute;inset:0;background:linear-gradient(to top,var(--bark),transparent 70%)"></div></div>
+    <div style="padding:0 20px 4px;margin-top:-28px;position:relative">
+      <span class="tag rosa">${secNom(e.sector)}</span>
+      <h3 class="sec-title" style="margin:10px 0 3px;font-size:24px">${e.nom}</h3>
+      <p class="binomial" style="margin:0 0 12px;color:var(--vidrio);font-size:15px">${e.bin}</p>
+      <p class="muted" style="font-size:13.5px;line-height:1.55;margin:0 0 16px">${e.desc.slice(0,140)}…</p>
+      <div style="display:flex;gap:9px">
+        <button class="btn" style="flex:1" onclick="closeSheet();ficha('${e.id}')">Ver ficha completa</button>
+        <button class="btn ghost" onclick="fav('${e.id}')" aria-label="Guardar">${svg(I.heart)}</button>
+      </div>
+    </div>`);
+}
+function previewPoi(id){
+  const p=poiById(id);
+  openSheet(`
+    <div style="position:relative;height:170px;margin:-1px 0 0">${art("p-"+p.id,p.kind)}<div style="position:absolute;inset:0;background:linear-gradient(to top,var(--bark),transparent 70%)"></div></div>
+    <div style="padding:0 20px 4px;margin-top:-28px;position:relative">
+      <span class="tag marmol">${p.tipo}</span>
+      <h3 class="sec-title" style="margin:10px 0 10px;font-size:24px">${p.nom}</h3>
+      <p style="font-size:13.5px;line-height:1.6;color:#CFDDD2;margin:0 0 14px">${p.desc}</p>
+      <div class="notecard" style="margin:0 0 16px"><span class="kicker">Dato</span><p>${p.dato}</p></div>
+      <button class="btn full ghost" onclick="closeSheet()">Cerrar</button>
+    </div>`);
+}
+function buscarMapa(q){
+  const box=document.getElementById("mapres"); if(!box) return;
+  q=q.trim().toLowerCase();
+  if(q.length<2){ box.innerHTML=""; return; }
+  const res=[
+    ...ESPECIES.filter(e=>(e.nom+e.bin).toLowerCase().includes(q)).map(e=>({id:e.id,g:"esp",nom:e.nom,sub:e.bin,x:e.x,y:e.y})),
+    ...POIS.filter(p=>p.nom.toLowerCase().includes(q)).map(p=>({id:p.id,g:"poi",nom:p.nom,sub:p.tipo,x:p.x,y:p.y})),
+    ...SECTORES.filter(s=>s.nom.toLowerCase().includes(q)).map(s=>({id:s.id,g:"sec",nom:s.nom,sub:"Sector",x:s.x,y:s.y}))
+  ].slice(0,5);
+  box.innerHTML = res.length? `<div class="card" style="border-radius:14px;overflow:hidden">${res.map(r=>`
+    <button class="listitem" style="padding:10px 14px" onclick="irA('${r.g}','${r.id}',${r.x},${r.y})">
+      <div class="lbody"><b style="font-size:13px">${r.nom}</b><i style="font-size:11px">${r.sub}</i></div>
+      <span class="arrow">${svg(I.next)}</span></button>`).join("")}</div>` : "";
+}
+function irA(g,id,x,y){
+  document.getElementById("mapq").value=""; document.getElementById("mapres").innerHTML="";
+  if(g==="sec"){ S.sector=id; S.focus=null; drawMap(); focusOn(x,y,620); return; }
+  S.focus=id; drawMap(); focusOn(x,y,560);
+  g==="esp"?previewEsp(id):previewPoi(id);
+}
+function verEnMapa(id,tipo){
+  const o = tipo==="poi"?poiById(id):espById(id);
+  closeSheet(); S.focus=id; go("mapa");
+  setTimeout(()=>{ drawMap(); focusOn(o.x,o.y,560); },240);
+}
+
+/* ============================================================
+   7. FICHA TÉCNICA
+   ============================================================ */
+function fav(id){
+  S.fav.has(id)?S.fav.delete(id):S.fav.add(id);
+  toast(S.fav.has(id)?"Guardada en tus favoritas":"Quitada de favoritas");
+}
+function ficha(id){
+  const e=espById(id);
+  const hueMap={amarilla:46,roja:4,violeta:268,blanca:60,rosa:335,"sin flor":140};
+  openSheet(`
+  <div class="ficha-hero">
+    ${art("h-"+e.id,"bloom",hueMap[e.color])}
+    <div class="grad"></div>
+    <div class="titles">
+      <span class="tag rosa">${secNom(e.sector)}</span>
+      <h2>${e.nom}</h2>
+      <div class="bin">${e.bin}</div>
+    </div>
+  </div>
+
+  <dl class="datagrid">
+    <div><dt>Familia</dt><dd>${e.fam}</dd></div>
+    <div><dt>Altura</dt><dd>${e.alt}</dd></div>
+    <div style="grid-column:1/-1"><dt>Origen</dt><dd style="font-weight:500;font-size:12.5px;line-height:1.4">${e.origen}</dd></div>
+    <div><dt>Follaje</dt><dd>Hoja ${e.hoja}</dd></div>
+    <div><dt>Conservación</dt><dd style="font-weight:500;font-size:12.5px;line-height:1.4">${e.conserva}</dd></div>
+  </dl>
+
+  <div style="padding:22px 20px 0"><span class="kicker">Calendario de floración</span></div>
+  <div class="bloomstrip">
+    ${MESES.map((m,i)=>`<div class="${e.flor.includes(i)?"f":""}${i===S.mes?" now":""}">${m}</div>`).join("")}
+  </div>
+  <p class="faint" style="padding:8px 20px 0;font-size:11.5px;margin:0">
+    ${e.flor.length? `Florece en ${e.flor.map(i=>MESES_L[i]).join(", ")}. Flor ${e.color}.` : "No produce flores: es una gimnosperma o se reproduce por esporas."}
+  </p>
+
+  <div style="padding:24px 20px 10px"><span class="kicker">Descripción</span></div>
+  <div class="prose"><p>${e.desc}</p></div>
+
+  <div class="notecard"><span class="kicker">Sabías que</span><p>${e.dato}</p></div>
+
+  <div style="padding:22px 20px 10px"><span class="kicker">Usos</span></div>
+  <div class="prose"><p>${e.usos}.</p></div>
+
+  <div style="padding:10px 20px 0;display:flex;flex-direction:column;gap:9px">
+    <button class="btn full" onclick="verEnMapa('${e.id}','esp')">${svg(I.pin)} Ver en el mapa</button>
+    <div style="display:flex;gap:9px">
+      <button class="btn ghost" style="flex:1" onclick="toast('Audioguía disponible en la versión final')">${svg(I.audio)} Escuchar</button>
+      <button class="btn ghost" style="flex:1" onclick="fav('${e.id}')">${svg(I.heart)} Guardar</button>
+    </div>
+  </div>`);
+}
+
+/* ============================================================
+   8. CATÁLOGO DE ESPECIES
+   ============================================================ */
+function listaEspecies(){
+  const f=S.espFiltro;
+  let lista=ESPECIES.slice();
+  if(f==="flor") lista=lista.filter(e=>e.flor.includes(S.mes));
+  else if(f==="nativas") lista=lista.filter(e=>/argentin|yungas|pampa|litoral|selva paranaense|noroeste|nordeste|chaco/i.test(e.origen));
+  else if(f!=="todo") lista=lista.filter(e=>e.sector===f);
+  const q=S.busqueda.trim().toLowerCase();
+  if(q) lista=lista.filter(e=>(e.nom+" "+e.bin+" "+e.fam).toLowerCase().includes(q));
+  lista.sort((a,b)=>a.nom.localeCompare(b.nom,"es"));
+  if(!lista.length) return `<p class="pad muted" style="font-size:13.5px">Ninguna especie coincide con la búsqueda. Probá con otro nombre o quitá los filtros.</p>`;
+  return lista.map(e=>`
+    <button class="listitem" onclick="ficha('${e.id}')">
+      <div class="lthumb">${art("l-"+e.id,"bloom")}</div>
+      <div class="lbody">
+        <b>${e.nom}</b><i>${e.bin}</i>
+        <div class="l3">${e.fam} · ${secNom(e.sector)}${e.flor.includes(S.mes)?' · <span style="color:#F0709B;font-weight:600">en flor</span>':""}</div>
+      </div>
+      <span class="arrow">${svg(I.next)}</span>
+    </button>`).join("");
+}
+function filtrarEspecies(v){
+  S.busqueda=v;
+  const box=document.getElementById("lista-especies");
+  if(box){ box.innerHTML=listaEspecies(); paintAll(box); }
+}
+function chipEspecies(f){
+  S.espFiltro=f;
+  document.querySelectorAll("#chips-especies .chip").forEach(c=>c.classList.toggle("on",c.dataset.f===f));
+  const box=document.getElementById("lista-especies");
+  if(box){ box.innerHTML=listaEspecies(); paintAll(box); }
+}
+RENDER.especies = () => {
+  const secs=[...new Set(ESPECIES.map(e=>e.sector))];
+  return `
+  <div class="backbar"><button class="backbtn" onclick="back()">${svg(I.back)} Descubrí</button></div>
+  <div class="vhead" style="padding-top:4px">
+    <h2>Fichas técnicas</h2>
+    <p>${ESPECIES.length} especies documentadas de las 5.500 que reúne el Jardín.</p>
+  </div>
+  <div style="padding:14px 20px 12px">
+    <div class="map-search" style="margin:0">
+      ${svg(I.search)}
+      <input value="${S.busqueda}" placeholder="Nombre común, científico o familia" oninput="filtrarEspecies(this.value)" aria-label="Buscar especies">
+    </div>
+  </div>
+  <div class="chiprow" id="chips-especies" style="padding-bottom:12px">
+    <button class="chip${S.espFiltro==="todo"?" on":""}" data-f="todo" onclick="chipEspecies('todo')">Todas</button>
+    <button class="chip${S.espFiltro==="flor"?" on":""}" data-f="flor" onclick="chipEspecies('flor')">En flor ahora</button>
+    <button class="chip${S.espFiltro==="nativas"?" on":""}" data-f="nativas" onclick="chipEspecies('nativas')">Nativas</button>
+    ${secs.map(x=>`<button class="chip${S.espFiltro===x?" on":""}" data-f="${x}" onclick="chipEspecies('${x}')">${secNom(x)}</button>`).join("")}
+  </div>
+  <div id="lista-especies">${listaEspecies()}</div>
+  <div style="height:20px"></div>`;
+};
+
+/* ============================================================
+   9. RECORRIDOS
+   ============================================================ */
+RENDER.recorridos = () => `
+  <div class="vhead">
+    <span class="kicker">Cinco caminos</span>
+    <h2>Recorridos guiados</h2>
+    <p>Autoguiados, con paradas numeradas sobre el mapa. Podés empezar y frenar cuando quieras.</p>
+  </div>
+  <div style="height:16px"></div>
+  ${RECORRIDOS.map(r=>`
+    <button class="routecard" onclick="abrirRuta('${r.id}')">
+      <div class="rtop">${art("r-"+r.id,r.kind)}<div class="g"></div></div>
+      <div class="rbody">
+        <h3>${r.nom}</h3>
+        <p>${r.res}</p>
+        <div class="rmeta">
+          <span>${svg(I.clock)} ${r.min} min</span>
+          <span>${svg(I.ruler)} ${r.km.toFixed(1)} km</span>
+          <span>${svg(I.pin)} ${r.paradas.length} paradas</span>
+        </div>
+      </div>
+    </button>`).join("")}
+  <div style="height:14px"></div>`;
+
+function abrirRuta(id){ go("ruta",{id}); }
+
+RENDER.ruta = (o) => {
+  const r=RECORRIDOS.find(x=>x.id===(o.id||S.rutaVista)); S.rutaVista=r.id;
+  const activo = S.ruta===r.id;
+  return `
+  <div style="position:relative;height:240px">
+    ${art("rh-"+r.id,r.kind)}
+    <div style="position:absolute;inset:0;background:linear-gradient(to top,var(--night) 4%,transparent 65%)"></div>
+    <button class="backbtn" style="position:absolute;top:56px;left:18px;background:rgba(7,12,9,.6);padding:8px 13px;border-radius:999px;backdrop-filter:blur(10px)" onclick="back()">${svg(I.back)} Volver</button>
+    <div style="position:absolute;left:20px;right:20px;bottom:14px">
+      <span class="tag ambar">${r.dif}</span>
+      <h2 style="font-family:var(--serif);font-weight:300;font-size:29px;letter-spacing:-.02em;margin:9px 0 0;line-height:1.06">${r.nom}</h2>
+    </div>
+  </div>
+  <div class="pad" style="margin-top:12px">
+    <div class="rmeta" style="margin-bottom:14px">
+      <span>${svg(I.clock)} ${r.min} min</span>
+      <span>${svg(I.ruler)} ${r.km.toFixed(1)} km</span>
+      <span>${svg(I.pin)} ${r.paradas.length} paradas</span>
+    </div>
+    <p style="font-size:14px;line-height:1.6;color:#CFDDD2;margin:0 0 18px">${r.res}</p>
+    <button class="btn full ${activo?"ghost":"rose"}" onclick="${activo?`quitarRuta();go('ruta',{id:'${r.id}',back:true})`:`iniciarRuta('${r.id}')`}">
+      ${activo?"Terminar recorrido":svg(I.play)+" Iniciar recorrido"}</button>
+  </div>
+
+  <div class="sec-head pad"><h3 class="sec-title">Paradas</h3></div>
+  <div class="stoplist">
+    ${r.paradas.map((p,i)=>{
+      const [t,id]=p.ref.split(":");
+      const o2 = t==="esp"?espById(id):poiById(id);
+      return `<button class="stop${activo&&i<S.paso?" done":""}" onclick="${t==="esp"?`ficha('${id}')`:`previewPoi('${id}')`}">
+        <span class="n">${String(i+1).padStart(2,"0")}</span>
+        <span><b>${o2.nom}</b><small>${p.txt}</small></span>
+      </button>`;
+    }).join("")}
+  </div>
+  <div style="height:24px"></div>`;
+};
+
+function iniciarRuta(id){
+  S.ruta=id; S.paso=0;
+  go("mapa"); toast("Recorrido iniciado. Seguí la línea rosa.");
+  setTimeout(()=>{drawMap();renderRunner();},260);
+}
+function renderRunner(){
+  const el=document.getElementById("runner");
+  const r=RECORRIDOS.find(x=>x.id===S.ruta);
+  if(!r||S.view!=="mapa"){ el.classList.remove("on"); return; }
+  const p=r.paradas[S.paso], [t,id]=p.ref.split(":");
+  const o=t==="esp"?espById(id):poiById(id);
+  const pct=Math.round((S.paso/(r.paradas.length-1))*100);
+  el.classList.add("on");
+  el.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="kicker">${r.nom}</span>
+      <button onclick="quitarRuta()" class="faint" style="font-size:11px;font-weight:600">Salir</button>
+    </div>
+    <div class="progress"><i style="width:${pct}%"></i></div>
+    <div style="display:flex;gap:12px;align-items:center">
+      <div style="width:44px;height:44px;border-radius:12px;overflow:hidden;position:relative;flex:none">${art("rn-"+o.id,t==="esp"?"bloom":"marble")}</div>
+      <div style="flex:1;min-width:0">
+        <div class="faint" style="font-size:10px;font-family:var(--mono);letter-spacing:.1em">PARADA ${S.paso+1} DE ${r.paradas.length}</div>
+        <b style="display:block;font-size:14px;margin-top:2px">${o.nom}</b>
+        <small class="muted" style="font-size:11.5px;line-height:1.4;display:block;margin-top:2px">${p.txt}</small>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn ghost" style="flex:1;padding:11px" onclick="${t==="esp"?`ficha('${id}')`:`previewPoi('${id}')`}">Ver detalle</button>
+      <button class="btn rose" style="flex:1;padding:11px" onclick="pasoRuta(1)">${S.paso===r.paradas.length-1?"Finalizar":"Siguiente"}</button>
+    </div>`;
+  paintAll(el);
+  focusOn(o.x,o.y,640);
+  S.focus=o.id; drawMap();
+}
+function pasoRuta(d){
+  const r=RECORRIDOS.find(x=>x.id===S.ruta);
+  if(S.paso+d>=r.paradas.length){
+    quitarRuta(); toast("¡Recorrido completado! Sumaste una insignia."); return;
+  }
+  S.paso=Math.max(0,S.paso+d); renderRunner();
+}
+
+/* ============================================================
+   10. DESCUBRÍ — hub
+   ============================================================ */
+RENDER.descubri = () => `
+  <div class="vhead">
+    <span class="kicker">Más allá del recorrido</span>
+    <h2>Descubrí</h2>
+    <p>Las colecciones, el patrimonio, la comunidad y un juego para reconocer especies.</p>
+  </div>
+  <div style="height:18px"></div>
+  <div class="hubgrid">
+    <button class="hub" onclick="go('especies')">${art("hub-esp","bloom")}<div class="g"></div>
+      <div class="t"><b>Fichas técnicas</b><small>${ESPECIES.length} especies con datos completos</small></div></button>
+    <button class="hub" onclick="go('puntos')">${art("hub-poi","marble")}<div class="g"></div>
+      <div class="t"><b>Puntos de interés</b><small>${POIS.length} hitos de patrimonio y naturaleza</small></div></button>
+    <button class="hub" onclick="go('juego')">${art("hub-game","bloom",270)}<div class="g"></div>
+      <div class="t"><b>Armá tu planta</b><small>Combiná rasgos y encontrá tu especie</small></div></button>
+    <button class="hub" onclick="go('galeria')">${art("hub-gal","glass")}<div class="g"></div>
+      <div class="t"><b>Galería</b><small>El feed de la comunidad</small></div></button>
+  </div>
+
+  <div class="sec-head pad"><h3 class="sec-title">Tu colección</h3></div>
+  <div class="pad">
+    <div class="card" style="padding:18px">
+      <div style="display:flex;gap:20px">
+        <div><div style="font-family:var(--serif);font-size:30px;line-height:1">${S.fav.size}</div><div class="faint" style="font-size:11px">guardadas</div></div>
+        <div><div style="font-family:var(--serif);font-size:30px;line-height:1">${S.ruta?1:0}</div><div class="faint" style="font-size:11px">recorridos</div></div>
+        <div><div style="font-family:var(--serif);font-size:30px;line-height:1">${Math.round(S.fav.size/ESPECIES.length*100)}%</div><div class="faint" style="font-size:11px">del catálogo</div></div>
+      </div>
+      ${S.fav.size? `<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px">${[...S.fav].map(id=>`<button class="tag rosa" onclick="ficha('${id}')">${espById(id).nom}</button>`).join("")}</div>`
+      : `<p class="faint" style="font-size:12.5px;margin:12px 0 0;line-height:1.5">Todavía no guardaste ninguna especie. Tocá el corazón en cualquier ficha para armar tu herbario personal.</p>`}
+    </div>
+  </div>
+  <div style="height:20px"></div>`;
+
+/* ============================================================
+   11. PUNTOS DE INTERÉS
+   ============================================================ */
+RENDER.puntos = () => {
+  const tipos=[...new Set(POIS.map(p=>p.tipo))];
+  return `
+  <div class="backbar"><button class="backbtn" onclick="back()">${svg(I.back)} Descubrí</button></div>
+  <div class="vhead" style="padding-top:4px">
+    <h2>Puntos de interés</h2>
+    <p>Más de treinta obras de arte conviven con las colecciones. Estos son los hitos imperdibles.</p>
+  </div>
+  <div class="chiprow" style="padding-top:14px;padding-bottom:14px">
+    <button class="chip on">Todos</button>
+    ${tipos.map(t=>`<button class="chip" onclick="toast('Filtro por ${t.toLowerCase()}')">${t}</button>`).join("")}
+  </div>
+  ${POIS.map(p=>`
+    <button class="listitem" onclick="previewPoi('${p.id}')">
+      <div class="lthumb">${art("pl-"+p.id,p.kind)}</div>
+      <div class="lbody"><b>${p.nom}</b>
+        <i style="font-style:normal;font-family:var(--sans);font-size:11.5px">${p.tipo}</i>
+        <div class="l3">${p.desc.slice(0,68)}…</div></div>
+      <span class="arrow">${svg(I.next)}</span>
+    </button>`).join("")}
+  <div style="height:20px"></div>`;
+};
+
+/* ============================================================
+   12. GALERÍA — feed importado de Instagram
+   ============================================================ */
+RENDER.galeria = () => {
+  const ETIQ={todo:"Todo",invernaculo:"Invernáculo",floracion:"Floración",esculturas:"Esculturas",arboles:"Árboles",gatos:"Gatos",sectores:"Sectores",mariposas:"Mariposas"};
+  const tags=["todo",...new Set(GALERIA.map(g=>g.tag))];
+  const lista=S.galFiltro==="todo"?GALERIA:GALERIA.filter(g=>g.tag===S.galFiltro);
+  return `
+  <div class="backbar"><button class="backbtn" onclick="back()">${svg(I.back)} Descubrí</button></div>
+  <div class="vhead" style="padding-top:4px">
+    <span class="kicker">@jardinbotanicoba</span>
+    <h2>Galería</h2>
+    <p>Fotos publicadas por el Jardín y por la comunidad con <strong style="color:var(--vidrio);font-weight:600">#MiJardínBotánico</strong>.</p>
+  </div>
+  <div class="chiprow" style="padding-top:14px;padding-bottom:14px">
+    ${tags.map(t=>`<button class="chip${S.galFiltro===t?" on":""}" onclick="S.galFiltro='${t}';go('galeria',{back:true})">${ETIQ[t]||t}</button>`).join("")}
+  </div>
+  <div class="gal">
+    ${lista.map(g=>`<button onclick="light('${g.id}')" aria-label="${g.cap}">
+      ${art("g-"+g.id,g.kind,g.hue)}<span class="ov">${g.cap.slice(0,42)}…</span></button>`).join("")}
+  </div>
+  <div style="padding:22px 20px 8px">
+    <div class="notecard" style="margin:0;background:rgba(126,216,195,.06);border-color:rgba(126,216,195,.2)">
+      <span class="kicker" style="color:var(--vidrio)">Cómo funciona</span>
+      <p style="color:#CFDDD2">El feed se sincroniza cada seis horas desde la cuenta oficial vía Instagram Basic Display API. Las fotos con el hashtag pasan por moderación antes de publicarse.</p>
+    </div>
+  </div>
+  <div style="height:16px"></div>`;
+};
+
+function light(id){
+  const g=GALERIA.find(x=>x.id===id), lb=document.getElementById("lightbox");
+  lb.innerHTML=`
+    <button class="sheet-close" style="top:56px;right:16px;z-index:5" onclick="closeLight()" aria-label="Cerrar">${svg(I.close)}</button>
+    <div class="lbimg">${art("lb-"+g.id,g.kind,g.hue)}</div>
+    <div class="lbmeta">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
+        <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--vidrio),var(--rosa))"></div>
+        <b style="font-size:13px">jardinbotanicoba</b>
+        <span class="tag plain" style="margin-left:auto">#${g.tag}</span>
+      </div>
+      <p style="font-size:14px;line-height:1.55;margin:0 0 10px;color:#DDE8DF">${g.cap}</p>
+      <div class="faint" style="font-size:11.5px;display:flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F0709B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${I.heart}</svg>
+        <span style="font-variant-numeric:tabular-nums">${g.likes.toLocaleString("es-AR")} me gusta</span>
+      </div>
+    </div>`;
+  lb.classList.add("on"); paintAll(lb);
+}
+function closeLight(){ document.getElementById("lightbox").classList.remove("on"); }
+
+/* ============================================================
+   13. JUEGO — armá tu planta
+   ============================================================ */
+const OPCIONES = {
+  hoja:[
+    {v:"simple",   n:"Simple y entera"},
+    {v:"compuesta",n:"Compuesta, muchos folíolos"},
+    {v:"acicular", n:"Acicular, como aguja"},
+    {v:"palmeada", n:"Palmeada, con lóbulos"},
+    {v:"abanico",  n:"En abanico"},
+    {v:"escamosa", n:"Escamosa y rígida"}
+  ],
+  flor:[
+    {v:"rosa",    n:"Rosada y grande"},
+    {v:"amarilla",n:"Amarilla en panícula"},
+    {v:"roja",    n:"Roja y tubular"},
+    {v:"blanca",  n:"Blanca perfumada"},
+    {v:"violeta", n:"Violeta en racimo"},
+    {v:"sin flor",n:"Sin flores: cono o espora"}
+  ],
+  tronco:[
+    {v:"recto",     n:"Recto y limpio"},
+    {v:"abultado",  n:"Abultado como botella"},
+    {v:"exfoliante",n:"Corteza que se descascara"},
+    {v:"tablar",    n:"Con raíces tablares"},
+    {v:"multiple",  n:"Varios troncos desde la base"}
+  ],
+  habitat:[
+    {v:"selva",        n:"Selva subtropical"},
+    {v:"pampa",        n:"Llanura pampeana"},
+    {v:"humedal",      n:"Ribera y bañado"},
+    {v:"asia",         n:"Montaña asiática"},
+    {v:"oceania",      n:"Bosque de Oceanía"},
+    {v:"norteamerica", n:"Bosque templado de América del Norte"}
+  ]
+};
+const PASOS = [
+  {k:"hoja",   t:"¿Cómo son sus hojas?"},
+  {k:"flor",   t:"¿Y sus flores?"},
+  {k:"tronco", t:"¿Cómo es el tronco?"},
+  {k:"habitat",t:"¿Dónde vive?"}
+];
+
+const HOJA_ICONO = {
+  simple:'<path d="M17 3C7 4 3 11 4 21c9-1 14-7 13-18Z" fill="currentColor" opacity=".85"/><path d="M4 21C8 15 12 10 16 6" stroke="#0F1913" stroke-width="1.2" fill="none"/>',
+  compuesta:'<path d="M12 22V4" stroke="currentColor" stroke-width="1.4"/>'+[0,1,2,3].map(i=>`<ellipse cx="7" cy="${7+i*4}" rx="4" ry="1.9" fill="currentColor" opacity=".8"/><ellipse cx="17" cy="${7+i*4}" rx="4" ry="1.9" fill="currentColor" opacity=".8"/>`).join(""),
+  acicular:[0,1,2,3,4,5,6].map(i=>`<path d="M12 21 ${4+i*2.7} ${4+Math.abs(i-3)*1.6}" stroke="currentColor" stroke-width="1.5"/>`).join(""),
+  palmeada:'<path d="M12 22v-6M12 16 4 8l1-4 4 3 3-4 3 4 4-3 1 4-8 8Z" fill="currentColor" opacity=".85" stroke="currentColor" stroke-width="1"/>',
+  abanico:'<path d="M12 21C6 16 4 10 5 5c4 2 10 2 14 0 1 5-1 11-7 16Z" fill="currentColor" opacity=".85"/><path d="M12 21V6" stroke="#0F1913" stroke-width="1.1"/>',
+  escamosa:[0,1,2].map(i=>`<path d="M12 ${4+i*5.5} 6 ${11+i*5.5}h12Z" fill="currentColor" opacity="${.9-i*.15}"/>`).join("")+'<path d="M11 21h2v-3h-2z" fill="currentColor"/>'
+};
+const FLOR_COLOR = {rosa:"#F0709B",amarilla:"#E8B24C",roja:"#E2523F",blanca:"#EFEFE4",violeta:"#9B7BD8","sin flor":"#5E7A66"};
+const TRONCO_ICONO = {
+  recto:'<path d="M10 22V5h4v17Z" fill="currentColor" opacity=".85"/>',
+  abultado:'<path d="M9 22c-2-5 1-7 1-11 0-3 0-6 2-6s2 3 2 6c0 4 3 6 1 11Z" fill="currentColor" opacity=".85"/><circle cx="11" cy="15" r=".8" fill="#0F1913"/><circle cx="13.5" cy="18" r=".8" fill="#0F1913"/>',
+  exfoliante:'<path d="M10 22V5h4v17Z" fill="currentColor" opacity=".6"/><path d="M10 8h2.4v3.5H10zM11.6 14h2.4v4h-2.4z" fill="currentColor"/>',
+  tablar:'<path d="M10 22V6h4v16Z" fill="currentColor" opacity=".85"/><path d="M10 22 5 22c1-4 3-5 5-6Zm4 0 5 0c-1-4-3-5-5-6Z" fill="currentColor" opacity=".7"/>',
+  multiple:'<path d="M12 22 8 6M12 22l4-16M12 22V8" stroke="currentColor" stroke-width="2.2" fill="none"/>'
+};
+const HAB_ICONO = {
+  selva:'<path d="M4 21h16" stroke="currentColor" stroke-width="1.4"/><path d="M8 21V9M8 9 4 13M8 9l4 4M16 21v-8M16 13l-3 3M16 13l3 3" stroke="currentColor" stroke-width="1.5" fill="none"/>',
+  pampa:'<path d="M2 17h20" stroke="currentColor" stroke-width="1.4"/><path d="M6 17c0-3 2-4 2-4M12 17c0-4 1-6 1-6M18 17c0-3-2-4-2-4" stroke="currentColor" stroke-width="1.4" fill="none"/><circle cx="17" cy="6" r="2.5" stroke="currentColor" stroke-width="1.2" fill="none"/>',
+  humedal:'<path d="M3 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M3 22c2-2 4-2 6 0s4 2 6 0 4-2 6 0" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9 14V5M12 14V7M15 14v-6" stroke="currentColor" stroke-width="1.5"/>',
+  asia:'<path d="M2 20h20" stroke="currentColor" stroke-width="1.4"/><path d="m3 20 7-13 4 7 2-3 5 9Z" fill="currentColor" opacity=".55"/><path d="m7 12 3-2 2 2" stroke="#0F1913" stroke-width="1"/>',
+  oceania:'<path d="M12 22V10" stroke="currentColor" stroke-width="1.8"/><path d="M12 10 5 6M12 10l7-4M12 14 6 11M12 14l6-3M12 6 7 3M12 6l5-3" stroke="currentColor" stroke-width="1.4" fill="none"/>',
+  norteamerica:'<path d="M2 21h20" stroke="currentColor" stroke-width="1.4"/><path d="M12 21V6" stroke="currentColor" stroke-width="1.8"/><path d="m12 6-5 6h10Zm0 6-6 6h12Z" fill="currentColor" opacity=".6"/>'
+};
+function optIcon(k,v){
+  if(k==="hoja") return `<svg viewBox="0 0 24 24" fill="none" stroke="none">${HOJA_ICONO[v]}</svg>`;
+  if(k==="tronco") return `<svg viewBox="0 0 24 24" fill="none">${TRONCO_ICONO[v]}</svg>`;
+  if(k==="habitat") return `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round">${HAB_ICONO[v]}</svg>`;
+  const c=FLOR_COLOR[v];
+  if(v==="sin flor") return `<svg viewBox="0 0 24 24" fill="none"><path d="M12 21V9" stroke="${c}" stroke-width="1.8"/><path d="M12 9 7 4h10Z" fill="${c}" opacity=".7"/><path d="M12 14 8 10h8Z" fill="${c}" opacity=".5"/></svg>`;
+  return `<svg viewBox="0 0 24 24">${[0,1,2,3,4].map(i=>{const a=i*72*Math.PI/180;return `<ellipse cx="${12+Math.sin(a)*4.6}" cy="${12-Math.cos(a)*4.6}" rx="3.1" ry="4.4" fill="${c}" opacity=".82" transform="rotate(${i*72} ${12+Math.sin(a)*4.6} ${12-Math.cos(a)*4.6})"/>`}).join("")}<circle cx="12" cy="12" r="2.4" fill="#E8B24C"/></svg>`;
+}
+
+function plantaSVG(){
+  const j=S.juego, W=200,H=200, gy=178;
+  let out=`<svg id="plantsvg" viewBox="0 0 200 200" fill="none">
+    <ellipse cx="100" cy="${gy+4}" rx="62" ry="8" fill="#000" opacity=".35"/>
+    <path d="M20 ${gy}h160" stroke="rgba(222,214,198,.22)" stroke-width="1.5"/>`;
+  const t=j.tronco, bark="#6B5844";
+  if(!t) out+=`<path d="M97 ${gy}V96h6v${gy-96}Z" fill="${bark}" opacity=".35"/>`;
+  else if(t==="recto") out+=`<path d="M94 ${gy}V92h12v${gy-92}Z" fill="${bark}"/>`;
+  else if(t==="abultado") out+=`<path d="M84 ${gy}c-4-24 10-30 10-48 0-14 1-24 6-24s6 10 6 24c0 18 14 24 10 48Z" fill="${bark}"/>
+    ${[[92,150],[104,158],[97,138],[108,144],[89,162]].map(p=>`<path d="M${p[0]} ${p[1]}l3 3-3 1Z" fill="#3E3226"/>`).join("")}`;
+  else if(t==="exfoliante") out+=`<path d="M94 ${gy}V92h12v${gy-92}Z" fill="#B8A184"/>
+    <path d="M94 104h7v18h-7zM99 132h7v16h-7zM94 154h6v14h-6z" fill="#6B5844"/>`;
+  else if(t==="tablar") out+=`<path d="M94 ${gy}V92h12v${gy-92}Z" fill="${bark}"/>
+    <path d="M94 ${gy}H70c4-16 14-20 24-24Zm12 0h24c-4-16-14-20-24-24Z" fill="${bark}" opacity=".8"/>`;
+  else if(t==="multiple") out+=`<path d="M100 ${gy} 82 100M100 ${gy} 118 100M100 ${gy}V104" stroke="${bark}" stroke-width="9" stroke-linecap="round"/>`;
+
+  const h=j.hoja, LC="#3E7A52", LC2="#5A9E6E";
+  const cx=100, cy=t==="multiple"?92:84;
+  if(!h){ out+=`<circle cx="${cx}" cy="${cy}" r="40" fill="${LC}" opacity=".14" stroke="${LC}" stroke-opacity=".3" stroke-dasharray="4 5"/>
+    <text x="${cx}" y="${cy+4}" text-anchor="middle" fill="#63756A" font-size="11" font-family="Instrument Sans">elegí las hojas</text>`; }
+  else {
+    const R=44, n= h==="acicular"?60: h==="escamosa"?34: 26;
+    for(let i=0;i<n;i++){
+      const a=(i/n)*Math.PI*2 + i*0.7, rr=R*(0.35+((i*37)%100)/145);
+      const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr*0.82;
+      const rot=(a*180/Math.PI)+90, col=i%3===0?LC2:LC;
+      if(h==="simple") out+=`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="9" ry="6" fill="${col}" opacity=".85" transform="rotate(${rot.toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
+      else if(h==="compuesta") out+=`<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(0)})" opacity=".9"><path d="M0 0h11" stroke="${col}" stroke-width="1"/>${[0,1,2].map(k=>`<ellipse cx="${3+k*3.4}" cy="-2" rx="1.9" ry="1" fill="${col}"/><ellipse cx="${3+k*3.4}" cy="2" rx="1.9" ry="1" fill="${col}"/>`).join("")}</g>`;
+      else if(h==="acicular") out+=`<path d="M${cx} ${cy} ${x.toFixed(1)} ${y.toFixed(1)}" stroke="${col}" stroke-width="1.6" opacity=".8"/>`;
+      else if(h==="palmeada") out+=`<path d="M${x.toFixed(1)} ${y.toFixed(1)} l-7-4 2-5 5 3 4-5 4 5 5-3 2 5-7 4Z" fill="${col}" opacity=".85"/>`;
+      else if(h==="abanico") out+=`<path d="M${x.toFixed(1)} ${y.toFixed(1)} c-6-2-8-6-7-10 4 2 9 2 13 0 1 4-1 8-6 10Z" fill="${col}" opacity=".85" transform="rotate(${rot.toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
+      else out+=`<path d="M${x.toFixed(1)} ${(y-6).toFixed(1)} l-6 9h12Z" fill="${col}" opacity=".85"/>`;
+    }
+  }
+  const f=j.flor;
+  if(f && f!=="sin flor"){
+    const c=FLOR_COLOR[f];
+    for(let i=0;i<22;i++){
+      const a=i*2.399, rr=42*Math.sqrt(((i*53)%100)/100);
+      const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr*0.82;
+      out+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(2.4+((i*17)%10)/6).toFixed(1)}" fill="${c}" opacity=".9"/>`;
+    }
+  } else if(f==="sin flor"){
+    for(let i=0;i<6;i++) out+=`<ellipse cx="${(cx-30+i*12)}" cy="${cy+18+((i%2)*10)}" rx="4" ry="6" fill="#8A6E4E" opacity=".85"/>`;
+  }
+  const hab=j.habitat;
+  if(hab){
+    const bg={selva:"#1E4A34",pampa:"#3A4A28",humedal:"#1E4048",asia:"#2E3A4A",oceania:"#254A44",norteamerica:"#3A3A28"}[hab];
+    out=out.replace("<ellipse cx=\"100\"",`<rect x="0" y="0" width="200" height="200" fill="${bg}" opacity=".35"/><ellipse cx="100"`);
+  }
+  return out+"</svg>";
+}
+
+function puntaje(){
+  const j=S.juego;
+  return ESPECIES.map(e=>{
+    let s=0;
+    if(e.hoja===j.hoja) s+=30;
+    if(e.color===j.flor) s+=26;
+    if(e.tronco===j.tronco) s+=24;
+    if(e.habitat===j.habitat) s+=20;
+    return {e,s};
+  }).sort((a,b)=>b.s-a.s || a.e.nom.localeCompare(b.e.nom,"es"));
+}
+
+RENDER.juego = () => {
+  const j=S.juego, done=j.step>=PASOS.length;
+  const paso=PASOS[Math.min(j.step,PASOS.length-1)];
+  const res=done?puntaje().slice(0,3):null;
+  return `
+  <div class="backbar"><button class="backbtn" onclick="back()">${svg(I.back)} Descubrí</button></div>
+  <div class="vhead" style="padding-top:4px">
+    <span class="kicker">Juego de identificación</span>
+    <h2>Armá tu planta</h2>
+    <p>Combiná cuatro rasgos y descubrí a qué especie del Jardín se parece más lo que armaste.</p>
+  </div>
+  <div style="height:18px"></div>
+  <div class="gamewrap">
+    <div class="steps">${PASOS.map((_,i)=>`<i class="${i<j.step?"on":""}"></i>`).join("")}</div>
+    <div class="gamestage">${plantaSVG()}</div>
+    ${done? `
+      <h3 class="sec-title" style="margin:4px 0 4px">Tu planta se parece a…</h3>
+      <p class="muted" style="font-size:13px;line-height:1.5;margin:0 0 6px">Comparamos los cuatro rasgos contra las ${ESPECIES.length} especies fichadas.</p>
+      ${res.map(({e,s})=>`
+        <button class="matchrow" onclick="ficha('${e.id}')">
+          <div style="width:44px;height:44px;border-radius:12px;overflow:hidden;position:relative;flex:none">${art("m-"+e.id,"bloom")}</div>
+          <div style="flex:1;min-width:0">
+            <b style="display:block;font-size:14px">${e.nom}</b>
+            <i class="binomial" style="font-size:11.5px;color:var(--muted)">${e.bin}</i>
+            <div class="matchbar" style="margin-top:6px"><i style="width:${s}%"></i></div>
+          </div>
+          <span class="matchpct">${s}%</span>
+        </button>`).join("")}
+      <div style="display:flex;gap:9px;margin-top:18px">
+        <button class="btn ghost" style="flex:1" onclick="reiniciarJuego()">Jugar de nuevo</button>
+        <button class="btn rose" style="flex:1" onclick="toast('Compartido en tu historia')">Compartir</button>
+      </div>
+      <p class="faint" style="font-size:11.5px;line-height:1.55;margin:18px 0 0">
+        Las hojas pesan 30 puntos, la flor 26, el tronco 24 y el hábitat 20. Un 100 % significa que reconstruiste exactamente el perfil de esa especie.</p>
+    ` : `
+      <span class="kicker">Paso ${j.step+1} de ${PASOS.length}</span>
+      <h3 class="sec-title" style="margin:8px 0 14px">${paso.t}</h3>
+      <div class="optgrid">
+        ${OPCIONES[paso.k].map(o=>`
+          <button class="opt${j[paso.k]===o.v?" on":""}" onclick="elegir('${paso.k}','${o.v}')">
+            <span style="color:${paso.k==="flor"?FLOR_COLOR[o.v]:"#5A9E6E"}">${optIcon(paso.k,o.v)}</span>
+            <span>${o.n}</span>
+          </button>`).join("")}
+      </div>
+      ${j.step>0?`<button class="btn ghost full" style="margin-top:14px" onclick="S.juego.step--;go('juego',{back:true})">Volver al paso anterior</button>`:""}
+    `}
+  </div>
+  <div style="height:24px"></div>`;
+};
+function elegir(k,v){
+  S.juego[k]=v;
+  setTimeout(()=>{ S.juego.step++; go("juego",{back:true}); },220);
+  go("juego",{back:true});
+}
+function reiniciarJuego(){ S.juego={hoja:null,flor:null,tronco:null,habitat:null,step:0}; go("juego",{back:true}); }
+
+/* ============================================================
+   14. AGENDA Y VOLUNTARIADO
+   ============================================================ */
+RENDER.agenda = () => `
+  <div class="vhead">
+    <span class="kicker">Septiembre 2026</span>
+    <h2>Actividades</h2>
+    <p>Visitas guiadas, talleres y programas educativos del Jardín y de la Asociación Amigos.</p>
+  </div>
+  <div style="height:18px"></div>
+  ${ACTIVIDADES.map(ev=>`
+    <button class="eventcard" onclick="toast('Reserva simulada: ${ev.nom}')">
+      <div class="eventdate"><b>${ev.n}</b><small>${ev.d}</small></div>
+      <div class="eventbody">
+        <b>${ev.nom}</b>
+        <p>${ev.desc}</p>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <span class="tag plain">${ev.hora}</span>
+          <span class="tag vidrio">${ev.tipo}</span>
+        </div>
+      </div>
+    </button>`).join("")}
+
+  <div class="sec-head pad"><h3 class="sec-title">Voluntariado</h3></div>
+  <div class="pad">
+    <p class="muted" style="font-size:13.5px;line-height:1.6;margin:0 0 16px">
+      El Área Educativa del Jardín abre tres programas de voluntariado. La convocatoria se realiza entre febrero y marzo de cada año.</p>
+    ${VOLUNTARIADOS.map(v=>`
+      <div class="card" style="padding:16px;margin-bottom:11px">
+        <span class="tag ${v.tag}">${v.nom}</span>
+        <p style="font-size:13.5px;line-height:1.55;margin:11px 0 9px;color:#CFDDD2">${v.desc}</p>
+        <p class="faint" style="font-size:11.5px;margin:0">${v.req}</p>
+      </div>`).join("")}
+    <button class="btn full rose" style="margin-top:6px" onclick="go('voluntariado')">${svg(I.hand)} Quiero ser voluntario</button>
+  </div>
+  <div style="height:24px"></div>`;
+
+RENDER.voluntariado = () => `
+  <div class="backbar"><button class="backbtn" onclick="back()">${svg(I.back)} Agenda</button></div>
+  <div class="vhead" style="padding-top:4px">
+    <h2>Sumate como voluntario</h2>
+    <p>Contanos en qué programa te gustaría participar. El equipo del Área Educativa se comunica antes del inicio del ciclo.</p>
+  </div>
+  <form class="pad" style="margin-top:20px" onsubmit="enviarVol(event)">
+    <div class="field"><label for="v-nom">Nombre y apellido</label><input id="v-nom" required placeholder="Cómo te llamás"></div>
+    <div class="field"><label for="v-mail">Correo electrónico</label><input id="v-mail" type="email" required placeholder="tu@correo.com"></div>
+    <div class="field"><label for="v-prog">Programa</label>
+      <select id="v-prog" required>
+        ${VOLUNTARIADOS.map(v=>`<option>${v.nom}</option>`).join("")}
+        <option>Todavía no sé, quiero que me orienten</option>
+      </select></div>
+    <div class="field"><label for="v-disp">Disponibilidad</label>
+      <select id="v-disp">
+        <option>Días de semana por la mañana</option>
+        <option>Días de semana por la tarde</option>
+        <option>Sábados y domingos</option>
+        <option>Flexible</option>
+      </select></div>
+    <div class="field"><label for="v-exp">¿Por qué te interesa?</label>
+      <textarea id="v-exp" rows="3" placeholder="Contanos brevemente"></textarea></div>
+    <label class="checkline" style="margin-bottom:18px">
+      <input type="checkbox" required>
+      <span>Confirmo que soy mayor de 18 años y acepto que el Jardín use estos datos para contactarme sobre el programa.</span>
+    </label>
+    <button class="btn full rose" type="submit">Enviar postulación</button>
+    <p class="faint" style="font-size:11.5px;line-height:1.55;margin:16px 0 0">
+      Prototipo: el formulario no envía datos reales. En producción se integra con el sistema del Área Educativa.</p>
+  </form>
+  <div style="height:24px"></div>`;
+
+function enviarVol(e){
+  e.preventDefault();
+  toast("Postulación enviada. Te escribimos en febrero.");
+  setTimeout(()=>back(),1200);
+}
+
+/* ============================================================
+   15. ARRANQUE
+   ============================================================ */
+tabbar();
+go("home");
+setTimeout(()=>paintAll(document),60);
+</script>
+
+</body>
+</html>
