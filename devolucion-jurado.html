@@ -90,11 +90,13 @@ section{padding:36px 0}
 .card:target,.card.hl{box-shadow:0 0 0 2px var(--vidrio)}
 
 /* ranking */
-.rank{display:grid;gap:6px;margin-bottom:34px}
-.rk{min-height:44px;display:grid;grid-template-columns:28px 190px 1fr 52px;gap:12px;align-items:center;padding:8px 12px;border-radius:12px;text-align:left;width:100%}
+.rank{display:grid;gap:4px;margin-bottom:30px}
+#cards{scroll-margin-top:80px}
+.rk{min-height:44px;display:grid;grid-template-columns:28px 260px 1fr 52px;gap:12px;align-items:center;padding:8px 12px;border-radius:12px;text-align:left;width:100%}
 .rk:hover{background:var(--card)}
 .rk .n{font-family:var(--mono);font-size:12px;color:var(--faint)}
-.rk .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:8px}
+.chip{flex:none;font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line-2);border-radius:999px;padding:1px 7px}
 .rk .bar{height:10px;border-radius:5px;background:var(--raise);overflow:hidden;display:flex}
 .rk .bar i{display:block;height:100%}
 .rk .p{font-family:var(--serif);font-size:22px;text-align:right;letter-spacing:-.02em}
@@ -199,15 +201,16 @@ footer{padding:40px 0 70px;color:var(--faint);font-size:13px;border-top:1px soli
 <section id="grupos">
   <p class="eyebrow">Grupo por grupo</p>
   <h2>La devolución de <em>cada grupo</em></h2>
-  <p class="lead" style="margin-bottom:18px">Elegí tu aula o buscá tu grupo: vas a encontrar en qué se destacó, qué le marcó el jurado y sus comentarios textuales.</p>
-  <div class="nav">
-    <div class="tabs" role="tablist">
-      <button role="tab" aria-selected="true" data-a="Aula 1">Aula 1</button>
+  <p class="lead" style="margin-bottom:22px">Así quedaron los dieciocho grupos. Tocá uno para ir a su devolución: en qué se destacó, qué le marcó el jurado y sus comentarios textuales.</p>
+  <div class="rank" id="rank"></div>
+  <div class="nav" id="nav">
+    <div class="tabs" role="tablist" aria-label="Filtrar tarjetas por aula">
+      <button role="tab" aria-selected="true" data-a="Todas">Todas</button>
+      <button role="tab" aria-selected="false" data-a="Aula 1">Aula 1</button>
       <button role="tab" aria-selected="false" data-a="Aula 2">Aula 2</button>
     </div>
-    <label class="pick"><span class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Ir a un grupo</span><select id="pick"></select></label>
+    <label class="pick"><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Ir a un grupo</span><select id="pick"></select></label>
   </div>
-  <div class="rank" id="rank"></div>
   <div class="legend">
     <span><i class="s2"></i>Bien (2)</span><span><i class="s1"></i>Más o menos (1)</span><span><i class="s0"></i>No / mal (0)</span><span><i class="se"></i>Sin marcar (0)</span>
   </div>
@@ -235,16 +238,23 @@ document.getElementById('crit').innerHTML=[['app','La app'],['grupo','La present
   return `<div class="critcol"><h3>${t}</h3><div class="chead"><span></span><span>Aula 1</span><span>Aula 2</span></div>${rows}</div>`;
 }).join('');
 
-function render(aula){
-  const gs=G.filter(g=>g.aula===aula).sort((a,b)=>b.total-a.total);
-  document.getElementById('rank').innerHTML=gs.map((g,i)=>`
+const RANKED=[...G].sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name,'es'));
+const POS=Object.fromEntries(RANKED.map((g,i)=>[g.code,i+1]));
+function renderRank(){
+  document.getElementById('rank').innerHTML=RANKED.map((g,i)=>`
     <button class="rk" data-go="g-${g.code}">
       <span class="n">${String(i+1).padStart(2,'0')}</span>
-      <span class="nm">${esc(g.name)}</span>
+      <span class="nm">${esc(g.name)}<span class="chip">${g.aula}</span></span>
       <span class="bar"><i style="width:${g.total}%;background:${col(g.total)}"></i></span>
       <span class="p">${g.total}</span>
     </button>`).join('');
-  document.getElementById('cards').innerHTML=gs.map((g,i)=>card(g,i+1,gs.length)).join('');
+}
+function render(aula){
+  const gs=RANKED.filter(g=>aula==='Todas'||g.aula===aula);
+  document.getElementById('cards').innerHTML=gs.map(g=>card(g,POS[g.code],RANKED.length)).join('');
+  const pick=document.getElementById('pick');
+  const opts=a=>G.filter(g=>g.aula===a).sort((x,y)=>x.name.localeCompare(y.name,'es')).map(g=>`<option value="${g.code}">${esc(g.name)}</option>`).join('');
+  pick.innerHTML='<option value="">Ir a un grupo…</option>'+(aula==='Todas'?['Aula 1','Aula 2'].map(a=>`<optgroup label="${a}">${opts(a)}</optgroup>`).join(''):opts(aula));
 }
 function card(g,pos,n){
   const notes=g.notes.map(q=>`<div class="q">${esc(q)}</div>`).join('');
@@ -276,11 +286,11 @@ function matrix(g){
   };
   return `<div class="mx"><table>${head}<tr class="sep"><th colspan="${g.sheets.length+2}">App</th></tr>${half('app').map(row).join('')}<tr class="sep"><th colspan="${g.sheets.length+2}">Presentación</th></tr>${half('grupo').map(row).join('')}</table></div>`;
 }
-let cur='Aula 1';
+let cur='Todas';
 function setAula(a){cur=a;document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x.dataset.a===a));render(a);}
 function go(code,smooth=true){
   const g=G.find(x=>x.code===code); if(!g) return;
-  if(g.aula!==cur) setAula(g.aula);
+  if(cur!=='Todas'&&g.aula!==cur) setAula(g.aula);
   const el=document.getElementById('g-'+code);
   history.replaceState(null,'','#'+code);
   document.querySelectorAll('.card.hl').forEach(c=>c.classList.remove('hl'));
@@ -288,11 +298,9 @@ function go(code,smooth=true){
   el.scrollIntoView({behavior:smooth?'smooth':'auto',block:'start'});
   document.getElementById('pick').value=code;
 }
-// selector con todos los grupos
 const pick=document.getElementById('pick');
-pick.innerHTML='<option value="">Ir a un grupo…</option>'+['Aula 1','Aula 2'].map(a=>`<optgroup label="${a}">${G.filter(g=>g.aula===a).sort((x,y)=>x.name.localeCompare(y.name,'es')).map(g=>`<option value="${g.code}">${esc(g.name)}</option>`).join('')}</optgroup>`).join('');
 pick.onchange=()=>pick.value&&go(pick.value);
-document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{setAula(b.dataset.a);history.replaceState(null,'',location.pathname);pick.value='';});
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{setAula(b.dataset.a);history.replaceState(null,'',location.pathname);const n=document.getElementById('nav');if(n.getBoundingClientRect().top<=1)document.getElementById('cards').scrollIntoView({block:'start'});});
 document.getElementById('rank').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b) go(b.dataset.go.slice(2));});
 document.getElementById('cards').addEventListener('click',async e=>{
   const b=e.target.closest('[data-share]'); if(!b) return;
@@ -306,7 +314,7 @@ const topBtn=document.getElementById('top');
 topBtn.onclick=()=>document.getElementById('grupos').scrollIntoView({behavior:'smooth'});
 const io=new IntersectionObserver(([e])=>topBtn.classList.toggle('on',!e.isIntersecting&&e.boundingClientRect.top<0));
 io.observe(document.getElementById('rank'));
-render(cur);
+renderRank();render(cur);
 const h=location.hash.slice(1); if(h&&G.some(g=>g.code===h)) requestAnimationFrame(()=>go(h,false));
 </script>
 </body>
