@@ -41,6 +41,19 @@ section{padding:36px 0}
 .note{font-size:14px;color:var(--faint);max-width:78ch;margin:14px 0 0}
 .note strong{color:var(--muted)}
 
+/* relato */
+.story{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding-top:12px}
+.chap{border-radius:22px;padding:28px;border:1px solid var(--line)}
+.chap.f{background:linear-gradient(160deg,rgba(126,216,195,.10),rgba(19,33,25,.6));border-color:rgba(126,216,195,.28)}
+.chap.w{background:linear-gradient(160deg,rgba(240,112,155,.10),rgba(19,33,25,.6));border-color:rgba(240,112,155,.28)}
+.chap.w .eyebrow{color:var(--rosa)}
+.chap.f h2 em{color:var(--vidrio)}
+.chap h3{font-family:var(--serif);font-weight:400;font-style:italic;font-size:22px;margin:22px 0 8px;letter-spacing:-.01em}
+.chap p{color:var(--muted);font-size:16.5px;margin:0 0 12px;max-width:60ch}
+.chap .coda{color:var(--text);border-top:1px solid var(--line);padding-top:14px;margin-top:18px}
+.chap .coda em{font-family:var(--serif);color:var(--ambar)}
+.critd{grid-column:1/-1;margin-top:4px}
+
 /* leyenda */
 .legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted);margin:16px 0 0}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
@@ -131,6 +144,9 @@ footer{padding:40px 0 70px;color:var(--faint);font-size:13px;border-top:1px soli
 @media (max-width:760px){
   .stats{grid-template-columns:1fr 1fr}
   .crit{grid-template-columns:1fr}
+  .story{grid-template-columns:1fr}
+  .chap{padding:20px;border-radius:18px}
+  .chap p{font-size:16px}
   .crow,.chead{grid-template-columns:120px 1fr 1fr}
   .rk{grid-template-columns:22px 1fr 44px;row-gap:6px}
   .rk .bar{grid-column:2/4;grid-row:2}
@@ -156,22 +172,34 @@ footer{padding:40px 0 70px;color:var(--faint);font-size:13px;border-top:1px soli
 <body>
 <div class="wrap">
 <header>
-  <p class="eyebrow">Diseño Gráfico 3 · FADU · Entrega 28·09·26</p>
-  <h1>Qué dijo el <em>jurado</em></h1>
-  <p class="lead">Resumen de la evaluación de las apps para el <strong>Jardín Botánico Carlos Thays</strong>: cómo le fue a cada grupo, qué marcó cada jurado en la grilla y qué comentaron sobre los puntos fuertes y débiles.</p>
-  <div class="stats" id="stats"></div>
-  <p class="note"><strong>Cómo se calcula.</strong> Cada criterio de cada hoja suma 2 (✓ o sí), 1 (más o menos, +/−, regular) o 0 (✗, no o sin marca); las grillas numéricas se convierten (7–10 = 2, 4–6 = 1, 0–3 = 0). El porcentaje es lo obtenido sobre el máximo posible. Cada aula tuvo jurados distintos y algunas hojas quedaron con celdas en blanco, así que <strong>los porcentajes se comparan dentro de cada aula</strong>, no entre aulas.</p>
+  <p class="eyebrow">Diseño Gráfico 3 · FADU · Devolución del jurado · 28·09·26</p>
+  <h1>En qué <em>brillaron</em> y qué les faltó</h1>
+  <p class="lead">El 28 de septiembre, dieciocho grupos presentaron en dos aulas sus apps para el <strong>Jardín Botánico Carlos Thays</strong> ante cuatro jurados. Cada grupo propuso su propia forma de recorrer el Jardín, y el jurado se llevó ideas muy distintas entre sí. Esto es lo que quedó de la jornada.</p>
 </header>
 
-<section>
-  <p class="eyebrow ambar" style="color:var(--ambar)">Lectura general</p>
-  <h2>Presentaron mejor de lo que <em>diseñaron</em></h2>
-  <p class="lead">En las dos aulas la exposición oral puntuó más alto que la app. El punto flojo compartido es la <strong>accesibilidad</strong>, seguido de la definición del <strong>usuario objetivo</strong> y de lograr que la app <strong>motive a explorar</strong> más allá del recorrido básico.</p>
-  <div class="crit" id="crit"></div>
+<section class="story">
+  <article class="chap f">
+    <p class="eyebrow">En qué brillaron</p>
+    <h2>Supieron <em>contarlo</em></h2>
+    <p>La presentación fue lo más sólido en las dos aulas: exposiciones ordenadas, bien de tiempo y con un material gráfico que acompañaba. Hubo grupos que llegaron con el relato muy trabajado y se notó en cómo respondieron las preguntas.</p>
+    <h3>Ideas con personalidad</h3>
+    <p>El jurado se llevó propuestas muy propias: un asistente que invita a frenar y respirar, un mapa que cambia con las estaciones, registros colectivos que arman comunidad, juegos y trivias para recorrer el Jardín, la invitación a sumarse como voluntario, notificaciones de lo que está pasando en el momento. Cuando una idea tenía foco, el jurado lo celebró.</p>
+  </article>
+  <article class="chap w">
+    <p class="eyebrow">Qué les faltó</p>
+    <h2>Pensar <em>para quién</em></h2>
+    <p>La accesibilidad fue la gran ausente: lenguaje claro, contraste y audioguías quedaron en segundo plano en casi todas las apps. También costó definir al usuario: varias propuestas querían hablarle a todos a la vez —o dibujaron usuarios iguales entre sí— y en el camino perdieron foco.</p>
+    <h3>Del recorrido básico al descubrimiento</h3>
+    <p>La mayoría resolvió bien el mapa y las fichas, pero pocas lograron que el visitante quiera ir más allá. Y cuando la app se probó en vivo aparecieron los tropiezos: QR que no estaban, gifs que no cargaron, navegaciones que no seguían lo que mostraba la pantalla.</p>
+    <p class="coda">Para la próxima: menos funciones y más profundidad. Como anotó un jurado, <em>«buenas ideas, pero poco cohesivas»</em>.</p>
+  </article>
+  <details class="critd"><summary>Ver cómo le fue a cada aula, criterio por criterio</summary><div class="crit" id="crit"></div></details>
 </section>
 
 <section id="grupos">
   <p class="eyebrow">Grupo por grupo</p>
+  <h2>La devolución de <em>cada grupo</em></h2>
+  <p class="lead" style="margin-bottom:18px">Elegí tu aula o buscá tu grupo: vas a encontrar en qué se destacó, qué le marcó el jurado y sus comentarios textuales.</p>
   <div class="nav">
     <div class="tabs" role="tablist">
       <button role="tab" aria-selected="true" data-a="Aula 1">Aula 1</button>
@@ -195,13 +223,7 @@ const C={2:'var(--c2)',1:'var(--c1)',0:'var(--c0)'};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const col=p=>p>=80?'var(--vidrio)':p>=65?'var(--ambar)':'var(--rosa)';
 
-// stats
-const G=D.groups, sheets=new Set(G.flatMap(g=>g.sheets));
-const quotes=G.reduce((n,g)=>n+g.notes.length,0);
-document.getElementById('stats').innerHTML=[
- [G.length,'grupos en dos aulas'],[4,'jurados (A, B, C y D)'],[sheets.size,'grillas completadas'],[quotes,'comentarios escritos']
-].map(([b,s])=>`<div class="stat"><b>${b}</b><span>${s}</span></div>`).join('');
-
+const G=D.groups;
 // criterios
 const half=k=>D.order.filter(c=>c.startsWith(k));
 document.getElementById('crit').innerHTML=[['app','La app'],['grupo','La presentación']].map(([k,t])=>{
